@@ -9,6 +9,7 @@
 #define kConnectionTimeoutInterval	20.0
 
 typedef enum HTTPStatusCode {
+	HTTPStatusCodeOK					= 200,
 	HTTPStatusCodeCreated				= 201,
 	HTTPStatusCodeUnauthorized			= 401,
 	HTTPStatusCodeUnprocessableEntity	= 422
