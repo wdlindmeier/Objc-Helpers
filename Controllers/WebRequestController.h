@@ -39,11 +39,13 @@ typedef enum HTTPStatusCode {
 	NSInteger responseStatus;
 	NSMutableData *receivedData;
 	NSURLConnection *requestConnection;
+	NSString *urlString;
 	
 }
 
 @property (nonatomic, assign) id <WebRequestDelegate> delegate;
 @property (nonatomic, readonly) NSInteger responseStatus;
+@property (nonatomic, copy) NSString *urlString;
 
 - (void)makeRequest:(NSURLRequest *)theRequest;
 - (void)cancelRequest;

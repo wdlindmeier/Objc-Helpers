@@ -13,7 +13,7 @@
 
 - (void)disableButtonWithTag:(NSInteger)index
 {
-	UIButton *disabledButton = [self viewWithTag:index];
+	UIButton *disabledButton = (UIButton *)[self viewWithTag:index];
 	disabledButton.enabled = NO;
 }
 

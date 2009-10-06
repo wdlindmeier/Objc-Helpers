@@ -10,12 +10,15 @@
 
 @implementation WebRequestController
 
-@synthesize delegate, responseStatus;
+@synthesize delegate, responseStatus, urlString;
+
+#pragma mark Requests 
 
 - (void)makeRequest:(NSURLRequest *)request 
 {
 
 	requestConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+	self.urlString = [[request URL] absoluteString];
 	
 	if (requestConnection) {		
 		[receivedData release];
@@ -105,6 +108,7 @@
 
 - (void)dealloc
 {
+	self.urlString = nil;
 	[receivedData release];
 	//[requestConnection release];
 	[super dealloc];
