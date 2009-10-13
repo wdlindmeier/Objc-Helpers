@@ -11,6 +11,12 @@
 
 @interface NSDate(Helpers)
 
+- (int)year;
+- (int)month;
+- (int)day;
+- (int)hour;
+- (int)minute;
+- (int)second;
 + (NSDateFormatter *)sharedFormatter;
 
 @end

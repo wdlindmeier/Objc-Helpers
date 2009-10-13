@@ -17,11 +17,53 @@
      return [containPred evaluateWithObject:self];  
 }  
 
+// Strips the string and compares it against an empty string
 - (BOOL)isEmpty
 {
-	// Strips the string and compares it against an empty string
 	// NOTE: This does not strip other whitespace characters such as newlines
 	return [[self stringByReplacingOccurrencesOfString:@" " withString:@""] isEqual:@""];
+}
+
+// String Transformers
+
+- (NSArray *)camelCaseComponents
+{
+	// CamelCase components
+	NSScanner *nameScanner = [NSScanner scannerWithString:self];
+	[nameScanner setCaseSensitive:YES];
+	int scanLocation = 0;
+	NSMutableArray *nameArray = [NSMutableArray array];
+	while(![nameScanner isAtEnd]){
+		
+		NSMutableArray *tokenArray = [NSMutableArray arrayWithCapacity:2];
+		
+		NSString *startToken;
+		BOOL foundStart = [nameScanner scanCharactersFromSet:[NSCharacterSet uppercaseLetterCharacterSet] intoString:&startToken];
+		if(foundStart) [tokenArray addObject:startToken];
+		
+		NSString *restToken;
+		BOOL foundRest = [nameScanner scanUpToCharactersFromSet:[NSCharacterSet uppercaseLetterCharacterSet] intoString:&restToken];
+		if(foundRest) [tokenArray addObject:restToken];
+		
+		if(foundStart || foundRest){ 
+			NSString *token = [tokenArray componentsJoinedByString:@""];
+			scanLocation += [token length];
+			[nameArray addObject:token]; 
+			[nameScanner setScanLocation:scanLocation];
+		}
+	}
+
+	return nameArray;
+}
+
+- (NSString *)titleizedStringFromCamelCase
+{
+	return [[self camelCaseComponents] componentsJoinedByString:@" "];
+}
+
+- (NSString *)underscoredStringFromCamelCase
+{
+	return [[[self titleizedStringFromCamelCase] lowercaseString] stringByReplacingOccurrencesOfString:@" " withString:@"_"];
 }
 
 + (NSString *)setterFromGetter:(NSString *)getterName

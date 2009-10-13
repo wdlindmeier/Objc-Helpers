@@ -13,6 +13,11 @@
 
 - (BOOL)containsString:(NSString *)matchString;
 - (BOOL)isEmpty;
+
+- (NSArray *)camelCaseComponents;
+- (NSString *)titleizedStringFromCamelCase;
+- (NSString *)underscoredStringFromCamelCase;
+
 + (NSString *)setterFromGetter:(NSString *)getterName;
 
 @end
