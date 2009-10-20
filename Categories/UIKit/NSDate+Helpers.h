@@ -17,6 +17,7 @@
 - (int)hour;
 - (int)minute;
 - (int)second;
+- (NSDate *)dateFromDaysOffset:(NSInteger)daysOffset;
 + (NSDateFormatter *)sharedFormatter;
 
 @end

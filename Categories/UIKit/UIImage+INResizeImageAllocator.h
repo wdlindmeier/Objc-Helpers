@@ -14,9 +14,13 @@
 
 	- (UIImage*)scaleImageToSize:(CGSize)newSize;
 	- (UIImage*)fillImageToSize:(CGSize)newSize;
+	- (UIImage *)cropImageToRect:(CGRect)cropRect;
+	- (CGSize)calculateNewSizeForCroppingBox:(CGSize)croppingBox;
+	- (UIImage *)cropCenterAndScaleImageToSize:(CGSize)cropSize;
 
 	+ (UIImage*)imageWithImage:(UIImage*)image scaledToSize:(CGSize)newSize;
 	+ (UIImage*)imageWithImage:(UIImage*)image filledToSize:(CGSize)newSize;
 	+ (UIImage *)scaleImage:(UIImage *)image withRatio:(float)scaleRatio;
+
 
 @end

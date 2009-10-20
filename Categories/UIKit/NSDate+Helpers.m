@@ -49,6 +49,20 @@ static NSDateFormatter *sharedFormatter;
 	return [[dateFormatter stringFromDate:self] intValue];
 }
 
+- (NSDate *)dateFromDaysOffset:(NSInteger)daysOffset
+{
+	// start by retrieving day, weekday, month and year components for yourDate
+    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+
+    NSDateComponents *offsetComponents = [[NSDateComponents alloc] init];
+    [offsetComponents setDay:daysOffset];
+    NSDate *offsetDate = [gregorian dateByAddingComponents:offsetComponents toDate:self options:0];
+    [offsetComponents release];
+    [gregorian release];	
+
+	return offsetDate;
+}
+
 + (NSDateFormatter *)sharedFormatter
 {
 	if(sharedFormatter == nil){
