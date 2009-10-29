@@ -8,12 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+@class WebImageLoader;
+
 @protocol WebImageLoaderDelegate
 
 @required 
 
--(void)webImageLoader:(WebImageLoader *)loader failedToLoadWithError:(NSString *)errorMessage;
--(void)webImageLoader:(WebImageLoader *)loader didLoadImage:(UIImage *)image;
+- (void)webImageLoader:(WebImageLoader *)loader failedToLoadWithError:(NSString *)errorMessage;
+- (void)webImageLoader:(WebImageLoader *)loader didLoadImage:(UIImage *)image;
 
 @end
 
@@ -25,6 +27,7 @@
 
 -(void)loadImageFromURL:(NSString *)imageURLString;
 
-@property(nonatomic,assign) id <WebImageLoaderDelegate> delegate;
+@property(nonatomic, assign) id <WebImageLoaderDelegate> delegate;
+@property(nonatomic, readonly) NSString *urlString;
 
 @end

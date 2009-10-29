@@ -10,7 +10,7 @@
 
 @implementation WebImageLoader
 
-@synthesize delegate;
+@synthesize delegate, urlString;
 
 -(void)loadImageFromURL:(NSString *)imageURLString{
 	if(isLoading)
@@ -58,7 +58,7 @@
 {	
 	isLoading = NO;
 	UIImage *image = [[[UIImage alloc] initWithData:imageData] autorelease];	
-	if(self.delegate) [(<WebImageLoaderDelegate> self.delegate) webImageLoader:self didLoadImage:image];
+	if(self.delegate) [self.delegate webImageLoader:self didLoadImage:image];
 }
 
 - (void)loadDidFinishWithError:(NSError*)error
@@ -66,7 +66,7 @@
 	isLoading = NO;
 	NSString *errorString = [NSString stringWithFormat:@"\nAPSWebImageView: Failed Image Load\n		[%@]\n		With Error - %@", 
 									  urlString, [error localizedDescription]];
-	if(self.delegate) [(<WebImageLoaderDelegate> self.delegate) webImageLoader:self failedToLoadWithError:errorString];
+	if(self.delegate) [self.delegate webImageLoader:self failedToLoadWithError:errorString];
 }
 
 - (void)dealloc 
