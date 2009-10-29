@@ -12,8 +12,8 @@
 
 @required 
 
--(void)webImageFailedToLoadWithError:(NSString *)errorMessage;
--(void)webImageDidLoad:(UIImage *)image;
+-(void)webImageLoader:(WebImageLoader *)loader failedToLoadWithError:(NSString *)errorMessage;
+-(void)webImageLoader:(WebImageLoader *)loader didLoadImage:(UIImage *)image;
 
 @end
 
