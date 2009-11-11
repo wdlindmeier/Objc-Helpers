@@ -101,7 +101,7 @@
 
 - (void)connection:(NSURLConnection *)connection didCancelAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 {
-	//NSLog(@"didCancelAuthenticationChallenge");
+	//NSLog(@"didCancelAuthenticationChallenge. challenge sender: %@", [challenge sender]);
 }
 
 #pragma mark Memory 

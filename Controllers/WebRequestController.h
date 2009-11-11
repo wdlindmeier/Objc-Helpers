@@ -8,12 +8,12 @@
 
 #define kConnectionTimeoutInterval	20.0
 
-typedef enum HTTPStatusCode {
+typedef enum HTTPStatusCodes {
 	HTTPStatusCodeOK					= 200,
 	HTTPStatusCodeCreated				= 201,
 	HTTPStatusCodeUnauthorized			= 401,
 	HTTPStatusCodeUnprocessableEntity	= 422
-} HTTPStatusCodes;
+} HTTPStatusCode;
 
 @class WebRequestController;
 
