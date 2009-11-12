@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class PhotoPickerController;
+
 @protocol PhotoPickerDelegate
 
 @required
@@ -21,7 +23,6 @@
 
 @interface PhotoPickerController : NSObject <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>{
 	
-	UIViewController *viewController;
 	UIImagePickerController *photoPickerFromCamera;
 	UIImagePickerController *photoPickerFromAlbum;
 	id <PhotoPickerDelegate>delegate;
