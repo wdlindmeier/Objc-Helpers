@@ -103,11 +103,9 @@ static PhotoPickerController *sharedController = nil;
 
 #pragma mark singleton controller methods
 
-// See "Creating a Singleton Instance" in the Cocoa Fundamentals Guide for more info
-
 + (PhotoPickerController *)sharedInstance {
 	if (sharedController == nil) {
-		sharedController = [[self alloc] init]; // assignment not done here
+		sharedController = [[self alloc] init];
 	}
     return sharedController;
 }
