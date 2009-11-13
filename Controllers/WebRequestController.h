@@ -12,7 +12,8 @@ typedef enum HTTPStatusCodes {
 	HTTPStatusCodeOK					= 200,
 	HTTPStatusCodeCreated				= 201,
 	HTTPStatusCodeUnauthorized			= 401,
-	HTTPStatusCodeUnprocessableEntity	= 422
+	HTTPStatusCodeUnprocessableEntity	= 422,
+	HTTPStatusCodeInternalError			= 500
 } HTTPStatusCode;
 
 @class WebRequestController;

@@ -68,9 +68,6 @@
 	// release the connection, and the data object	
 	[connection release];
 	
-	// receivedData is declared as a method instance elsewhere	
-	//[receivedData release];
-	
 	if(self.delegate){
 		[self.delegate webRequest:self didFailWithError:[error localizedDescription]];
 		if([(NSObject *)self.delegate respondsToSelector:@selector(webRequestConnectionComplete:)]){
@@ -87,10 +84,7 @@
 	
 	NSString* stringEncodedData = [[[NSString alloc] initWithData: receivedData encoding: NSUTF8StringEncoding] autorelease];
 	
-	// release the connection, and the data object	
-	//[receivedData release];	
 	[connection release];	
-	//NSLog(@"connectionDidFinishLoading");
 	if(self.delegate){
 		[self.delegate webRequest:self didReturnResults:stringEncodedData];
 		if([(NSObject *)self.delegate respondsToSelector:@selector(webRequestConnectionComplete:)]){
@@ -110,7 +104,6 @@
 {
 	self.urlString = nil;
 	[receivedData release];
-	//[requestConnection release];
 	[super dealloc];
 }
 
