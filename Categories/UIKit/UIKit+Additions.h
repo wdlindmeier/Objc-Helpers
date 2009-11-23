@@ -7,6 +7,7 @@
  *
  */
 
+#import "NSObject+Helpers.h"
 #import "UIActionSheet+Helpers.h"
 #import "NSArray+Functional.h"
 #import "NSCharacterSet+Helpers.h"
