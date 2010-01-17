@@ -64,7 +64,7 @@ static PhotoPickerController *sharedController = nil;
 		photoPickerFromAlbum = [[UIImagePickerController alloc] init];		
 		photoPickerFromAlbum.delegate = self;
 		photoPickerFromAlbum.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-		photoPickerFromAlbum.allowsImageEditing = NO;
+		photoPickerFromAlbum.allowsEditing = NO;
 		photoPickerFromAlbum.view.hidden = YES;
 		[[UIApplication sharedApplication].keyWindow addSubview:photoPickerFromAlbum.view];
 	}
@@ -81,7 +81,7 @@ static PhotoPickerController *sharedController = nil;
 		photoPickerFromCamera = [[UIImagePickerController alloc] init];		
 		photoPickerFromCamera.delegate = self;
 		photoPickerFromCamera.sourceType = UIImagePickerControllerSourceTypeCamera;
-		photoPickerFromCamera.allowsImageEditing = NO;
+		photoPickerFromCamera.allowsEditing = NO;
 		photoPickerFromCamera.view.hidden = YES;
 		[[UIApplication sharedApplication].keyWindow addSubview:photoPickerFromCamera.view];
 	}
@@ -92,8 +92,9 @@ static PhotoPickerController *sharedController = nil;
 	}
 }
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)image editingInfo:(NSDictionary *)editingInfo
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
+	UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
 	if(self.delegate){			
 		UIViewController *viewController = [self.delegate viewControllerToPresentPhotoPicker:self];
 		[viewController dismissModalViewControllerAnimated:YES];

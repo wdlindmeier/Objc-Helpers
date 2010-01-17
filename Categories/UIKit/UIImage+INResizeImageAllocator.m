@@ -13,12 +13,7 @@
 #pragma mark Instance methods 
 
 - (UIImage *)scaleImageToSize:(CGSize)size {
-	CGRect rect = CGRectMake(0.0, 0.0, size.width, size.height);
-	UIGraphicsBeginImageContext(rect.size);
-	[self drawInRect:rect];  // scales image to rect
-	UIImage *resImage = UIGraphicsGetImageFromCurrentImageContext();
-	UIGraphicsEndImageContext();
-	return resImage;
+	return [UIImage imageWithImage:self scaledToSize:size];
 }
 
 - (UIImage *)cropImageToRect:(CGRect)cropRect {

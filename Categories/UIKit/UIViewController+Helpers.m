@@ -11,10 +11,5 @@
 
 @implementation UIViewController(Helpers)
 
-- (void)resignCurrentFirstResponder
-{
-	UIResponder *firstResponder = [[[UIApplication sharedApplication] keyWindow] performSelector:@selector(firstResponder)];
-	[firstResponder resignFirstResponder];
-}
 
 @end

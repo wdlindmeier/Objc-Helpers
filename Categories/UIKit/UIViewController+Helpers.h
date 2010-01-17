@@ -11,6 +11,4 @@
 
 @interface UIViewController(Helpers)
 
-- (void)resignCurrentFirstResponder;
-
 @end
