@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PotentialValueObject : NSObject {
+@interface WDLPotentialValueObject : NSObject {
 	NSObject *parentObject;	
 	NSString *propertyName;
 }

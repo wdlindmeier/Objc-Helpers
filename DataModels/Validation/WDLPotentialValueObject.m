@@ -6,12 +6,12 @@
 //  Copyright 2009. All rights reserved.
 //
 
-#import "PotentialValueObject.h"
+#import "WDLPotentialValueObject.h"
 #import "ManagedContextController.h"
 #import <objc/runtime.h>
 
 
-@implementation PotentialValueObject
+@implementation WDLPotentialValueObject
 
 @synthesize parentObject, propertyName;
 

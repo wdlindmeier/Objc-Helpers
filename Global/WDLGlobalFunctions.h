@@ -1,5 +1,5 @@
 //
-//  GlobalFunctions.h
+//  WDLGlobalFunctions.h
 //  Chaucer
 //
 //  Created by William Lindmeier on 8/27/09.

@@ -1,14 +1,14 @@
 //
-//  WebImageLoader.m
+//  WDLWebImageLoader.m
 //  Geotag
 //
 //  Created by William Lindmeier on 4/28/09.
 //  Copyright 2009. All rights reserved.
 //
 
-#import "WebImageLoader.h"
+#import "WDLWebImageLoader.h"
 
-@implementation WebImageLoader
+@implementation WDLWebImageLoader
 
 @synthesize delegate, urlString;
 

@@ -1,5 +1,5 @@
 //
-//  AccountController.h
+//  WDLAccountController.h
 //  tap
 //
 //  Created by William Lindmeier on 10/2/09.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AccountController : NSObject {
+@interface WDLAccountController : NSObject {
 	NSString *username;
 	NSString *password;
 }

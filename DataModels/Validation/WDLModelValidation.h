@@ -1,5 +1,5 @@
 //
-//  ModelValidation.h
+//  WDLModelValidation.h
 //  tap
 //
 //  Created by William Lindmeier on 6/16/09.
@@ -7,14 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ModelValidation.h"
+#import "WDLModelValidation.h"
 
 #define kValidationMessageKey		@"message"
 #define kValidationAllowsNilKey		@"allowsNil"
 #define kValidationRangeMaximumKey	@"rangeMax"
 #define kValidationRangeMinimumKey	@"rangeMin"
 
-@class Model;
+@class WDLModel;
 
 typedef enum ValidationTypes {
 	ValidationTypeNone = 0,
@@ -25,7 +25,7 @@ typedef enum ValidationTypes {
 	ValidatesNumberInRange
 } ValidationType;
 
-@interface ModelValidation : NSObject {
+@interface WDLModelValidation : NSObject {
 	ValidationType validationType;
 	NSString *propertyName;
 	NSString *errorMessage;
@@ -35,7 +35,7 @@ typedef enum ValidationTypes {
 @property (nonatomic, readonly) NSString *errorMessage;
 
 - (id)initWithValidationType:(ValidationType)type propertyName:(NSString *)propName options:(NSDictionary *)optionsOrNil;
-- (NSString *)validateAgainstRecord:(Model *)record;
+- (NSString *)validateAgainstRecord:(WDLModel *)record;
 
 @end
 

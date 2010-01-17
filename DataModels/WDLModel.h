@@ -1,5 +1,5 @@
 //
-//  Model.h
+//  WDLModel.h
 //  tap
 //
 //  Created by William Lindmeier on 5/23/09.
@@ -10,11 +10,11 @@
 #define kValidationErrorSingleCode		404
 
 #import "ManagedContextController.h"
-#import "ModelValidation.h"
+#import "WDLModelValidation.h"
 
-@class PotentialValueObject;
+@class WDLPotentialValueObject;
 
-@interface Model :  NSManagedObject  
+@interface WDLModel :  NSManagedObject  
 {
 	NSString *errorMessages;
 }
@@ -25,7 +25,7 @@
 
 @property (nonatomic, readonly) NSString * errorMessages;
 
-- (PotentialValueObject *)propertyWithName:(NSString *)propName;
+- (WDLPotentialValueObject *)propertyWithName:(NSString *)propName;
 - (BOOL)isValid;
 - (BOOL)save;
 - (void)persist;
@@ -38,7 +38,7 @@
 + (NSString *)deleteWarning;
 + (NSArray *)findAll;
 + (NSArray *)findByAttribute:(NSString *)attribute value:(id)value;
-+ (Model *)newRecord;
++ (WDLModel *)newRecord;
 
 
 @end

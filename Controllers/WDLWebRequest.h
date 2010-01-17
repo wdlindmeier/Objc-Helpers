@@ -1,5 +1,5 @@
 //
-//  WebRequestController.h
+//  WDLWebRequest.h
 //  tap
 //
 //  Created by William Lindmeier on 6/20/09.
@@ -16,27 +16,27 @@ typedef enum HTTPStatusCodes {
 	HTTPStatusCodeInternalError			= 500
 } HTTPStatusCode;
 
-@class WebRequestController;
+@class WDLWebRequest;
 
-@protocol WebRequestDelegate
+@protocol WDLWebRequestDelegate
 
 @optional
 // This is called after after every succussful or failed connection attempt is complete
-- (void)webRequestConnectionComplete:(WebRequestController *)aWebRequest;
+- (void)webRequestConnectionComplete:(WDLWebRequest *)aWebRequest;
 
 @required
 
-- (void)webRequest:(WebRequestController *)aWebRequest didReturnResults:(NSString *)resultString;
-- (void)webRequest:(WebRequestController *)aWebRequest didFailWithError:(NSString *)errorMessage;
-- (void)webRequestConnectionFailed:(WebRequestController *)aWebRequest;
+- (void)webRequest:(WDLWebRequest *)aWebRequest didReturnResults:(NSString *)resultString;
+- (void)webRequest:(WDLWebRequest *)aWebRequest didFailWithError:(NSString *)errorMessage;
+- (void)webRequestConnectionFailed:(WDLWebRequest *)aWebRequest;
 
 @end
 
 #import <Foundation/Foundation.h>
 
-@interface WebRequestController : NSObject {
+@interface WDLWebRequest : NSObject {
 
-	id <WebRequestDelegate> delegate;
+	id <WDLWebRequestDelegate> delegate;
 	NSInteger responseStatus;
 	NSMutableData *receivedData;
 	NSURLConnection *requestConnection;
@@ -44,7 +44,7 @@ typedef enum HTTPStatusCodes {
 	
 }
 
-@property (nonatomic, assign) id <WebRequestDelegate> delegate;
+@property (nonatomic, assign) id <WDLWebRequestDelegate> delegate;
 @property (nonatomic, readonly) NSInteger responseStatus;
 @property (nonatomic, copy) NSString *urlString;
 

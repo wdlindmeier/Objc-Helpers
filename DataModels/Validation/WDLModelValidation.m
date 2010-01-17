@@ -1,16 +1,16 @@
 //
-//  ModelValidation.m
+//  WDLModelValidation.m
 //  tap
 //
 //  Created by William Lindmeier on 6/16/09.
 //  Copyright 2009. All rights reserved.
 //
 
-#import "ModelValidation.h"
-#import "PotentialValueObject.h"
-#import "Model.h"
+#import "WDLModelValidation.h"
+#import "WDLPotentialValueObject.h"
+#import "WDLModel.h"
 
-@implementation ModelValidation
+@implementation WDLModelValidation
 
 @dynamic errorMessage;
 
@@ -65,9 +65,9 @@
 }
 
 // Will return an error message (NSString) if the record is invalid, or nil if it's valid
-- (NSString *)validateAgainstRecord:(Model *)record
+- (NSString *)validateAgainstRecord:(WDLModel *)record
 {
-	PotentialValueObject *propObject = [[PotentialValueObject alloc] initWithParentObject:record propertyName:propertyName];
+	WDLPotentialValueObject *propObject = [[WDLPotentialValueObject alloc] initWithParentObject:record propertyName:propertyName];
 	BOOL invalid = NO;
 	id currentValue = [propObject currentValue];
 
@@ -79,7 +79,7 @@
 
 	}else if(validationType == ValidatesAssociated){
 		
-		if(![(Model *)currentValue isValid]) invalid = YES;
+		if(![(WDLModel *)currentValue isValid]) invalid = YES;
 
 	}else if(validationType == ValidatesNonEmptyString){
 		

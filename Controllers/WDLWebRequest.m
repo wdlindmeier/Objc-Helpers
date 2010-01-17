@@ -1,14 +1,14 @@
 //
-//  WebRequestController.m
+//  WDLWebRequest.m
 //  tap
 //
 //  Created by William Lindmeier on 6/20/09.
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
-#import "WebRequestController.h"
+#import "WDLWebRequest.h"
 
-@implementation WebRequestController
+@implementation WDLWebRequest
 
 @synthesize delegate, responseStatus, urlString;
 

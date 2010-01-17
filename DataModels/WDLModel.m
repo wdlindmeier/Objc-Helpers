@@ -1,16 +1,16 @@
 //
-//  Model.m
+//  WDLModel.m
 //  tap
 //
 //  Created by William Lindmeier on 5/23/09.
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
-#import "Model.h"
-#import "PotentialValueObject.h"
+#import "WDLModel.h"
+#import "WDLPotentialValueObject.h"
 #import "JSON.h"
 
-@implementation Model 
+@implementation WDLModel 
 
 @synthesize errorMessages;
 
@@ -20,8 +20,8 @@
 
 #pragma mark Accessors 
 
-- (PotentialValueObject *)propertyWithName:(NSString *)propName{
-	PotentialValueObject * varietalProp = [[[PotentialValueObject alloc] initWithParentObject:self
+- (WDLPotentialValueObject *)propertyWithName:(NSString *)propName{
+	WDLPotentialValueObject * varietalProp = [[[WDLPotentialValueObject alloc] initWithParentObject:self
 											propertyName:propName] autorelease];
 	return varietalProp;
 }
@@ -49,7 +49,7 @@
 	[errorMessages release];
 	NSMutableArray *validationErrors = [NSMutableArray array];
 	
-	for(ModelValidation *validation in [self validations]){
+	for(WDLModelValidation *validation in [self validations]){
 		NSString *errorMessage = [validation validateAgainstRecord:self];
 		if(errorMessage){
 			[validationErrors addObject:errorMessage];
@@ -87,7 +87,7 @@
 	for(NSString *relationshipName in relationshipsByName){
 		NSRelationshipDescription *relationship = [relationshipsByName objectForKey:relationshipName];
 		if(![relationship isToMany]){
-			Model *associatedObject = [self performSelector:NSSelectorFromString(relationshipName)];
+			WDLModel *associatedObject = [self performSelector:NSSelectorFromString(relationshipName)];
 			[associatedObject persist];
 		}
 	}
@@ -135,9 +135,9 @@
 			}else{
 				value = @"[]";
 			}
-		}else if([relationshipValue isKindOfClass:[Model class]]){
+		}else if([relationshipValue isKindOfClass:[WDLModel class]]){
 			keyName = [NSString stringWithFormat:@"%@Id", key];
-			value = [NSString stringWithFormat:@"\"%@\"", [[[(Model *)relationshipValue objectID] URIRepresentation] relativePath]];
+			value = [NSString stringWithFormat:@"\"%@\"", [[[(WDLModel *)relationshipValue objectID] URIRepresentation] relativePath]];
 		}else if([relationshipValue isKindOfClass:[NSData class]]){			
 			if([key isEqual:@"imageData"]){
 				// this is a photo
@@ -233,12 +233,12 @@
 	return fetchedObjects;	
 }
 
-+ (Model *)newRecord
++ (WDLModel *)newRecord
 {
 	NSManagedObjectContext *sharedContext = [ManagedContextController sharedContext];
 	NSManagedObjectModel *managedObjectModel = [[sharedContext persistentStoreCoordinator] managedObjectModel];
 	NSEntityDescription *entity = [[managedObjectModel entitiesByName] objectForKey:NSStringFromClass([self class])];
-	return (Model *)[[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:sharedContext];
+	return (WDLModel *)[[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:sharedContext];
 }
 
 // Add a delete warning to a class if the user should get an alert before the record is removed

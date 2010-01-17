@@ -1,19 +1,19 @@
 //
-//  PhotoPickerController.m
+//  WDLPhotoPickerController.m
 //  tweak
 //
 //  Created by William Lindmeier on 11/11/09.
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
-#import "PhotoPickerController.h"
+#import "WDLPhotoPickerController.h"
 
 #define kButtonNewPhotoIndex	0
 #define kButtonChoosePhotoIndex	1
 
-static PhotoPickerController *sharedController = nil;
+static WDLPhotoPickerController *sharedController = nil;
 
-@implementation PhotoPickerController
+@implementation WDLPhotoPickerController
 
 @synthesize delegate;
 
@@ -104,7 +104,7 @@ static PhotoPickerController *sharedController = nil;
 
 #pragma mark singleton controller methods
 
-+ (PhotoPickerController *)sharedInstance {
++ (WDLPhotoPickerController *)sharedInstance {
 	if (sharedController == nil) {
 		sharedController = [[self alloc] init];
 	}

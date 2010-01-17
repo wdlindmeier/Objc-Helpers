@@ -1,14 +1,14 @@
 //
-//  AccountController.m
+//  WDLAccountController.m
 //  tap
 //
 //  Created by William Lindmeier on 10/2/09.
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
-#import "AccountController.h"
+#import "WDLAccountController.h"
 
-@implementation AccountController
+@implementation WDLAccountController
 
 @dynamic username, password;
 
@@ -78,8 +78,8 @@
 
 + (void)setUsername:(NSString *)aUsername password:(NSString *)aPassword
 {
-	((AccountController *)[self sharedInstance]).username = aUsername;
-	((AccountController *)[self sharedInstance]).password = aPassword;
+	((WDLAccountController *)[self sharedInstance]).username = aUsername;
+	((WDLAccountController *)[self sharedInstance]).password = aPassword;
 }
 
 + (BOOL)accountEnabled

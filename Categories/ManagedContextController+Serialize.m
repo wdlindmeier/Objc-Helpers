@@ -7,7 +7,7 @@
 //
 
 #import "ManagedContextController+Serialize.h"
-#import "Model.h"
+#import "WDLModel.h"
 
 @implementation ManagedContextController(Serialize)
 
@@ -21,11 +21,11 @@
 	for(NSString *name in entityNames){
 		// NOTE: This should only serialized requested classes, not superclasses
 		
-		if(![name isEqual:@"Model"] && ![name isEqual:@"NamedModel"]){
+		if(![name isEqual:@"WDLModel"] && ![name isEqual:@"NamedModel"]){
 			id modelClass = NSClassFromString(name);
 			NSArray *allRecords = [modelClass findAll];
 			NSMutableArray *jsonData = [NSMutableArray array];			
-			for(Model *record in allRecords){
+			for(WDLModel *record in allRecords){
 				[jsonData addObject:[record JSONRepresentation]];
 				[record exportBinaryDataToPath:[exportPath stringByAppendingPathComponent:[record binaryPath]]];
 			}
