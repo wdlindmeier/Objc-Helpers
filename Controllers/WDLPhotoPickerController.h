@@ -13,11 +13,12 @@
 @protocol WDLPhotoPickerDelegate
 
 @required
-- (void)photoPickerDidPickImage:(UIImage *)anImage;
+- (void)photoPicker:(WDLPhotoPickerController *)aPhotoPicker didPickImage:(UIImage *)anImage;
 - (UIViewController *)viewControllerToPresentPhotoPicker:(WDLPhotoPickerController *)aPhotoPicker;
 
 @optional
-- (void)photoPickerDidCancel;
+
+- (void)photoPickerDidCancel:(WDLPhotoPickerController *)aPhotoPicker;
 
 @end
 

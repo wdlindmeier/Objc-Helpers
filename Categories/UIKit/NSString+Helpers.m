@@ -76,4 +76,24 @@
 	return setter;
 }
 
++ (NSDictionary *)dictionaryFromQueryParams:(NSString *)paramsString lowercaseKeys:(BOOL)shouldLowercase
+{	
+	// If the string starts with a ?, lop it off
+	NSString *queryString = [paramsString stringByReplacingOccurrencesOfString:@"?" withString:@""];
+	
+	NSMutableDictionary *options = [NSMutableDictionary dictionary];
+	
+	NSArray *paramKeyValues = [queryString componentsSeparatedByString:@"&"];		
+	
+	for(NSString *param in paramKeyValues){
+		NSArray *keyValue = [param componentsSeparatedByString:@"="];
+		NSString *theKey = [keyValue objectAtIndex:0];
+		if(shouldLowercase) theKey = [theKey lowercaseString];
+		[options setObject:[keyValue objectAtIndex:1] forKey:theKey];
+	}
+	
+	return options;	
+}
+
+
 @end

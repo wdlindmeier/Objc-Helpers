@@ -16,11 +16,12 @@
 
 - (void)makeRequest:(NSURLRequest *)request 
 {
-
+	
 	requestConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	self.urlString = [[request URL] absoluteString];
 	
-	if (requestConnection) {		
+	if (requestConnection) {
+		isActive = YES;
 		[receivedData release];
 		receivedData = [[NSMutableData alloc] init];
 	} else if(self.delegate) {
@@ -33,10 +34,12 @@
 
 - (void)cancelRequest
 {
-	[requestConnection cancel];
-	if(self.delegate && [(NSObject *)self.delegate respondsToSelector:@selector(webRequestConnectionComplete:)]){
-		[self.delegate webRequestConnectionComplete:self];
-	}	
+	if(isActive){
+		[requestConnection cancel];
+		if(self.delegate && [(NSObject *)self.delegate respondsToSelector:@selector(webRequestConnectionComplete:)]){
+			[self.delegate webRequestConnectionComplete:self];
+		}	
+	}
 }
 
 #pragma mark ---- delegate methods for the NSURLConnection class ----
@@ -65,6 +68,8 @@
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
+	isActive = NO;
+	
 	// release the connection, and the data object	
 	[connection release];
 	
@@ -81,6 +86,8 @@
 {	
 	// receivedData is declared as a method instance elsewhere	
 	// NSLog(@"Succeeded! Received %d bytes of data", [receivedData length]);
+	
+	isActive = NO;
 	
 	NSString* stringEncodedData = [[[NSString alloc] initWithData: receivedData encoding: NSUTF8StringEncoding] autorelease];
 	

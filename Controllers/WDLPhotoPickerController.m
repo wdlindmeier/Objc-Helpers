@@ -52,6 +52,9 @@ static WDLPhotoPickerController *sharedController = nil;
 			[self choosePhotoFromAlbum];
 			break;
 		default:
+			if(self.delegate && [(NSObject *)self.delegate respondsToSelector:@selector(photoPickerDidCancel:)]){
+				[self.delegate photoPickerDidCancel:self];
+			}
 			break;
 	}
 }
@@ -98,7 +101,18 @@ static WDLPhotoPickerController *sharedController = nil;
 	if(self.delegate){			
 		UIViewController *viewController = [self.delegate viewControllerToPresentPhotoPicker:self];
 		[viewController dismissModalViewControllerAnimated:YES];
-		[delegate photoPickerDidPickImage:image];
+		[delegate photoPicker:self didPickImage:image];
+	}
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+	if(self.delegate){
+		UIViewController *viewController = [self.delegate viewControllerToPresentPhotoPicker:self];
+		[viewController dismissModalViewControllerAnimated:YES];
+		if([(NSObject *)self.delegate respondsToSelector:@selector(photoPickerDidCancel:)]){
+			[self.delegate photoPickerDidCancel:self];
+		}
 	}
 }
 

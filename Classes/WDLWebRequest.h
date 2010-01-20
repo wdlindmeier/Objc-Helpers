@@ -6,6 +6,8 @@
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
 #define kConnectionTimeoutInterval	20.0
 
 typedef enum HTTPStatusCodes {
@@ -32,8 +34,6 @@ typedef enum HTTPStatusCodes {
 
 @end
 
-#import <Foundation/Foundation.h>
-
 @interface WDLWebRequest : NSObject {
 
 	id <WDLWebRequestDelegate> delegate;
@@ -41,6 +41,7 @@ typedef enum HTTPStatusCodes {
 	NSMutableData *receivedData;
 	NSURLConnection *requestConnection;
 	NSString *urlString;
+	BOOL isActive;
 	
 }
 

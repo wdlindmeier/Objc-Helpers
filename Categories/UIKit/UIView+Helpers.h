@@ -7,11 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import <QuartzCore/QuartzCore.h>
 
 @interface UIView(Helpers)
 
 - (UIImage *)renderedAsImage;
 - (CGPoint)positionWithinView:(UIView *)parentView;
+- (void)removeAllSubviews;
 
 @end

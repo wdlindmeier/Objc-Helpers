@@ -8,7 +8,6 @@
 
 #import "UIView+Helpers.h"
 
-
 @implementation UIView(Helpers)
 
 - (UIImage *)renderedAsImage
@@ -31,6 +30,13 @@
 		}
 	}
 	return position;
+}
+
+- (void)removeAllSubviews
+{
+	for(UIView *aView in self.subviews){
+		[aView removeFromSuperview];
+	}
 }
 
 @end

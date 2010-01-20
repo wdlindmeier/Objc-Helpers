@@ -13,11 +13,11 @@
 
 - (BOOL)containsString:(NSString *)matchString;
 - (BOOL)isEmpty;
-
 - (NSArray *)camelCaseComponents;
 - (NSString *)titleizedStringFromCamelCase;
 - (NSString *)underscoredStringFromCamelCase;
 
 + (NSString *)setterFromGetter:(NSString *)getterName;
++ (NSDictionary *)dictionaryFromQueryParams:(NSString *)paramsString lowercaseKeys:(BOOL)shouldLowercase;
 
 @end
