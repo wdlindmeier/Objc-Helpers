@@ -10,9 +10,9 @@
 
 @implementation WDLWebImageLoader
 
-@synthesize delegate, urlString;
+@synthesize delegate, imageURL;
 
--(void)loadImageFromURL:(NSString *)imageURLString{
+-(void)loadImageFromURL:(NSURL *)url{
 	if(isLoading)
 	{
 		@throw [NSException exceptionWithName:@"Load Request Ignored" 
@@ -22,12 +22,11 @@
 	
 	isLoading = YES;
 	
-	[urlString release];
-	urlString = [imageURLString copy];
+	self.imageURL = url;
 	
 	[NSThread detachNewThreadSelector:@selector(performAsyncLoadWithURL:) 
 							 toTarget:self 
-						   withObject:[NSURL URLWithString:urlString]];	
+						   withObject:self.imageURL];	
 }
 
 - (void) performAsyncLoadWithURL:(NSURL*)url
@@ -64,14 +63,14 @@
 - (void)loadDidFinishWithError:(NSError*)error
 {
 	isLoading = NO;
-	NSString *errorString = [NSString stringWithFormat:@"\nAPSWebImageView: Failed Image Load\n		[%@]\n		With Error - %@", 
-									  urlString, [error localizedDescription]];
+	NSString *errorString = [NSString stringWithFormat:@"Failed to load image from %@ with error \"%@\"", 
+									  imageURL, [error localizedDescription]];
 	if(self.delegate) [self.delegate webImageLoader:self failedToLoadWithError:errorString];
 }
 
 - (void)dealloc 
 {
-	[urlString release];
+	self.imageURL = nil;
 	[super dealloc];
 }
 

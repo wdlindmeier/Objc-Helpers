@@ -31,11 +31,11 @@
 }
 
 @property (assign) id <WDLPhotoPickerDelegate> delegate;
+@property (nonatomic, retain) UIImagePickerController *photoPickerFromCamera;
+@property (nonatomic, retain) UIImagePickerController *photoPickerFromAlbum;
 
 - (void)choosePhoto;
 - (void)choosePhotoFromAlbum;
 - (void)capturePhotoFromCamera;
-
-+ (WDLPhotoPickerController *)sharedInstance;
 
 @end

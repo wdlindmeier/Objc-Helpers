@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#define Release(x)		[x release];x = nil
+
 NSString * pathForDocumentFileNamed(NSString *fileName);
 NSURL * urlForDocumentFileNamed(NSString *fileName);
 NSString * pathForBundleFileNamed(NSString *fileName);

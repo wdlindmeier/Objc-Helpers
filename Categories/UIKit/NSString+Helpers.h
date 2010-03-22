@@ -16,7 +16,8 @@
 - (NSArray *)camelCaseComponents;
 - (NSString *)titleizedStringFromCamelCase;
 - (NSString *)underscoredStringFromCamelCase;
-
+- (NSString*)stringWithPercentEscape;
+- (NSString*)stringByUnescapingPercentEscape;
 + (NSString *)setterFromGetter:(NSString *)getterName;
 + (NSDictionary *)dictionaryFromQueryParams:(NSString *)paramsString lowercaseKeys:(BOOL)shouldLowercase;
 

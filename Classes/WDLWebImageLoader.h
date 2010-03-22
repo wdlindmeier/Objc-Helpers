@@ -21,13 +21,13 @@
 
 @interface WDLWebImageLoader : NSObject {
 	id <WDLWebImageLoaderDelegate> delegate;
-	NSString *urlString;
+	NSURL *imageURL;
 	BOOL isLoading;
 }
 
--(void)loadImageFromURL:(NSString *)imageURLString;
+-(void)loadImageFromURL:(NSURL *)url;
 
 @property(nonatomic, assign) id <WDLWebImageLoaderDelegate> delegate;
-@property(nonatomic, readonly) NSString *urlString;
+@property(nonatomic, retain) NSURL *imageURL;
 
 @end
