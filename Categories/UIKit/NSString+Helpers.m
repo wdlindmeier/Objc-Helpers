@@ -113,6 +113,20 @@
 	//   return [(NSString *) CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)[[self mutableCopy] autorelease], NULL, CFSTR("￼=,!$&'()*+;@?\n\"<>#\t :/"),kCFStringEncodingUTF8) autorelease];
 }
 
+- (NSString *)normalizedString
+{
+	NSData *asciiData = [[self lowercaseString] dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+	return [[[NSString alloc] initWithData:asciiData encoding:NSASCIIStringEncoding] autorelease];
+}
+
+- (NSString *)stringByIncrementingCharacters
+{
+	int lastIndex = [self length] - 1;
+	unichar lastChar = [self characterAtIndex:lastIndex];
+	unichar chars[] = {lastChar+1};
+	return [self stringByReplacingCharactersInRange:NSMakeRange(lastIndex, 1) withString:[NSString stringWithCharacters:chars length:1]];	
+}
+
 + (NSString *)setterFromGetter:(NSString *)getterName
 {
 	NSMutableString *capitalizedGetter = [getterName mutableCopy];	
