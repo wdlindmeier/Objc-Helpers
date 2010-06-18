@@ -77,40 +77,88 @@
 #pragma mark Keyboard Notifications
 
 - (void)keyboardWillShow:(NSNotification *)notification
-{
-	if(self.delegate){
-		UIView *mainWindow = [[UIApplication sharedApplication] keyWindow];
-		CGRect windowFrame = mainWindow.frame;
-
-		CGRect r = self.view.frame, t;
-		[[notification.userInfo valueForKey:UIKeyboardBoundsUserInfoKey] getValue:&t];
-		r.origin.y = windowFrame.size.height - (t.size.height + r.size.height);
+{	
+	UIView *mainWindow = [[UIApplication sharedApplication] keyWindow];
+	CGRect windowFrame = mainWindow.frame;	
+	CGRect r = self.view.frame, t;
+	[[notification.userInfo valueForKey:UIKeyboardBoundsUserInfoKey] getValue:&t];
+	r.origin.y = windowFrame.size.height - (t.size.height + r.size.height);
+	
+	if(toolbarIsAnimating){
 		
-		[UIView beginAnimations:nil context:NULL];
+		[(CALayer *)self.view.layer removeAnimationForKey:@"hideKeyboard"];
+		toolbarIsAnimating = NO;
+		self.view.frame = r;
+		
+	}else if(self.delegate){
+		
+		if([self.delegate respondsToSelector:@selector(keyboardWillAppear)]) [self.delegate keyboardWillAppear];
+		[self animateToolbarToFrame:r named:@"showKeyboard"];
+		/*
+		[UIView beginAnimations:@"showKeyboard" context:NULL];
 		[UIView setAnimationDuration:0.3];
+		[UIView setAnimationDelegate:self];
+		[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
 		
 		self.view.frame = r;
 		
 		[UIView commitAnimations];
+		
+		toolbarIsAnimating = YES;
+		*/
 	}	
+		
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification
-{	
-	if(self.delegate){		
-		UIView *mainWindow = [[UIApplication sharedApplication] keyWindow];
-		CGRect windowFrame = mainWindow.frame;
-
-		CGRect r = self.view.frame;
-		r.origin.y = windowFrame.size.height;
+{		
+	UIView *mainWindow = [[UIApplication sharedApplication] keyWindow];
+	CGRect windowFrame = mainWindow.frame;	
+	CGRect r = self.view.frame;
+	r.origin.y = windowFrame.size.height;
+	
+	if(toolbarIsAnimating){
 		
-		[UIView beginAnimations:nil context:NULL];
+		[(CALayer *)self.view.layer removeAnimationForKey:@"showKeyboard"];
+		toolbarIsAnimating = NO;
+		self.view.frame = r;
+		
+	}else if(self.delegate){		
+		
+		if([self.delegate respondsToSelector:@selector(keyboardWillHide)]) [self.delegate keyboardWillHide];
+		[self animateToolbarToFrame:r named:@"hideKeyboard"];
+		/*
+		[UIView beginAnimations:@"hideKeyboard" context:NULL];
 		[UIView setAnimationDuration:0.3];
-		
+		[UIView setAnimationDelegate:self];
+		[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
+
 		self.view.frame = r;
 		
 		[UIView commitAnimations];
-	}	
+		
+		toolbarIsAnimating = YES;
+		*/
+	}		
+}
+
+- (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context
+{
+	toolbarIsAnimating = NO;
+}
+
+- (void)animateToolbarToFrame:(CGRect)inputFrame named:(NSString *)animationID
+{
+	[UIView beginAnimations:animationID context:NULL];
+	[UIView setAnimationDuration:0.3];
+	[UIView setAnimationDelegate:self];
+	[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
+	
+	self.view.frame = inputFrame;
+	
+	[UIView commitAnimations];
+	
+	toolbarIsAnimating = YES;	
 }
 
 /*
@@ -125,11 +173,16 @@
 
 - (IBAction)buttonDonePressed:(id)sender
 {
-	[textFieldAssumeFirstResponder becomeFirstResponder];
-	[textFieldAssumeFirstResponder resignFirstResponder];
+	[self hideKeyboard];
 	if(self.delegate && [self.delegate respondsToSelector:@selector(keyboardToolbarButtonDonePressed:)]){
 		[self.delegate keyboardToolbarButtonDonePressed:sender];
 	}
+}
+
+- (void)hideKeyboard
+{
+	[textFieldAssumeFirstResponder becomeFirstResponder];
+	[textFieldAssumeFirstResponder resignFirstResponder];	
 }
 
 #define kSegmentIndexPrevious	0

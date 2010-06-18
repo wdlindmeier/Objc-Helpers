@@ -18,6 +18,9 @@
 	UIViewController <WDLKeyboardToolbarDelegate> * delegate;	
 	UITextField *textFieldAssumeFirstResponder;
 	
+	//BOOL keyboardIsVisible;
+	BOOL toolbarIsAnimating;
+	
 }
 
 @property (nonatomic, retain) IBOutlet UIBarItem *buttonDone;
@@ -28,6 +31,9 @@
 - (IBAction)buttonDonePressed:(id)sender;
 - (IBAction)buttonPrevNextPressed:(id)sender;
 
+- (void)hideKeyboard;
+- (void)animateToolbarToFrame:(CGRect)inputFrame named:(NSString *)animationID;
+
 @end
 
 @protocol WDLKeyboardToolbarDelegate
@@ -37,5 +43,7 @@
 - (void)keyboardToolbarButtonDonePressed:(id)sender;
 - (void)keyboardToolbarButtonPreviousPressed:(id)sender;
 - (void)keyboardToolbarButtonNextPressed:(id)sender;
+- (void)keyboardWillAppear;
+- (void)keyboardWillHide;
 
 @end
