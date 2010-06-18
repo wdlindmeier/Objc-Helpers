@@ -194,8 +194,8 @@
 		bytesOffset += 5;
 		charsOffset += 8;
 		bytesLen -= 5;
-	}
-	return [NSString stringWithCString:chars length:sizeof(chars)];
+	}	
+	return [NSString stringWithUTF8String:chars]; //[NSString stringWithCString:chars length:sizeof(chars)];
 }
 
 #define FinishBlock(X)  (*code_ptr = (X),   code_ptr = dst++,   code = 0x01)

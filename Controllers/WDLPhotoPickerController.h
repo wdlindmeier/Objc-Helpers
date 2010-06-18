@@ -13,12 +13,14 @@
 @protocol WDLPhotoPickerDelegate
 
 @required
-- (void)photoPicker:(WDLPhotoPickerController *)aPhotoPicker didPickImage:(UIImage *)anImage;
+
 - (UIViewController *)viewControllerToPresentPhotoPicker:(WDLPhotoPickerController *)aPhotoPicker;
 
 @optional
 
+- (void)photoPicker:(WDLPhotoPickerController *)aPhotoPicker didPickImage:(UIImage *)anImage;
 - (void)photoPickerDidCancel:(WDLPhotoPickerController *)aPhotoPicker;
+- (void)photoPicker:(WDLPhotoPickerController *)aPhotoPicker didPickVideoAtURL:(NSURL *)videoURL;
 
 @end
 
@@ -27,6 +29,7 @@
 	UIImagePickerController *photoPickerFromCamera;
 	UIImagePickerController *photoPickerFromAlbum;
 	id <WDLPhotoPickerDelegate>delegate;
+	NSArray *permissableMediaTypes;
 	
 }
 
@@ -34,8 +37,8 @@
 @property (nonatomic, retain) UIImagePickerController *photoPickerFromCamera;
 @property (nonatomic, retain) UIImagePickerController *photoPickerFromAlbum;
 
-- (void)choosePhoto;
-- (void)choosePhotoFromAlbum;
-- (void)capturePhotoFromCamera;
+- (void)chooseFromMediaTypes:(NSArray *)mediaTypes;
+- (void)chooseMediaTypesFromAlbum:(NSArray *)mediaTypes;
+- (void)captureMediaTypesFromCamera:(NSArray *)mediaTypes;
 
 @end
