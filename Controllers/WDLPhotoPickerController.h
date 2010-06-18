@@ -30,12 +30,14 @@
 	UIImagePickerController *photoPickerFromAlbum;
 	id <WDLPhotoPickerDelegate>delegate;
 	NSArray *permissableMediaTypes;
+	BOOL allowsEditing;
 	
 }
 
 @property (assign) id <WDLPhotoPickerDelegate> delegate;
 @property (nonatomic, retain) UIImagePickerController *photoPickerFromCamera;
 @property (nonatomic, retain) UIImagePickerController *photoPickerFromAlbum;
+@property (nonatomic, assign) BOOL allowsEditing;
 
 - (void)chooseFromMediaTypes:(NSArray *)mediaTypes;
 - (void)chooseMediaTypesFromAlbum:(NSArray *)mediaTypes;

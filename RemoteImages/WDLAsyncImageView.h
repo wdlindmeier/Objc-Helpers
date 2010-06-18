@@ -1,5 +1,5 @@
 //
-//  AsyncImageView.h
+//  WDLAsyncImageView.h
 //  Native
 //
 //  Created by William Lindmeier on 4/12/10.
@@ -7,15 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
-@class SingletonImageCache;
-@class CachedImageData;
 
-@interface AsyncImageView : UIView {
+@class WDLSingletonImageCache;
+@class WDLCachedImageData;
+
+@interface WDLAsyncImageView : UIView {
 @private
 	NSString *URLString;
 	NSURLConnection *URLConnection;
 	NSMutableData *URLData;	
-	CachedImageData *cachedData;
+	WDLCachedImageData *cachedData;
 }
 
 - (void)loadImageFromURLString:(NSString *)aURLString;

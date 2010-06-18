@@ -1,5 +1,5 @@
 //
-//  SingletonImageCache.h
+//  WDLSingletonImageCache.h
 //  Native
 //
 //  Created by William Lindmeier on 4/12/10.
@@ -8,18 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
-@class CachedImageData;
+@class WDLCachedImageData;
 
-@interface SingletonImageCache : NSObject {
+@interface WDLSingletonImageCache : NSObject {
 	NSMutableDictionary	*sharedImageCacheDictionary;
 }
 
 - (NSMutableDictionary *) getSharedImageCache;
 - (void)handleMemoryWarning;
 
-+ (SingletonImageCache *)sharedImageCacheInstance;
-+ (CachedImageData *)imageDataForURLString:(NSString *)urlString;
-+ (void)setImageData:(CachedImageData *)cachedData;
++ (WDLSingletonImageCache *)sharedImageCacheInstance;
++ (WDLCachedImageData *)imageDataForURLString:(NSString *)urlString;
++ (void)setImageData:(WDLCachedImageData *)cachedData;
 + (void)moveDataFromMemoryToDiskForImageAtURLString:(NSString *)URLString;
 + (BOOL)clearCache;
 

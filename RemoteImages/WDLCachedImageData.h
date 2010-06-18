@@ -1,5 +1,5 @@
 //
-//  CachedImageData.h
+//  WDLCachedImageData.h
 //  Native
 //
 //  Created by William Lindmeier on 4/12/10.
@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface CachedImageData : NSObject {
+@interface WDLCachedImageData : NSObject {
 	
 	NSMutableData *imageData;
 	int displayCount;

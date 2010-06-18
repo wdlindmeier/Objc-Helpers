@@ -1,15 +1,15 @@
 //
-//  CachedImageData.m
+//  WDLCachedImageData.m
 //  Native
 //
 //  Created by William Lindmeier on 4/12/10.
 //  Copyright 2010 William Lindmeier All rights reserved.
 //
 
-#import "CachedImageData.h"
-#import "SingletonImageCache.h"
+#import "WDLCachedImageData.h"
+#import "WDLSingletonImageCache.h"
 
-@implementation CachedImageData
+@implementation WDLCachedImageData
 
 @synthesize imageData, displayCount, URLString;
 
@@ -33,7 +33,7 @@
 	displayCount = count;
 	// If the image is no longer displayed, move it to the disk cache
 	if(count < 1 && self.URLString){
-		[SingletonImageCache moveDataFromMemoryToDiskForImageAtURLString:self.URLString];
+		[WDLSingletonImageCache moveDataFromMemoryToDiskForImageAtURLString:self.URLString];
 	}
 }
 

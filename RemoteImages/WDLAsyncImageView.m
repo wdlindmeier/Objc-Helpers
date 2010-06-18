@@ -1,24 +1,24 @@
 //
-//  AsyncImageView.m
+//  WDLAsyncImageView.m
 //  Native
 //
 //  Created by William Lindmeier on 4/12/10.
 //  Copyright 2010 William Lindmeier. All rights reserved.
 //
 
-#import "AsyncImageView.h"
-#import "SingletonImageCache.h"
-#import "CachedImageData.h"
+#import "WDLAsyncImageView.h"
+#import "WDLSingletonImageCache.h"
+#import "WDLCachedImageData.h"
 
 // private definitions
-@interface AsyncImageView()
+@interface WDLAsyncImageView()
 	@property (nonatomic, retain) NSString *URLString;
 	@property (nonatomic, retain) NSURLConnection *URLConnection;
-	@property (retain) CachedImageData *cachedData;
+	@property (retain) WDLCachedImageData *cachedData;
 	- (void) refreshWithImage;
 @end
 
-@implementation AsyncImageView
+@implementation WDLAsyncImageView
 @synthesize URLString, URLConnection, cachedData;
 
 - (void)loadImageFromURLString:(NSString *)aURLString {
@@ -31,7 +31,7 @@
 	@synchronized(self) {
 	
 		//First, check if the image exists in Cache.
-		self.cachedData = [SingletonImageCache imageDataForURLString:self.URLString];
+		self.cachedData = [WDLSingletonImageCache imageDataForURLString:self.URLString];
 		
 		if (self.cachedData) {
 			// image FOUND in cache. use this
@@ -68,16 +68,16 @@
 		if(!self.cachedData){
 			// We don't want more than 1 thread accessing the image cache for a particular URL
 			@synchronized(self.URLString){
-				CachedImageData *existingImageCache = [SingletonImageCache imageDataForURLString:self.URLString]; // [sharedImageCache valueForKey:self.URLString];		
+				WDLCachedImageData *existingImageCache = [WDLSingletonImageCache imageDataForURLString:self.URLString]; // [sharedImageCache valueForKey:self.URLString];		
 				if(existingImageCache){
 					// Whoops. We grabbed 2 at the same time. Get rid of one.
 					self.cachedData = existingImageCache;				
 				}else{
-					CachedImageData *cache = [[CachedImageData alloc] initWithURLString:self.URLString];
+					WDLCachedImageData *cache = [[WDLCachedImageData alloc] initWithURLString:self.URLString];
 					cache.imageData = URLData;
 					self.cachedData = cache;
 					[cache release];
-					[SingletonImageCache setImageData:self.cachedData];
+					[WDLSingletonImageCache setImageData:self.cachedData];
 				}
 			}
 			[URLData release]; URLData = nil;

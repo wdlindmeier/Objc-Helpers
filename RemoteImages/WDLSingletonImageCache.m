@@ -6,11 +6,11 @@
 //  Copyright 2010 William Lindmeier. All rights reserved.
 //
 
-#import "SingletonImageCache.h"
-#import "CachedImageData.h"
+#import "WDLSingletonImageCache.h"
+#import "WDLCachedImageData.h"
 
 // private definitions
-@interface SingletonImageCache()
+@interface WDLSingletonImageCache()
 
 @property (nonatomic, retain) NSMutableDictionary *sharedImageCacheDictionary;
 
@@ -20,7 +20,7 @@
 
 @end
 
-@implementation SingletonImageCache
+@implementation WDLSingletonImageCache
 
 @synthesize sharedImageCacheDictionary;
 
@@ -36,8 +36,8 @@
 #pragma mark Memory
 
 - (void)handleMemoryWarning {
-	NSLog(@"SingletonImageCache: received memory warning");
-	SingletonImageCache *sharedImageCacheInstance = [SingletonImageCache sharedImageCacheInstance];
+	NSLog(@"WDLSingletonImageCache: received memory warning");
+	WDLSingletonImageCache *sharedImageCacheInstance = [WDLSingletonImageCache sharedImageCacheInstance];
 	NSMutableDictionary *sharedImageCache = [sharedImageCacheInstance getSharedImageCache];
 	[sharedImageCache removeAllObjects];
 }
@@ -51,12 +51,12 @@
 
 #pragma mark Class methods
 
-+ (SingletonImageCache *) sharedImageCacheInstance {
-	static SingletonImageCache *sharedImageCacheInstance;
++ (WDLSingletonImageCache *) sharedImageCacheInstance {
+	static WDLSingletonImageCache *sharedImageCacheInstance;
 	
 	@synchronized(self) {
 		if (!sharedImageCacheInstance) {
-			sharedImageCacheInstance = [[SingletonImageCache alloc] init];
+			sharedImageCacheInstance = [[WDLSingletonImageCache alloc] init];
 			/*[[NSNotificationCenter defaultCenter] addObserver:self
 			 selector:@selector(handleMemoryWarning) 
 			 name:UIApplicationDidReceiveMemoryWarningNotification
@@ -67,30 +67,30 @@
 	return sharedImageCacheInstance;
 }
 
-+ (CachedImageData *)imageDataForURLString:(NSString *)URLString
++ (WDLCachedImageData *)imageDataForURLString:(NSString *)URLString
 {
-	CachedImageData *imageData;
-	SingletonImageCache *sharedImageCacheInstance = [SingletonImageCache sharedImageCacheInstance];
+	WDLCachedImageData *imageData;
+	WDLSingletonImageCache *sharedImageCacheInstance = [WDLSingletonImageCache sharedImageCacheInstance];
 	NSMutableDictionary *sharedImageCache = [sharedImageCacheInstance getSharedImageCache];
 	imageData = [sharedImageCache valueForKey:URLString];
 	if(!imageData){
 		// Check the file system
-		NSMutableData *urlData = [SingletonImageCache cachedImageDataForURLString:URLString];
+		NSMutableData *urlData = [WDLSingletonImageCache cachedImageDataForURLString:URLString];
 		// If it's there, save it to memory
 		if(urlData){ 
-			imageData = [[CachedImageData alloc] initWithURLString:URLString];
+			imageData = [[WDLCachedImageData alloc] initWithURLString:URLString];
 			imageData.imageData = urlData;
 			//[sharedImageCache setValue:imageData forKey:URLString];
-			[SingletonImageCache setImageData:imageData]; //forURLString:URLString];
+			[WDLSingletonImageCache setImageData:imageData]; //forURLString:URLString];
 			[imageData release];
 		}
 	}	
 	return imageData;
 }
 
-+ (void)setImageData:(CachedImageData *)cachedData //forURLString:(NSString *)aURL
++ (void)setImageData:(WDLCachedImageData *)cachedData
 {
-	SingletonImageCache *sharedImageCacheInstance = [SingletonImageCache sharedImageCacheInstance];
+	WDLSingletonImageCache *sharedImageCacheInstance = [WDLSingletonImageCache sharedImageCacheInstance];
 	NSMutableDictionary *sharedImageCache = [sharedImageCacheInstance getSharedImageCache];
 	[sharedImageCache setValue:cachedData forKey:cachedData.URLString];
 }
@@ -120,7 +120,7 @@
 
 + (void)saveImageData:(NSData *)imageData fromURLString:(NSString *)URLString
 {
-	NSString *escapedURLString = [URLString stringWithPercentEscape]; //[URLString stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+	NSString *escapedURLString = [URLString stringWithPercentEscape];
 
 	NSString *filePath = [[self cacheDirectory] stringByAppendingPathComponent:escapedURLString];
 	
@@ -138,9 +138,9 @@
 
 + (void)moveDataFromMemoryToDiskForImageAtURLString:(NSString *)URLString
 {
-	SingletonImageCache *sharedImageCacheInstance = [SingletonImageCache sharedImageCacheInstance];
+	WDLSingletonImageCache *sharedImageCacheInstance = [WDLSingletonImageCache sharedImageCacheInstance];
 	NSMutableDictionary *sharedImageCache = [sharedImageCacheInstance getSharedImageCache];
-	CachedImageData *cachedData = [sharedImageCache valueForKey:URLString];
+	WDLCachedImageData *cachedData = [sharedImageCache valueForKey:URLString];
 	if(cachedData){		
 //		NSLog(@"Moving image to disk cache: %@", URLString);
 		[self saveImageData:cachedData.imageData fromURLString:URLString];

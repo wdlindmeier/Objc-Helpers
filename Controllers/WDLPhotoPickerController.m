@@ -7,13 +7,14 @@
 //
 
 #import "WDLPhotoPickerController.h"
+// NOTE: This requires #import <MobileCoreServices/MobileCoreServices.h>
 
 #define kButtonNewPhotoIndex	0
 #define kButtonChoosePhotoIndex	1
 
 @implementation WDLPhotoPickerController
 
-@synthesize delegate, photoPickerFromAlbum, photoPickerFromCamera;
+@synthesize delegate, photoPickerFromAlbum, photoPickerFromCamera, allowsEditing;
 
 #pragma mark UIControl Actions
 
@@ -68,7 +69,7 @@
 		photoPickerFromCamera = [[UIImagePickerController alloc] init];		
 		photoPickerFromCamera.delegate = self;
 		photoPickerFromCamera.sourceType = UIImagePickerControllerSourceTypeCamera;
-		photoPickerFromCamera.allowsEditing = NO;
+		photoPickerFromCamera.allowsEditing = allowsEditing;
 		photoPickerFromCamera.view.hidden = YES;
 	}	
 	return photoPickerFromCamera;
@@ -79,7 +80,7 @@
 		photoPickerFromAlbum = [[UIImagePickerController alloc] init];		
 		photoPickerFromAlbum.delegate = self;
 		photoPickerFromAlbum.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-		photoPickerFromAlbum.allowsEditing = NO;
+		photoPickerFromAlbum.allowsEditing = allowsEditing;
 		photoPickerFromAlbum.view.hidden = YES;
 	}	
 	return photoPickerFromAlbum;
@@ -139,8 +140,7 @@
 			[viewController dismissModalViewControllerAnimated:YES];
 			[self.delegate photoPicker:self didPickVideoAtURL:videoURL];
 		}
-	}
-	
+	}	
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
