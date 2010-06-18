@@ -1,9 +1,9 @@
 //
 //  SingletonImageCache.h
-//  QNow-iPhone
+//  Native
 //
-//  Created by Subu Musti on 11/24/09.
-//  Copyright 2009 __MyCompanyName__. All rights reserved.
+//  Created by William Lindmeier on 4/12/10.
+//  Copyright 2010 William Lindmeier. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -19,7 +19,7 @@
 
 + (SingletonImageCache *)sharedImageCacheInstance;
 + (CachedImageData *)imageDataForURLString:(NSString *)urlString;
-+ (void)setImageData:(CachedImageData *)cachedData; // forURLString:(NSString *)urlString;
++ (void)setImageData:(CachedImageData *)cachedData;
 + (void)moveDataFromMemoryToDiskForImageAtURLString:(NSString *)URLString;
 + (BOOL)clearCache;
 

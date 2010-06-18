@@ -1,9 +1,9 @@
 //
-//  Qnow_ImageView.h
-//  QNow-iPhone
+//  AsyncImageView.h
+//  Native
 //
-//  Created by Subu Musti on 11/24/09.
-//  Copyright 2009 __MyCompanyName__. All rights reserved.
+//  Created by William Lindmeier on 4/12/10.
+//  Copyright 2010 William Lindmeier. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -16,8 +16,6 @@
 	NSURLConnection *URLConnection;
 	NSMutableData *URLData;	
 	CachedImageData *cachedData;
-//	SingletonImageCache *sharedImageCacheInstance;
-//	NSMutableDictionary *sharedImageCache;
 }
 
 - (void)loadImageFromURLString:(NSString *)aURLString;

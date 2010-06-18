@@ -2,8 +2,8 @@
 //  CachedImageData.m
 //  Native
 //
-//  Created by Bill Lindmeier on 4/12/10.
-//  Copyright 2010 Apple Inc. All rights reserved.
+//  Created by William Lindmeier on 4/12/10.
+//  Copyright 2010 William Lindmeier All rights reserved.
 //
 
 #import "CachedImageData.h"

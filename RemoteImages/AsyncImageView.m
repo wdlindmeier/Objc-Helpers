@@ -1,9 +1,9 @@
 //
-//  Qnow_ImageView.m
-//  QNow-iPhone
+//  AsyncImageView.m
+//  Native
 //
-//  Created by Subu Musti on 11/24/09.
-//  Copyright 2009 __MyCompanyName__. All rights reserved.
+//  Created by William Lindmeier on 4/12/10.
+//  Copyright 2010 William Lindmeier. All rights reserved.
 //
 
 #import "AsyncImageView.h"
@@ -31,7 +31,7 @@
 	@synchronized(self) {
 	
 		//First, check if the image exists in Cache.
-		self.cachedData = [SingletonImageCache imageDataForURLString:self.URLString]; //[sharedImageCache valueForKey:self.URLString];
+		self.cachedData = [SingletonImageCache imageDataForURLString:self.URLString];
 		
 		if (self.cachedData) {
 			// image FOUND in cache. use this
