@@ -30,5 +30,6 @@
 - (BOOL)hasAlpha;
 - (UIImage *)imageWithAlpha;
 - (UIImage *)transparentBorderImage:(NSUInteger)borderSize;
+- (UIColor *)colorAtX:(int)xx y:(int)yy;
 
 @end
