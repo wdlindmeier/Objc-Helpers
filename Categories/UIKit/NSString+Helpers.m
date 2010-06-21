@@ -156,5 +156,14 @@
 	return options;	
 }
 
++ (NSString *)udid
+{
+	CFUUIDRef uuidRef = CFUUIDCreate(kCFAllocatorDefault);
+	CFStringRef strRef = CFUUIDCreateString(kCFAllocatorDefault, uuidRef);
+	NSString *uuidString = [NSString stringWithString:(NSString*)strRef];
+	CFRelease(strRef);
+	CFRelease(uuidRef);	
+	return uuidString;
+}
 
 @end
