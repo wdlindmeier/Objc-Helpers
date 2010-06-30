@@ -127,6 +127,11 @@
 	return [self stringByReplacingCharactersInRange:NSMakeRange(lastIndex, 1) withString:[NSString stringWithCharacters:chars length:1]];	
 }
 
+- (NSString *)stringByStrippingString
+{
+	return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+}
+
 + (NSString *)setterFromGetter:(NSString *)getterName
 {
 	NSMutableString *capitalizedGetter = [getterName mutableCopy];	
@@ -156,5 +161,14 @@
 	return options;	
 }
 
++ (NSString *)udid
+{
+	CFUUIDRef uuidRef = CFUUIDCreate(kCFAllocatorDefault);
+	CFStringRef strRef = CFUUIDCreateString(kCFAllocatorDefault, uuidRef);
+	NSString *uuidString = [NSString stringWithString:(NSString*)strRef];
+	CFRelease(strRef);
+	CFRelease(uuidRef);	
+	return uuidString;
+}
 
 @end

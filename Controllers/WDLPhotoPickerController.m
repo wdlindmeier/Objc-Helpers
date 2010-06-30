@@ -36,8 +36,8 @@
 		if(self.delegate){			
 			UIViewController *viewController = [self.delegate viewControllerToPresentPhotoPicker:self];
 			[anActionSheet showInView:viewController.view];
-			[anActionSheet release];
 		}			
+		[anActionSheet release];
 	}else{
 		[self chooseMediaTypesFromAlbum:mediaTypes];
 	}
@@ -129,8 +129,9 @@
 		if(self.delegate && [(NSObject *)self.delegate respondsToSelector:@selector(photoPicker:didPickImage:)]){	
 			UIViewController *viewController = [self.delegate viewControllerToPresentPhotoPicker:self];
 			[viewController dismissModalViewControllerAnimated:YES];
-			[self.delegate photoPicker:self didPickImage:[image autorelease]];
+			[self.delegate photoPicker:self didPickImage:image];
 		}
+		[image release];
 	}else if([mediaType isEqual:(NSString *)kUTTypeMovie]){
 		
 		// Picked a video: Return the URL

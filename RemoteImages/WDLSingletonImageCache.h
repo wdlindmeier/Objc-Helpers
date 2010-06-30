@@ -11,7 +11,10 @@
 @class WDLCachedImageData;
 
 @interface WDLSingletonImageCache : NSObject {
+	
 	NSMutableDictionary	*sharedImageCacheDictionary;
+	NSOperationQueue *imageLoadQueue;
+
 }
 
 - (NSMutableDictionary *) getSharedImageCache;
@@ -19,6 +22,7 @@
 
 + (WDLSingletonImageCache *)sharedImageCacheInstance;
 + (WDLCachedImageData *)imageDataForURLString:(NSString *)urlString;
++ (void)loadImageForURL:(NSURL *)imageURL;
 + (void)setImageData:(WDLCachedImageData *)cachedData;
 + (void)moveDataFromMemoryToDiskForImageAtURLString:(NSString *)URLString;
 + (BOOL)clearCache;

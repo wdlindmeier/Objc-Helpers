@@ -81,31 +81,17 @@
 	UIView *mainWindow = [[UIApplication sharedApplication] keyWindow];
 	CGRect windowFrame = mainWindow.frame;	
 	CGRect r = self.view.frame, t;
-	[[notification.userInfo valueForKey:UIKeyboardBoundsUserInfoKey] getValue:&t];
+	//[[notification.userInfo valueForKey:UIKeyboardBoundsUserInfoKey] getValue:&t];
+	[[notification.userInfo valueForKey:UIKeyboardFrameBeginUserInfoKey] getValue:&t];
 	r.origin.y = windowFrame.size.height - (t.size.height + r.size.height);
 	
 	if(toolbarIsAnimating){
-		
 		[(CALayer *)self.view.layer removeAnimationForKey:@"hideKeyboard"];
 		toolbarIsAnimating = NO;
-		self.view.frame = r;
-		
-	}else if(self.delegate){
-		
+		self.view.frame = r;		
+	}else if(self.delegate){				
 		if([self.delegate respondsToSelector:@selector(keyboardWillAppear)]) [self.delegate keyboardWillAppear];
 		[self animateToolbarToFrame:r named:@"showKeyboard"];
-		/*
-		[UIView beginAnimations:@"showKeyboard" context:NULL];
-		[UIView setAnimationDuration:0.3];
-		[UIView setAnimationDelegate:self];
-		[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
-		
-		self.view.frame = r;
-		
-		[UIView commitAnimations];
-		
-		toolbarIsAnimating = YES;
-		*/
 	}	
 		
 }
@@ -118,27 +104,14 @@
 	r.origin.y = windowFrame.size.height;
 	
 	if(toolbarIsAnimating){
-		
 		[(CALayer *)self.view.layer removeAnimationForKey:@"showKeyboard"];
 		toolbarIsAnimating = NO;
 		self.view.frame = r;
 		
 	}else if(self.delegate){		
-		
 		if([self.delegate respondsToSelector:@selector(keyboardWillHide)]) [self.delegate keyboardWillHide];
 		[self animateToolbarToFrame:r named:@"hideKeyboard"];
-		/*
-		[UIView beginAnimations:@"hideKeyboard" context:NULL];
-		[UIView setAnimationDuration:0.3];
-		[UIView setAnimationDelegate:self];
-		[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
-
-		self.view.frame = r;
 		
-		[UIView commitAnimations];
-		
-		toolbarIsAnimating = YES;
-		*/
 	}		
 }
 
@@ -149,16 +122,17 @@
 
 - (void)animateToolbarToFrame:(CGRect)inputFrame named:(NSString *)animationID
 {
+	toolbarIsAnimating = YES;	
+	
 	[UIView beginAnimations:animationID context:NULL];
 	[UIView setAnimationDuration:0.3];
 	[UIView setAnimationDelegate:self];
 	[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
-	
+
 	self.view.frame = inputFrame;
 	
 	[UIView commitAnimations];
-	
-	toolbarIsAnimating = YES;	
+		
 }
 
 /*
@@ -217,16 +191,15 @@
 
 - (void)viewDidUnload {
     [super viewDidUnload];
-	self.toolbar = nil;
-	self.buttonDone = nil;
-	self.buttonPrevNext = nil;
-	[self.view removeFromSuperview];
 }
 
 - (void)dealloc {
 	NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
 	[nc removeObserver:self];
-	[self viewDidUnload];
+	self.toolbar = nil;
+	self.buttonDone = nil;
+	self.buttonPrevNext = nil;
+	[self.view removeFromSuperview];	
 	self.delegate = nil;
 	[textFieldAssumeFirstResponder release];
     [super dealloc];

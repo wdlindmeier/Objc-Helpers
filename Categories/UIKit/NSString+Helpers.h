@@ -20,9 +20,11 @@
 - (NSString*)stringByUnescapingPercentEscape;
 - (NSString *)normalizedString;
 - (NSString *)stringByIncrementingCharacters;
+- (NSString *)stringByStrippingString;
 
 + (NSString *)setterFromGetter:(NSString *)getterName;
 + (NSDictionary *)dictionaryFromQueryParams:(NSString *)paramsString lowercaseKeys:(BOOL)shouldLowercase;
++ (NSString *)udid;
 
 @end
 
