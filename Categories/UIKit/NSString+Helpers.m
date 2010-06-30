@@ -127,6 +127,11 @@
 	return [self stringByReplacingCharactersInRange:NSMakeRange(lastIndex, 1) withString:[NSString stringWithCharacters:chars length:1]];	
 }
 
+- (NSString *)stringByStrippingString
+{
+	return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+}
+
 + (NSString *)setterFromGetter:(NSString *)getterName
 {
 	NSMutableString *capitalizedGetter = [getterName mutableCopy];	

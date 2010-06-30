@@ -217,16 +217,15 @@
 
 - (void)viewDidUnload {
     [super viewDidUnload];
-	self.toolbar = nil;
-	self.buttonDone = nil;
-	self.buttonPrevNext = nil;
-	[self.view removeFromSuperview];
 }
 
 - (void)dealloc {
 	NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
 	[nc removeObserver:self];
-	[self viewDidUnload];
+	self.toolbar = nil;
+	self.buttonDone = nil;
+	self.buttonPrevNext = nil;
+	[self.view removeFromSuperview];	
 	self.delegate = nil;
 	[textFieldAssumeFirstResponder release];
     [super dealloc];

@@ -35,8 +35,10 @@
 		
 		if (self.cachedData) {
 			// image FOUND in cache. use this
+			NSLog(@"FOUND cached data for URL: %@", self.URLString);
 			[self refreshWithImage];
 		} else {
+			NSLog(@"NO cached data for URL: %@", self.URLString);
 			// image NOT-FOUND in cache, get it from the web
 			URLData = [[NSMutableData alloc] init];
 			NSURL *url = [[NSURL alloc] initWithString:self.URLString];

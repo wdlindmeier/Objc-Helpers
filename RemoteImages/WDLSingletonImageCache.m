@@ -8,9 +8,12 @@
 
 #import "WDLSingletonImageCache.h"
 #import "WDLCachedImageData.h"
+#import "WDLImageLoadOperation.h"
 
 // private definitions
 @interface WDLSingletonImageCache()
+
+- (void)loadImageForURL:(NSURL *)aURL;
 
 @property (nonatomic, retain) NSMutableDictionary *sharedImageCacheDictionary;
 
@@ -24,15 +27,47 @@
 
 @synthesize sharedImageCacheDictionary;
 
+#pragma mark -
+#pragma mark Init
+
+- (id)init
+{
+	if(self = [super init]){
+		imageLoadQueue = [[NSOperationQueue alloc] init];
+	}
+	return self;
+}
+
+#pragma -
 #pragma mark Accessors 
 
-- (NSMutableDictionary *) getSharedImageCache {
+- (NSMutableDictionary *) getSharedImageCache 
+{
 	if (!sharedImageCacheDictionary) {
 		sharedImageCacheDictionary = [[NSMutableDictionary alloc] init];
 	}
 	return sharedImageCacheDictionary;
 }
 
+#pragma mark -
+#pragma mark Loading Images 
+
+- (void)loadImageForURL:(NSURL *)aURL
+{
+	// NOTE: Do we want to register delegates for each image?
+	
+	// If the URL is already loaded, dont bother
+	if([WDLSingletonImageCache cachedImageDataForURLString:[aURL absoluteString]]){
+		// The image is already cached. Dont bother.
+	}else{
+		WDLImageLoadOperation *imageLoader = [[WDLImageLoadOperation alloc] init];
+		imageLoader.imageURL = aURL;
+		[imageLoadQueue addOperation:imageLoader];
+		[imageLoader release];		
+	}
+}
+
+#pragma -
 #pragma mark Memory
 
 - (void)handleMemoryWarning {
@@ -43,12 +78,14 @@
 }
 
 - (void) dealloc {
-	//[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[imageLoadQueue cancelAllOperations];	
+	[imageLoadQueue release];
 	[sharedImageCacheDictionary removeAllObjects];
 	[sharedImageCacheDictionary release];
 	[super dealloc];
 }
 
+#pragma -
 #pragma mark Class methods
 
 + (WDLSingletonImageCache *) sharedImageCacheInstance {
@@ -93,6 +130,14 @@
 	WDLSingletonImageCache *sharedImageCacheInstance = [WDLSingletonImageCache sharedImageCacheInstance];
 	NSMutableDictionary *sharedImageCache = [sharedImageCacheInstance getSharedImageCache];
 	[sharedImageCache setValue:cachedData forKey:cachedData.URLString];
+}
+
+// This will simply load an image and store it in the cache for future use.
+// If the image is already cached, it will not load it again
++ (void)loadImageForURL:(NSURL *)imageURL
+{
+	WDLSingletonImageCache *sharedImageCacheInstance = [WDLSingletonImageCache sharedImageCacheInstance];
+	[sharedImageCacheInstance loadImageForURL:imageURL];
 }
 
 + (NSData *)cachedImageDataForURLString:(NSString *)URLString
