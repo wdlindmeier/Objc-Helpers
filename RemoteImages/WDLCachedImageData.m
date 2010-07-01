@@ -32,7 +32,7 @@
 
 	displayCount = count;
 	// If the image is no longer displayed, move it to the disk cache
-	if(count < 1 && self.URLString){
+	if(count < 1 && self.URLString){		
 		[WDLSingletonImageCache moveDataFromMemoryToDiskForImageAtURLString:self.URLString];
 	}
 }

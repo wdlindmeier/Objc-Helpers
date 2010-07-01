@@ -13,7 +13,9 @@
 // private definitions
 @interface WDLSingletonImageCache()
 
-- (void)loadImageForURL:(NSURL *)imageURL forDelegate:(NSObject <WDLRemoteImageLoaderDelegate> *)delegate;
+- (void)loadImageForURL:(NSURL *)imageURL 
+			forDelegate:(NSObject <WDLRemoteImageLoaderDelegate> *)delegate
+		willBeDisplayed:(BOOL)isDisplayed;
 
 + (NSString *)cacheDirectory;
 + (NSMutableData *)cachedImageDataForURLString:(NSString *)URLString;
@@ -41,7 +43,9 @@
 #pragma mark -
 #pragma mark Loading Images 
 
-- (void)loadImageForURL:(NSURL *)imageURL forDelegate:(NSObject <WDLRemoteImageLoaderDelegate> *)delegate
+- (void)loadImageForURL:(NSURL *)imageURL 
+			forDelegate:(NSObject <WDLRemoteImageLoaderDelegate> *)delegate
+		willBeDisplayed:(BOOL)isDisplayed
 {
 	// NOTE: Do we want to register delegates for each image?
 	@synchronized([WDLSingletonImageCache class]){
@@ -66,6 +70,7 @@
 			// Queue up an operation to load the image
 			WDLImageLoadOperation *imageLoader = [[WDLImageLoadOperation alloc] init];
 			imageLoader.imageURL = imageURL;
+			imageLoader.immediatelySaveToDisk = !isDisplayed;
 			[imageLoadQueue addOperation:imageLoader];
 			[imageLoader release];		
 		}
@@ -170,12 +175,16 @@
 }
 
 // This will simply load an image and store it in the cache for future use.
-// If the image is already cached, it will not load it again
-+ (void)loadImageForURL:(NSURL *)imageURL forDelegate:(NSObject <WDLRemoteImageLoaderDelegate> *)delegate
+// If the image is already cached, it will not load it again.
+// Set willBeDisplayed to YES if this is loaded into a view. 
+// Otherwise the image will be saved to disk.
++ (void)loadImageForURL:(NSURL *)imageURL 
+			forDelegate:(NSObject <WDLRemoteImageLoaderDelegate> *)delegate
+		willBeDisplayed:(BOOL)isDisplayed
 {
 	// We're just handing this down to the singleton instance
 	WDLSingletonImageCache *sharedImageCacheInstance = [WDLSingletonImageCache sharedImageCacheInstance];
-	[sharedImageCacheInstance loadImageForURL:imageURL forDelegate:delegate];
+	[sharedImageCacheInstance loadImageForURL:imageURL forDelegate:delegate willBeDisplayed:isDisplayed];
 }
 
 + (NSData *)cachedImageDataForURLString:(NSString *)URLString
@@ -230,6 +239,7 @@
 		WDLSingletonImageCache *sharedImageCacheInstance = [WDLSingletonImageCache sharedImageCacheInstance];
 		WDLCachedImageData *cachedData = [sharedImageCacheInstance.sharedImageCache valueForKey:URLString];
 		if(cachedData){		
+			NSLog(@"Moving image from memory to disk at URL: %@", URLString);
 			[self saveImageData:cachedData.imageData fromURLString:URLString];
 			[sharedImageCacheInstance.sharedImageCache removeObjectForKey:URLString];
 		}						 
@@ -267,6 +277,7 @@
 	// Clear the disk cache
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	NSError *fsError;
+	NSLog(@"[self cacheDirectory]: %@", [self cacheDirectory]);
 	BOOL success = [fileManager removeItemAtPath:[self cacheDirectory] error:&fsError];
 	if(!success){
 		NSLog(@"ERROR clearing image cache: %@", fsError);

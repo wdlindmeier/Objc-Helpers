@@ -10,59 +10,45 @@
 #import "WDLSingletonImageCache.h"
 #import "WDLCachedImageData.h"
 
-// private definitions
 @interface WDLAsyncImageView()
 
-@property (nonatomic, retain) NSString *URLString;
 @property (retain) WDLCachedImageData *cachedData;
-- (void) refreshWithImage;
+
+- (void)displayImageView:(UIImageView *)imageView;
 
 @end
 
 @implementation WDLAsyncImageView
-@synthesize URLString, cachedData;
+
+@synthesize cachedData, showsActivityIndicator;
 
 - (void)loadImageFromURLString:(NSString *)aURLString {
 	
-	// Not sure if this is needed
-	self.URLString = aURLString;
+	// Activity indicator, if you want it
+	if(showsActivityIndicator){
+		UIActivityIndicatorView *myIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+		myIndicator.center = self.center;
+		myIndicator.hidesWhenStopped = YES;
+		[myIndicator startAnimating];
+		[self addSubview:myIndicator];
+		[myIndicator release];
+	}
 	
-	[WDLSingletonImageCache loadImageForURL:[NSURL URLWithString:aURLString] 
-								forDelegate:self];
-	
-	/*	
-	 UIActivityIndicatorView *myIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-	 myIndicator.center = self.center;
-	 myIndicator.hidesWhenStopped = YES;
-	 [myIndicator startAnimating];
-	 [self addSubview:myIndicator];
-	 [myIndicator release];
-	 */			
-	
+	if(aURLString){
+		
+		[WDLSingletonImageCache loadImageForURL:[NSURL URLWithString:aURLString] 
+									forDelegate:self
+								willBeDisplayed:YES];
+	}else{
+		[self displayPlaceholderImage];
+	}
+		
 }
 
 - (void)displayPlaceholderImage {
-	[self displayApplicationImage:@"no_image.png"];
-}
-
-- (void)displayApplicationImage:(NSString *)imageName {
-	
-	NSString *defaultImagePath = [[NSBundle mainBundle] pathForResource:imageName ofType:nil];
-	UIImage *image = [[UIImage alloc] initWithContentsOfFile:defaultImagePath];
-	
-	UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.bounds];
-	imageView.contentMode = UIViewContentModeScaleAspectFit;
-	imageView.backgroundColor = UIColor.lightGrayColor;
-	imageView.image = image;
-	[image release];
-	
-	[self layoutIfNeeded];
-	[self setNeedsDisplay];
-	[self addSubview:imageView];
-	[imageView release];
-
-	self.contentMode = UIViewContentModeScaleAspectFit;
-	
+	UIImageView *placholder = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"no_image.png"]];
+	[self displayImageView:placholder];
+	[placholder release];
 }
 
 #pragma mark -
@@ -72,18 +58,19 @@
 {
 	self.cachedData = imageCache;
 	
-	// Increment the display count whenever we add the image to a view
-	self.cachedData.displayCount += 1;
-	
 	UIImageView* imageView = [[[UIImageView alloc] init] initWithFrame:self.bounds];
 	imageView.contentMode = UIViewContentModeScaleAspectFit;
 	[imageView setImage:[UIImage imageWithData:self.cachedData.imageData]];
+
+	[self displayImageView:imageView];
+	
+}
+
+- (void)displayImageView:(UIImageView *)imageView
+{
 	[self removeAllSubviews];
 	[self addSubview:imageView];
-	[imageView release];
-	
-	self.contentMode = UIViewContentModeScaleAspectFit;
-	
+	[self setNeedsLayout];
 }
 
 - (void)imageFailedToLoadForURL:(NSURL *)anImageURL
@@ -96,23 +83,28 @@
 #pragma mark -
 #pragma mark UIView 
 
-/*- (void)removeFromSuperview
+// These methods track how many times an image is displayed. 
+// If it gets to 0, we move cached image from memory to disk.
+// This is awesome.
+- (void)removeFromSuperview
 {
 	if(cachedData){
 		cachedData.displayCount -= 1;
 	}	
-}*/
+}
+
+- (void)didMoveToSuperview
+{
+	if(self.superview && cachedData){
+		cachedData.displayCount += 1;
+	}	
+}
 
 #pragma mark -
 #pragma mark Memory
 
 - (void)dealloc {
-	// NOTE: Should this be in removeFromSuperview?
-	if(cachedData){
-		cachedData.displayCount -= 1;
-	}		
 	self.cachedData = nil;
-	self.URLString = nil;
     [super dealloc];
 }
 	

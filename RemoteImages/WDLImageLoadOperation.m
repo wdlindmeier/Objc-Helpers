@@ -12,7 +12,7 @@
 
 @implementation WDLImageLoadOperation
 
-@synthesize imageURL;
+@synthesize imageURL, immediatelySaveToDisk;
 
 // This just loads an image as an operation in a queue and saves the data in the shared image cache
 - (void)main
@@ -24,7 +24,9 @@
 		if(imageCache.imageData){
 			// Should this be performed in the main thread?
 			[WDLSingletonImageCache setImageData:imageCache];
-			[WDLSingletonImageCache moveDataFromMemoryToDiskForImageAtURLString:urlString];
+			if(immediatelySaveToDisk){
+				[WDLSingletonImageCache moveDataFromMemoryToDiskForImageAtURLString:urlString];
+			}
 		}else{
 			[WDLSingletonImageCache imageFailedToLoadForURL:self.imageURL];
 		}

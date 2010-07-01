@@ -15,13 +15,14 @@
 	
 @private
 	
-	NSString *URLString;
 	WDLCachedImageData *cachedData;
+	BOOL showsActivityIndicator;
 	
 }
 
-- (void)loadImageFromURLString:(NSString *)aURLString;
-- (void)displayApplicationImage:(NSString *)imageName;
+@property (nonatomic, assign) BOOL showsActivityIndicator;
+
 - (void)displayPlaceholderImage;
+- (void)loadImageFromURLString:(NSString *)aURLString;
 
 @end

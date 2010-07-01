@@ -27,7 +27,9 @@
 
 + (WDLSingletonImageCache *)sharedImageCacheInstance;
 + (WDLCachedImageData *)imageDataForURLString:(NSString *)urlString;
-+ (void)loadImageForURL:(NSURL *)imageURL forDelegate:(NSObject <WDLRemoteImageLoaderDelegate> *)delegate;
++ (void)loadImageForURL:(NSURL *)imageURL 
+			forDelegate:(NSObject <WDLRemoteImageLoaderDelegate> *)delegate
+		willBeDisplayed:(BOOL)isDisplayed;
 + (void)setImageData:(WDLCachedImageData *)cachedData;
 + (void)imageFailedToLoadForURL:(NSURL *)imageURL;
 + (void)moveDataFromMemoryToDiskForImageAtURLString:(NSString *)URLString;

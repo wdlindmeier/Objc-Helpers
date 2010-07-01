@@ -12,9 +12,11 @@
 @interface WDLImageLoadOperation : NSOperation {
 
 	NSURL *imageURL;
+	BOOL immediatelySaveToDisk;
 	
 }
 
 @property (nonatomic, retain) NSURL *imageURL;
+@property (nonatomic, assign) BOOL immediatelySaveToDisk;
 
 @end
