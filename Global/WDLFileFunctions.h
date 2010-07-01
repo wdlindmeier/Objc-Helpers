@@ -1,5 +1,5 @@
 //
-//  WDLGlobalFunctions.h
+//  WDLFileFunctions.h
 //  Chaucer
 //
 //  Created by William Lindmeier on 8/27/09.
@@ -7,8 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-
-#define Release(x)		[x release];x = nil
 
 NSString * pathForDocumentFileNamed(NSString *fileName);
 NSURL * urlForDocumentFileNamed(NSString *fileName);
