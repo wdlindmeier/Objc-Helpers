@@ -12,104 +12,33 @@
 
 // private definitions
 @interface WDLAsyncImageView()
-	@property (nonatomic, retain) NSString *URLString;
-	@property (nonatomic, retain) NSURLConnection *URLConnection;
-	@property (retain) WDLCachedImageData *cachedData;
-	- (void) refreshWithImage;
+
+@property (nonatomic, retain) NSString *URLString;
+@property (retain) WDLCachedImageData *cachedData;
+- (void) refreshWithImage;
+
 @end
 
 @implementation WDLAsyncImageView
-@synthesize URLString, URLConnection, cachedData;
+@synthesize URLString, cachedData;
 
 - (void)loadImageFromURLString:(NSString *)aURLString {
 	
+	// Not sure if this is needed
 	self.URLString = aURLString;
 	
-	[self setBackgroundColor:[UIColor lightGrayColor]];
-	self.contentMode = UIViewContentModeScaleToFill;
+	[WDLSingletonImageCache loadImageForURL:[NSURL URLWithString:aURLString] 
+								forDelegate:self];
 	
-	@synchronized(self) {
+	/*	
+	 UIActivityIndicatorView *myIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+	 myIndicator.center = self.center;
+	 myIndicator.hidesWhenStopped = YES;
+	 [myIndicator startAnimating];
+	 [self addSubview:myIndicator];
+	 [myIndicator release];
+	 */			
 	
-		//First, check if the image exists in Cache.
-		self.cachedData = [WDLSingletonImageCache imageDataForURLString:self.URLString];
-		
-		if (self.cachedData) {
-			// image FOUND in cache. use this
-			NSLog(@"FOUND cached data for URL: %@", self.URLString);
-			[self refreshWithImage];
-		} else {
-			NSLog(@"NO cached data for URL: %@", self.URLString);
-			// image NOT-FOUND in cache, get it from the web
-			URLData = [[NSMutableData alloc] init];
-			NSURL *url = [[NSURL alloc] initWithString:self.URLString];
-/*			UIActivityIndicatorView *myIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-			myIndicator.center = self.center;
-			myIndicator.hidesWhenStopped = YES;
-			[myIndicator startAnimating];
-			[self addSubview:myIndicator];
-			[myIndicator release];
-*/			
-			NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url
-														  cachePolicy:NSURLRequestUseProtocolCachePolicy
-													  timeoutInterval:60.0];
-			[url release];
-			[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-			NSURLConnection *newUrlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-			[request release];
-
-			self.URLConnection = newUrlConnection;
-			[newUrlConnection release];
-		}
-	}	
-}
-
-- (void)refreshWithImage {
-	@synchronized(self) {
-		NSAssert2([NSThread isMainThread], @"%s at line %d called on secondary thread", __FUNCTION__, __LINE__);
-				
-		if(!self.cachedData){
-			// We don't want more than 1 thread accessing the image cache for a particular URL
-			@synchronized(self.URLString){
-				WDLCachedImageData *existingImageCache = [WDLSingletonImageCache imageDataForURLString:self.URLString]; // [sharedImageCache valueForKey:self.URLString];		
-				if(existingImageCache){
-					// Whoops. We grabbed 2 at the same time. Get rid of one.
-					self.cachedData = existingImageCache;				
-				}else{
-					WDLCachedImageData *cache = [[WDLCachedImageData alloc] initWithURLString:self.URLString];
-					cache.imageData = URLData;
-					self.cachedData = cache;
-					[cache release];
-					[WDLSingletonImageCache setImageData:self.cachedData];
-				}
-			}
-			[URLData release]; URLData = nil;
-		}
-		
-		UIImage *image = [UIImage imageWithData:self.cachedData.imageData];
-		
-		// it is still possible data received is not of UIImage type.
-		if (!image) {
-			self.cachedData = nil;
-			[self displayPlaceholderImage];
-			return;
-		}			
-		
-		// Increment the display count whenever we add the image to a view
-		self.cachedData.displayCount += 1;
-
-		UIImageView* imageView = [[[UIImageView alloc] init] initWithFrame:self.bounds];
-		imageView.contentMode = UIViewContentModeScaleAspectFit;
-		[imageView setImage:image];
-		[imageView setBackgroundColor:[UIColor lightGrayColor]]; 
-		
-		[self layoutIfNeeded];
-		[self setNeedsDisplay];
-		[self addSubview:imageView];
-		[imageView release];
-		
-		self.contentMode = UIViewContentModeScaleAspectFit;
-		
-	}
 }
 
 - (void)displayPlaceholderImage {
@@ -136,55 +65,52 @@
 	
 }
 
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-	@synchronized(self) {
-		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;	
-		
-		// release the connection, and the data object
-		[URLConnection release]; URLConnection=nil;
-		[URLData release]; URLData=nil;
-		
-		NSLog(@"Image download failed! Error - %@ %@", [error localizedDescription],
-			  [[error userInfo] objectForKey:NSErrorFailingURLStringKey]);
-		if ([[self subviews] count]>0) {
-			[[[self subviews] objectAtIndex:0] removeFromSuperview];
-		}
-		[self displayPlaceholderImage];
-	}
+#pragma mark -
+#pragma mark WDLRemoteImageLoaderDelegate
+
+- (void)imageLoadedAndCached:(WDLCachedImageData *)imageCache
+{
+	self.cachedData = imageCache;
+	
+	// Increment the display count whenever we add the image to a view
+	self.cachedData.displayCount += 1;
+	
+	UIImageView* imageView = [[[UIImageView alloc] init] initWithFrame:self.bounds];
+	imageView.contentMode = UIViewContentModeScaleAspectFit;
+	[imageView setImage:[UIImage imageWithData:self.cachedData.imageData]];
+	[self removeAllSubviews];
+	[self addSubview:imageView];
+	[imageView release];
+	
+	self.contentMode = UIViewContentModeScaleAspectFit;
+	
 }
 
-- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData {
-	@synchronized(self) {
-		[URLData appendData:incrementalData];
-	}
+- (void)imageFailedToLoadForURL:(NSURL *)anImageURL
+{
+	// Do we care?
+	NSLog(@"Async Image failed to load for %@", anImageURL);
+	[self displayPlaceholderImage];
 }
 
-- (void)connectionDidFinishLoading:(NSURLConnection*)connection {
-	@synchronized(self) {
-		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+#pragma mark -
+#pragma mark UIView 
 
-		// release the connection, and the data object
-		[URLConnection release]; URLConnection=nil;
-		
-		if ([[self subviews] count]>0) {
-			[[[self subviews] objectAtIndex:0] removeFromSuperview];
-		}
-		[self performSelectorOnMainThread:@selector(refreshWithImage) withObject:nil waitUntilDone:NO];
-	}
-}
+/*- (void)removeFromSuperview
+{
+	if(cachedData){
+		cachedData.displayCount -= 1;
+	}	
+}*/
 
+#pragma mark -
 #pragma mark Memory
 
 - (void)dealloc {
-	if (URLConnection != nil) {
-		[URLConnection cancel];
-		[URLConnection release];
-	}
-	[URLData release];
-	// NOTE: Maybe this should be in "removeFromSuperview"
+	// NOTE: Should this be in removeFromSuperview?
 	if(cachedData){
 		cachedData.displayCount -= 1;
-	}
+	}		
 	self.cachedData = nil;
 	self.URLString = nil;
     [super dealloc];

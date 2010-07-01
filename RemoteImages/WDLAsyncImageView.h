@@ -6,17 +6,18 @@
 //  Copyright 2010 William Lindmeier. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "WDLRemoteImageLoaderDelegate.h"
 
 @class WDLSingletonImageCache;
 @class WDLCachedImageData;
 
-@interface WDLAsyncImageView : UIView {
+@interface WDLAsyncImageView : UIView <WDLRemoteImageLoaderDelegate> {
+	
 @private
+	
 	NSString *URLString;
-	NSURLConnection *URLConnection;
-	NSMutableData *URLData;	
 	WDLCachedImageData *cachedData;
+	
 }
 
 - (void)loadImageFromURLString:(NSString *)aURLString;

@@ -19,12 +19,16 @@
 {
 	NSString *urlString = [self.imageURL absoluteString];
 	WDLCachedImageData *imageCache = [[WDLCachedImageData alloc] initWithURLString:urlString];
-	imageCache.imageData = [NSMutableData dataWithContentsOfURL:self.imageURL];
-	@synchronized([WDLSingletonImageCache sharedImageCacheInstance]){
-		[WDLSingletonImageCache setImageData:imageCache];
-		[WDLSingletonImageCache moveDataFromMemoryToDiskForImageAtURLString:urlString];
+	imageCache.imageData = [NSMutableData dataWithContentsOfURL:self.imageURL];	
+	@synchronized([WDLSingletonImageCache class]){
+		if(imageCache.imageData){
+			// Should this be performed in the main thread?
+			[WDLSingletonImageCache setImageData:imageCache];
+			[WDLSingletonImageCache moveDataFromMemoryToDiskForImageAtURLString:urlString];
+		}else{
+			[WDLSingletonImageCache imageFailedToLoadForURL:self.imageURL];
+		}
 	}
-	NSLog(@"Cached image for URL: %@", urlString);
 }
 
 - (void)dealloc

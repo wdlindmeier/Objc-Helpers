@@ -7,23 +7,29 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "WDLRemoteImageLoaderDelegate.h"
 
 @class WDLCachedImageData;
 
 @interface WDLSingletonImageCache : NSObject {
 	
-	NSMutableDictionary	*sharedImageCacheDictionary;
+	NSMutableDictionary	*sharedImageCache;
+	NSMutableDictionary *remoteImageDelegates;
 	NSOperationQueue *imageLoadQueue;
 
 }
 
-- (NSMutableDictionary *) getSharedImageCache;
+@property (readonly) NSMutableDictionary * sharedImageCache;
+@property (readonly) NSMutableDictionary * remoteImageDelegates;
+@property (readonly) NSOperationQueue *imageLoadQueue;
+
 - (void)handleMemoryWarning;
 
 + (WDLSingletonImageCache *)sharedImageCacheInstance;
 + (WDLCachedImageData *)imageDataForURLString:(NSString *)urlString;
-+ (void)loadImageForURL:(NSURL *)imageURL;
++ (void)loadImageForURL:(NSURL *)imageURL forDelegate:(NSObject <WDLRemoteImageLoaderDelegate> *)delegate;
 + (void)setImageData:(WDLCachedImageData *)cachedData;
++ (void)imageFailedToLoadForURL:(NSURL *)imageURL;
 + (void)moveDataFromMemoryToDiskForImageAtURLString:(NSString *)URLString;
 + (BOOL)clearCache;
 
