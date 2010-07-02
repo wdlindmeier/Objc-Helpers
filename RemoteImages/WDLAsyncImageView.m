@@ -40,15 +40,21 @@
 									forDelegate:self
 								willBeDisplayed:YES];
 	}else{
+		
 		[self displayPlaceholderImage];
+		
 	}
 		
 }
 
 - (void)displayPlaceholderImage {
-	UIImageView *placholder = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"no_image.png"]];
-	[self displayImageView:placholder];
-	[placholder release];
+	
+	UIImageView *placeholder = [[[UIImageView alloc] init] initWithFrame:self.bounds];
+	placeholder.contentMode = UIViewContentModeScaleAspectFit;
+	placeholder.image = [UIImage imageNamed:@"no_image.png"];
+	[self displayImageView:placeholder];
+	[placeholder release];
+	
 }
 
 #pragma mark -
@@ -58,18 +64,18 @@
 {
 	self.cachedData = imageCache;
 	
-	UIImageView* imageView = [[[UIImageView alloc] init] initWithFrame:self.bounds];
+	UIImageView *imageView = [[[UIImageView alloc] init] initWithFrame:self.bounds];
 	imageView.contentMode = UIViewContentModeScaleAspectFit;
 	[imageView setImage:[UIImage imageWithData:self.cachedData.imageData]];
-
 	[self displayImageView:imageView];
+	[imageView release];
 	
 }
 
 - (void)displayImageView:(UIImageView *)imageView
 {
 	[self removeAllSubviews];
-	[self addSubview:imageView];
+	[self addSubview:imageView];		
 	[self setNeedsLayout];
 }
 
