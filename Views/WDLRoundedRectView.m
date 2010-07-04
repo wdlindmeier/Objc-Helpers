@@ -54,7 +54,10 @@
 {
 	CGContextRef ctx = UIGraphicsGetCurrentContext();
 	
-	CGRect frame = self.bounds;
+	CGRect frame = CGRectMake(self.bounds.origin.x + (strokeWeight * 0.5), 
+							  self.bounds.origin.y + (strokeWeight * 0.5), 
+							  self.bounds.size.width - strokeWeight, 
+							  self.bounds.size.height - strokeWeight);
 	
 	CGPathRef roundedRectPath = [self newPathForRoundedRect:frame radius:self.radius];
 	
