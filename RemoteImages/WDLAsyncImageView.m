@@ -14,7 +14,7 @@
 
 @property (retain) WDLCachedImageData *cachedData;
 
-- (void)displayImageView:(UIImageView *)imageView;
+- (void)displayImageView:(UIImageView *)anImageView;
 
 @end
 
@@ -36,15 +36,33 @@
 	
 	if(aURLString){
 		
-		[WDLSingletonImageCache loadImageForURL:[NSURL URLWithString:aURLString] 
-									forDelegate:self
-								willBeDisplayed:YES];
+		[self displayPlaceholderImage];
+		
+		NSURL *imgURL = [NSURL URLWithString:aURLString];
+		
+		if(imgURL){
+			[WDLSingletonImageCache loadImageForURL:imgURL
+										forDelegate:self
+									willBeDisplayed:YES];
+		}else{
+			NSLog(@"%@ is not a valid URL", imgURL);
+		}
+		
 	}else{
 		
 		[self displayPlaceholderImage];
 		
 	}
 		
+}
+
+- (void)displayImage:(UIImage *)anImage
+{
+	UIImageView *localImageView = [[[UIImageView alloc] init] initWithFrame:self.bounds];
+	localImageView.contentMode = UIViewContentModeScaleAspectFit;
+	localImageView.image = anImage;
+	[self displayImageView:localImageView];
+	[localImageView release];
 }
 
 - (void)displayPlaceholderImage {
@@ -57,6 +75,14 @@
 	
 }
 
+- (void)layoutSubviews
+{
+	[super layoutSubviews];
+	if(imageView){
+		imageView.frame = self.bounds;
+	}
+}
+
 #pragma mark -
 #pragma mark WDLRemoteImageLoaderDelegate
 
@@ -64,17 +90,19 @@
 {
 	self.cachedData = imageCache;
 	
-	UIImageView *imageView = [[[UIImageView alloc] init] initWithFrame:self.bounds];
-	imageView.contentMode = UIViewContentModeScaleAspectFit;
-	[imageView setImage:[UIImage imageWithData:self.cachedData.imageData]];
-	[self displayImageView:imageView];
-	[imageView release];
+	UIImageView *anImageView = [[[UIImageView alloc] init] initWithFrame:self.bounds];
+	anImageView.contentMode = UIViewContentModeScaleAspectFit;
+	[anImageView setImage:[UIImage imageWithData:self.cachedData.imageData]];
+	[self displayImageView:anImageView];
+	[anImageView release];
 	
 }
 
-- (void)displayImageView:(UIImageView *)imageView
+- (void)displayImageView:(UIImageView *)anImageView
 {
 	[self removeAllSubviews];
+	// No retain, no release
+	imageView = anImageView;
 	[self addSubview:imageView];		
 	[self setNeedsLayout];
 }
@@ -110,6 +138,7 @@
 #pragma mark Memory
 
 - (void)dealloc {
+	// NOTE: No retain, no release of imageView
 	self.cachedData = nil;
     [super dealloc];
 }

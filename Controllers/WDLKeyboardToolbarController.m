@@ -78,11 +78,11 @@
 
 - (void)keyboardWillShow:(NSNotification *)notification
 {	
+	keyboardIsVisible = YES;
 	UIView *mainWindow = [[UIApplication sharedApplication] keyWindow];
 	CGRect windowFrame = mainWindow.frame;	
 	CGRect r = self.view.frame, t;
-	//[[notification.userInfo valueForKey:UIKeyboardBoundsUserInfoKey] getValue:&t];
-	[[notification.userInfo valueForKey:UIKeyboardFrameBeginUserInfoKey] getValue:&t];
+	[[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue:&t];
 	r.origin.y = windowFrame.size.height - (t.size.height + r.size.height);
 	
 	if(toolbarIsAnimating){
@@ -90,7 +90,10 @@
 		toolbarIsAnimating = NO;
 		self.view.frame = r;		
 	}else if(self.delegate){				
-		if([self.delegate respondsToSelector:@selector(keyboardWillAppear)]) [self.delegate keyboardWillAppear];
+		CGRect toolbarFrame = self.view.frame;
+		// NOTE: We're using the keyboard bounds y, not the toolbar
+		CGRect frameWithToolbar = CGRectMake(t.origin.x, t.origin.y, t.size.width, t.size.height + toolbarFrame.size.height);
+		if([self.delegate respondsToSelector:@selector(keyboardWillAppear:)]) [self.delegate keyboardWillAppear:frameWithToolbar];
 		[self animateToolbarToFrame:r named:@"showKeyboard"];
 	}	
 		
@@ -98,20 +101,22 @@
 
 - (void)keyboardWillHide:(NSNotification *)notification
 {		
+	keyboardIsVisible = NO;
 	UIView *mainWindow = [[UIApplication sharedApplication] keyWindow];
 	CGRect windowFrame = mainWindow.frame;	
-	CGRect r = self.view.frame;
+	CGRect r = self.view.frame, t;
+    [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &t];
 	r.origin.y = windowFrame.size.height;
 	
 	if(toolbarIsAnimating){
 		[(CALayer *)self.view.layer removeAnimationForKey:@"showKeyboard"];
 		toolbarIsAnimating = NO;
 		self.view.frame = r;
-		
 	}else if(self.delegate){		
-		if([self.delegate respondsToSelector:@selector(keyboardWillHide)]) [self.delegate keyboardWillHide];
-		[self animateToolbarToFrame:r named:@"hideKeyboard"];
-		
+		CGRect toolbarFrame = self.view.frame;
+		CGRect frameWithToolbar = CGRectMake(t.origin.x, t.origin.y - toolbarFrame.size.height, t.size.width, t.size.height + toolbarFrame.size.height);
+		if([self.delegate respondsToSelector:@selector(keyboardWillHide:)]) [self.delegate keyboardWillHide:frameWithToolbar];
+		[self animateToolbarToFrame:r named:@"hideKeyboard"];		
 	}		
 }
 
@@ -155,8 +160,10 @@
 
 - (void)hideKeyboard
 {
-	[textFieldAssumeFirstResponder becomeFirstResponder];
-	[textFieldAssumeFirstResponder resignFirstResponder];	
+	if(keyboardIsVisible){
+		[textFieldAssumeFirstResponder becomeFirstResponder];
+		[textFieldAssumeFirstResponder resignFirstResponder];	
+	}
 }
 
 #define kSegmentIndexPrevious	0

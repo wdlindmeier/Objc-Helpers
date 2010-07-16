@@ -26,7 +26,7 @@
 - (void)handleMemoryWarning;
 
 + (WDLSingletonImageCache *)sharedImageCacheInstance;
-+ (WDLCachedImageData *)imageDataForURLString:(NSString *)urlString;
++ (WDLCachedImageData *)imageCacheForURLString:(NSString *)urlString;
 + (void)loadImageForURL:(NSURL *)imageURL 
 			forDelegate:(NSObject <WDLRemoteImageLoaderDelegate> *)delegate
 		willBeDisplayed:(BOOL)isDisplayed;

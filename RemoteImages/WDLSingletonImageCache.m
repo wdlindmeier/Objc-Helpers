@@ -18,7 +18,7 @@
 		willBeDisplayed:(BOOL)isDisplayed;
 
 + (NSString *)cacheDirectory;
-+ (NSMutableData *)cachedImageDataForURLString:(NSString *)URLString;
++ (NSMutableData *)imageDataForURLString:(NSString *)URLString;
 + (void)saveImageData:(NSData *)imageData fromURLString:(NSString *)URLString;
 
 @end
@@ -47,10 +47,9 @@
 			forDelegate:(NSObject <WDLRemoteImageLoaderDelegate> *)delegate
 		willBeDisplayed:(BOOL)isDisplayed
 {
-	// NOTE: Do we want to register delegates for each image?
 	@synchronized([WDLSingletonImageCache class]){
 		// If the URL is already loaded, dont bother
-		WDLCachedImageData *imageCache = [WDLSingletonImageCache imageDataForURLString:[imageURL absoluteString]];
+		WDLCachedImageData *imageCache = [WDLSingletonImageCache imageCacheForURLString:[imageURL absoluteString]];
 		if(imageCache){
 			// The image is already cached. Inform the delegate
 			[delegate imageLoadedAndCached:imageCache];
@@ -113,7 +112,7 @@
 	return sharedImageCacheInstance;
 }
 
-+ (WDLCachedImageData *)imageDataForURLString:(NSString *)URLString
++ (WDLCachedImageData *)imageCacheForURLString:(NSString *)URLString
 {
 	WDLCachedImageData *imageData;
 	@synchronized([WDLSingletonImageCache class]){
@@ -121,7 +120,7 @@
 		imageData = [sharedImageCacheInstance.sharedImageCache valueForKey:URLString];
 		if(!imageData){
 			// Check the file system
-			NSMutableData *urlData = [WDLSingletonImageCache cachedImageDataForURLString:URLString];
+			NSMutableData *urlData = [WDLSingletonImageCache imageDataForURLString:URLString];
 			// If it's there, save it to memory
 			if(urlData){ 
 				imageData = [[WDLCachedImageData alloc] initWithURLString:URLString];
@@ -187,7 +186,7 @@
 	[sharedImageCacheInstance loadImageForURL:imageURL forDelegate:delegate willBeDisplayed:isDisplayed];
 }
 
-+ (NSData *)cachedImageDataForURLString:(NSString *)URLString
++ (NSData *)imageDataForURLString:(NSString *)URLString
 {
 	NSData *imageData;
 	@synchronized([WDLSingletonImageCache class]){
@@ -239,7 +238,7 @@
 		WDLSingletonImageCache *sharedImageCacheInstance = [WDLSingletonImageCache sharedImageCacheInstance];
 		WDLCachedImageData *cachedData = [sharedImageCacheInstance.sharedImageCache valueForKey:URLString];
 		if(cachedData){		
-			NSLog(@"Moving image from memory to disk at URL: %@", URLString);
+			//NSLog(@"Moving image from memory to disk at URL: %@", URLString);
 			[self saveImageData:cachedData.imageData fromURLString:URLString];
 			[sharedImageCacheInstance.sharedImageCache removeObjectForKey:URLString];
 		}						 
@@ -277,7 +276,6 @@
 	// Clear the disk cache
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	NSError *fsError;
-	NSLog(@"[self cacheDirectory]: %@", [self cacheDirectory]);
 	BOOL success = [fileManager removeItemAtPath:[self cacheDirectory] error:&fsError];
 	if(!success){
 		NSLog(@"ERROR clearing image cache: %@", fsError);
