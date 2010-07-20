@@ -12,7 +12,6 @@
 @interface NSString (Helpers)
 
 - (BOOL)containsString:(NSString *)matchString;
-- (BOOL)isNotBlank;
 - (NSArray *)camelCaseComponents;
 - (NSString *)titleizedStringFromCamelCase;
 - (NSString *)underscoredStringFromCamelCase;

@@ -186,6 +186,22 @@
 	[sharedImageCacheInstance loadImageForURL:imageURL forDelegate:delegate willBeDisplayed:isDisplayed];
 }
 
++ (void)removeDelegate:(NSObject <WDLRemoteImageLoaderDelegate> *)delegate forURL:(NSURL *)imageURL
+{
+	@synchronized([WDLSingletonImageCache class]){
+		WDLSingletonImageCache *imageCacher = [WDLSingletonImageCache sharedImageCacheInstance];
+		NSMutableDictionary *delgateGraph = imageCacher.remoteImageDelegates;
+		NSString *urlKey = [imageURL absoluteString];
+		NSMutableArray *delegates = [delgateGraph valueForKey:urlKey];
+		if(delegates){
+			[delegates removeObject:delegate];
+			if([delegates count] == 0){
+				[delgateGraph removeObjectForKey:urlKey];
+			}
+		}
+	}
+}
+
 + (NSData *)imageDataForURLString:(NSString *)URLString
 {
 	NSData *imageData;

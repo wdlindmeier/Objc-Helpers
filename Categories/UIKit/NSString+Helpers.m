@@ -17,12 +17,6 @@
      return [containPred evaluateWithObject:self];  
 }  
 
-// Strips the string and compares it against an empty string
-- (BOOL)isNotBlank
-{
-	return ![[self stringByStrippingString] isEqualToString:@""];
-}
-
 // String Transformers
 
 - (NSArray *)camelCaseComponents

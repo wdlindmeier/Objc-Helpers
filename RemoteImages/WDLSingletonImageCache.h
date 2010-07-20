@@ -30,6 +30,9 @@
 + (void)loadImageForURL:(NSURL *)imageURL 
 			forDelegate:(NSObject <WDLRemoteImageLoaderDelegate> *)delegate
 		willBeDisplayed:(BOOL)isDisplayed;
++ (void)removeDelegate:(NSObject <WDLRemoteImageLoaderDelegate> *)delegate 
+				forURL:(NSURL *)imageURL;
+
 + (void)setImageData:(WDLCachedImageData *)cachedData;
 + (void)imageFailedToLoadForURL:(NSURL *)imageURL;
 + (void)moveDataFromMemoryToDiskForImageAtURLString:(NSString *)URLString;

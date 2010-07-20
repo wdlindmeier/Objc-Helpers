@@ -20,7 +20,7 @@
 
 @implementation WDLAsyncImageView
 
-@synthesize cachedData, showsActivityIndicator;
+@synthesize cachedData, showsActivityIndicator, imageURL;
 
 - (void)loadImageFromURLString:(NSString *)aURLString {
 	
@@ -38,14 +38,14 @@
 		
 		[self displayPlaceholderImage];
 		
-		NSURL *imgURL = [NSURL URLWithString:aURLString];
+		self.imageURL = [NSURL URLWithString:aURLString];
 		
-		if(imgURL){
-			[WDLSingletonImageCache loadImageForURL:imgURL
+		if(imageURL){
+			[WDLSingletonImageCache loadImageForURL:imageURL
 										forDelegate:self
 									willBeDisplayed:YES];
 		}else{
-			NSLog(@"%@ is not a valid URL", imgURL);
+			NSLog(@"%@ is not a valid URL", imageURL);
 		}
 		
 	}else{
@@ -138,6 +138,10 @@
 #pragma mark Memory
 
 - (void)dealloc {
+	if(self.imageURL){
+		[WDLSingletonImageCache removeDelegate:self forURL:self.imageURL];
+	}							  
+	self.imageURL = nil;
 	// NOTE: No retain, no release of imageView
 	self.cachedData = nil;
     [super dealloc];

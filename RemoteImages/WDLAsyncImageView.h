@@ -18,10 +18,12 @@
 	WDLCachedImageData *cachedData;
 	BOOL showsActivityIndicator;
 	UIImageView *imageView;
+	NSURL *imageURL;
 	
 }
 
 @property (nonatomic, assign) BOOL showsActivityIndicator;
+@property (nonatomic, retain) NSURL *imageURL;
 
 - (void)displayPlaceholderImage;
 - (void)displayImage:(UIImage *)anImage;
