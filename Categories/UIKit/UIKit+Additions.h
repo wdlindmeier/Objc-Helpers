@@ -7,13 +7,13 @@
  *
  */
 
-#import "NSObject+Helpers.h"
 #import "UIActionSheet+Helpers.h"
 #import "NSCharacterSet+Helpers.h"
 #import "UIColor+Helpers.h"
 #import "NSData+Helpers.h"
 #import "NSData+Base64.h"
 #import "NSDate+Helpers.h"
+#import "NSEnumerable+Functional.h"
 #import "NSObject+isNotBlank.h"
 #import "UIImage+Helpers.h"
 #import "NSInvocation+Functional.h"

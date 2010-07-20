@@ -18,7 +18,7 @@
 
 @end
 
-@interface NSArray (isNotBlank)
+@implementation NSArray (isNotBlank)
 
 - (BOOL)isNotBlank
 {
@@ -27,7 +27,7 @@
 
 @end
 
-@interface NSSet (isNotBlank)
+@implementation NSSet (isNotBlank)
 
 - (BOOL)isNotBlank
 {
@@ -36,7 +36,7 @@
 
 @end
 
-@interface NSDictionary (isNotBlank)
+@implementation NSDictionary (isNotBlank)
 
 - (BOOL)isNotBlank
 {
@@ -45,7 +45,7 @@
 
 @end
 
-@interface NSString (isNotBlank)
+@implementation NSString (isNotBlank)
 
 - (BOOL)isNotBlank
 {
@@ -54,7 +54,7 @@
 
 @end
 
-@interface NSNull(isNotBlank)
+@implementation NSNull(isNotBlank)
 
 - (BOOL)isNotBlank
 {
