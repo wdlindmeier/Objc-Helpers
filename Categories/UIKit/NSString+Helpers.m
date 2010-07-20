@@ -18,10 +18,9 @@
 }  
 
 // Strips the string and compares it against an empty string
-- (BOOL)isEmpty
+- (BOOL)isNotBlank
 {
-	// NOTE: This does not strip other whitespace characters such as newlines
-	return [[self stringByReplacingOccurrencesOfString:@" " withString:@""] isEqual:@""];
+	return ![[self stringByStrippingString] isEqualToString:@""];
 }
 
 // String Transformers

@@ -10,9 +10,9 @@
 
 @implementation NSNull(Helpers)
 
-- (BOOL)isEmpty
+- (BOOL)isNotBlank
 {
-	return YES;
+	return NO;
 }
 
 @end

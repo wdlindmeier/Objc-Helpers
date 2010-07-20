@@ -11,6 +11,6 @@
 
 @interface NSNull(Helpers)
 
-- (BOOL)isEmpty;
+- (BOOL)isNotBlank;
 
 @end

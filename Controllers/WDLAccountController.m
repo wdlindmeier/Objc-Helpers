@@ -24,7 +24,7 @@
 
 - (void)setUsername:(NSString *)aUsername
 {	
-	if(aUsername && ![aUsername isEmpty]){
+	if([aUsername isNotBlank]){
 		NSString *newUsername = [aUsername copy];
 		[username release];
 		username = newUsername;
@@ -46,7 +46,7 @@
 
 - (void)setPassword:(NSString *)aPassword
 {	
-	if(aPassword && ![aPassword isEmpty]){
+	if([aPassword isNotBlank]){
 		NSString *newPassword = [aPassword copy];
 		[password release];
 		password = newPassword;

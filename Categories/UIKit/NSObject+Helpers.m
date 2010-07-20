@@ -12,7 +12,7 @@
 
 - (BOOL)isNotBlank
 {
-	return self && self != [NSNull null];
+	return self != [NSNull null];
 }
 
 @end

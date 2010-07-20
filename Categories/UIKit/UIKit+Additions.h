@@ -16,6 +16,7 @@
 #import "NSData+Base64.h"
 #import "NSDate+Helpers.h"
 #import "NSNull+Helpers.h"
+#import "NSNumber+Helpers.h"
 #import "UIImage+Helpers.h"
 #import "NSInvocation+Functional.h"
 #import "UINavigationBar+CustomImage.h"
