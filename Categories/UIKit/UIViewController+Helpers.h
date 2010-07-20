@@ -11,4 +11,7 @@
 
 @interface UIViewController(Helpers)
 
+- (void)showPickerView:(UIView *)pickerView;
+- (void)hidePickerView:(UIView *)pickerView;
+
 @end
