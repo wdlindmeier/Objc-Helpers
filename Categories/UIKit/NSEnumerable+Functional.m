@@ -10,13 +10,13 @@
 
 @implementation NSSet(Functional)
 
-- (NSArray *)mapUsingBlock:(id (^)(id obj))block
+- (NSSet *)setByMappingWithBlock:(id (^)(id obj))block
 {
 	NSMutableArray *collection = [NSMutableArray arrayWithCapacity:[self count]];
 	for(id obj in self){
 		[collection addObject:block(obj)];
 	}
-	return [NSArray arrayWithArray:collection];
+	return [NSSet setWithArray:collection];
 }
 
 - (NSArray *)sortedArrayReversing:(BOOL)isReversed withBlock:(id (^)(id obj))block
@@ -29,7 +29,7 @@
 
 @implementation NSArray(Functional)
 
-- (NSArray *)mapUsingBlock:(id (^)(id obj))block
+- (NSArray *)arrayByMapingWithBlock:(id (^)(id obj))block
 {
 	NSMutableArray *collection = [NSMutableArray arrayWithCapacity:[self count]];
 	for(id obj in self){

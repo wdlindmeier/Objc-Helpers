@@ -11,15 +11,14 @@
 
 @interface NSSet(Functional)
 
-- (NSArray *)mapUsingBlock:(id (^)(id obj))block;
+- (NSSet *)setByMappingWithBlock:(id (^)(id obj))block;
 - (NSArray *)sortedArrayReversing:(BOOL)isReversed withBlock:(id (^)(id obj))block;
 
 @end
 
-
 @interface NSArray(Functional)
 
-- (NSArray *)mapUsingBlock:(id (^)(id obj))block;
+- (NSArray *)arrayByMapingWithBlock:(id (^)(id obj))block;
 - (NSArray *)sortedArrayReversing:(BOOL)isReversed withBlock:(id (^)(id obj))block;
 
 @end
