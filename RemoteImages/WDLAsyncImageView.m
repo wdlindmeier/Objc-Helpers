@@ -89,13 +89,16 @@
 - (void)imageLoadedAndCached:(WDLCachedImageData *)imageCache
 {
 	self.cachedData = imageCache;
-	
-	UIImageView *anImageView = [[[UIImageView alloc] init] initWithFrame:self.bounds];
-	anImageView.contentMode = UIViewContentModeScaleAspectFit;
-	[anImageView setImage:[UIImage imageWithData:self.cachedData.imageData]];
-	[self displayImageView:anImageView];
-	[anImageView release];
-	
+	UIImage *image = [UIImage imageWithData:self.cachedData.imageData];
+	if(image){
+		UIImageView *anImageView = [[[UIImageView alloc] init] initWithFrame:self.bounds];
+		anImageView.contentMode = UIViewContentModeScaleAspectFit;
+		[anImageView setImage:[UIImage imageWithData:self.cachedData.imageData]];
+		[self displayImageView:anImageView];
+		[anImageView release];
+	}else{
+		NSLog(@"Bad image at %@", imageCache.URLString);
+	}
 }
 
 - (void)displayImageView:(UIImageView *)anImageView

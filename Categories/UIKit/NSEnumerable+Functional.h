@@ -11,14 +11,14 @@
 
 @interface NSSet(Functional)
 
-- (NSSet *)setByMappingWithBlock:(id (^)(id obj))block;
+- (NSSet *)setByMappingWithBlock:(id (^)(id obj))block omitNils:(BOOL)omitNils;
 - (NSArray *)sortedArrayReversing:(BOOL)isReversed withBlock:(id (^)(id obj))block;
 
 @end
 
 @interface NSArray(Functional)
 
-- (NSArray *)arrayByMapingWithBlock:(id (^)(id obj))block;
+- (NSArray *)arrayByMapingWithBlock:(id (^)(id obj))block omitNils:(BOOL)omitNils;
 - (NSArray *)sortedArrayReversing:(BOOL)isReversed withBlock:(id (^)(id obj))block;
 
 @end

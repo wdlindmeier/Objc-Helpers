@@ -10,11 +10,12 @@
 
 @implementation NSSet(Functional)
 
-- (NSSet *)setByMappingWithBlock:(id (^)(id obj))block
+- (NSSet *)setByMappingWithBlock:(id (^)(id obj))block omitNils:(BOOL)omitNils
 {
 	NSMutableArray *collection = [NSMutableArray arrayWithCapacity:[self count]];
 	for(id obj in self){
-		[collection addObject:block(obj)];
+		id ret = block(obj);		
+		if(ret || !omitNils) [collection addObject:ret];
 	}
 	return [NSSet setWithArray:collection];
 }
@@ -29,11 +30,12 @@
 
 @implementation NSArray(Functional)
 
-- (NSArray *)arrayByMapingWithBlock:(id (^)(id obj))block
+- (NSArray *)arrayByMapingWithBlock:(id (^)(id obj))block omitNils:(BOOL)omitNils
 {
 	NSMutableArray *collection = [NSMutableArray arrayWithCapacity:[self count]];
 	for(id obj in self){
-		[collection addObject:block(obj)];
+		id ret = block(obj);		
+		if(ret || !omitNils) [collection addObject:ret];
 	}
 	return [NSArray arrayWithArray:collection];
 }
