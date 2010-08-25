@@ -16,7 +16,6 @@
 #import "NSEnumerable+Functional.h"
 #import "NSObject+isNotBlank.h"
 #import "UIImage+Helpers.h"
-#import "NSInvocation+Functional.h"
 #import "UINavigationBar+CustomImage.h"
 #import "NSString+Helpers.h"
 #import "UIView+Helpers.h"
