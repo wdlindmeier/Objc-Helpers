@@ -33,6 +33,7 @@
 
 - (void)hideKeyboard;
 - (void)animateToolbarToFrame:(CGRect)inputFrame named:(NSString *)animationID;
+- (BOOL)isKeyboardVisible;
 
 @end
 

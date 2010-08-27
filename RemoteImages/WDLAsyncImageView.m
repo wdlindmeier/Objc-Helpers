@@ -91,6 +91,7 @@
 	self.cachedData = imageCache;
 	UIImage *image = [UIImage imageWithData:self.cachedData.imageData];
 	if(image){
+		NSLog(@"assign image view %@", self);
 		UIImageView *anImageView = [[[UIImageView alloc] init] initWithFrame:self.bounds];
 		anImageView.contentMode = UIViewContentModeScaleAspectFit;
 		[anImageView setImage:[UIImage imageWithData:self.cachedData.imageData]];
@@ -125,6 +126,9 @@
 // This is awesome.
 - (void)removeFromSuperview
 {
+	if(self.imageURL){
+		[WDLSingletonImageCache removeDelegate:self forURL:self.imageURL];
+	}							  	
 	if(cachedData){
 		cachedData.displayCount -= 1;
 	}	
@@ -141,9 +145,6 @@
 #pragma mark Memory
 
 - (void)dealloc {
-	if(self.imageURL){
-		[WDLSingletonImageCache removeDelegate:self forURL:self.imageURL];
-	}							  
 	self.imageURL = nil;
 	// NOTE: No retain, no release of imageView
 	self.cachedData = nil;

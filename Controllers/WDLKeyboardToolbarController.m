@@ -51,6 +51,11 @@
 	}	
 }
 
+- (BOOL)isKeyboardVisible
+{
+	return keyboardIsVisible;
+}
+
 #pragma mark View 
 
 - (void)viewDidLoad
