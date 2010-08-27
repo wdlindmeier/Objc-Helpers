@@ -91,7 +91,6 @@
 	self.cachedData = imageCache;
 	UIImage *image = [UIImage imageWithData:self.cachedData.imageData];
 	if(image){
-		NSLog(@"assign image view %@", self);
 		UIImageView *anImageView = [[[UIImageView alloc] init] initWithFrame:self.bounds];
 		anImageView.contentMode = UIViewContentModeScaleAspectFit;
 		[anImageView setImage:[UIImage imageWithData:self.cachedData.imageData]];
