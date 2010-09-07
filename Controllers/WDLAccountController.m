@@ -24,16 +24,18 @@
 
 - (void)setUsername:(NSString *)aUsername
 {	
+	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
 	if([aUsername isNotBlank]){
 		NSString *newUsername = [aUsername copy];
 		[username release];
 		username = newUsername;
-		[[NSUserDefaults standardUserDefaults] setValue:username forKey:[[self class] keyUsername]];
+		[prefs setValue:username forKey:[[self class] keyUsername]];
 	}else{
 		[username release];
 		username = nil;
-		[[NSUserDefaults standardUserDefaults] removeObjectForKey:[[self class] keyUsername]];
+		[prefs removeObjectForKey:[[self class] keyUsername]];
 	}
+	[prefs synchronize];
 }
 
 - (NSString *)password
@@ -46,16 +48,18 @@
 
 - (void)setPassword:(NSString *)aPassword
 {	
+	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
 	if([aPassword isNotBlank]){
 		NSString *newPassword = [aPassword copy];
 		[password release];
 		password = newPassword;
-		[[NSUserDefaults standardUserDefaults] setValue:password forKey:[[self class] keyPassword]];
+		[prefs setValue:password forKey:[[self class] keyPassword]];
 	}else{
 		[password release];
 		password = nil;
-		[[NSUserDefaults standardUserDefaults] removeObjectForKey:[[self class] keyPassword]];
+		[prefs removeObjectForKey:[[self class] keyPassword]];
 	}	
+	[prefs synchronize];
 }
 
 #pragma mark Memory
@@ -89,7 +93,9 @@
 
 + (void)setAccountEnabled:(BOOL)enabled
 {
-	[[NSUserDefaults standardUserDefaults] setBool:enabled forKey:[self keyEnabled]];
+	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+	[prefs setBool:enabled forKey:[self keyEnabled]];
+	[prefs synchronize];
 }
 
 + (NSString *)keyEnabled{ return @"accountEnabled"; }

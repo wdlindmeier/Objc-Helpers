@@ -15,7 +15,6 @@
 
 @property (nonatomic, copy) NSString *username;
 @property (nonatomic, copy) NSString *password;
-// NOTE: if we need a delegate it might conflict with the TwitterAccount delegate
 
 + (BOOL)accountEnabled;
 + (void)setAccountEnabled:(BOOL)enabled;
