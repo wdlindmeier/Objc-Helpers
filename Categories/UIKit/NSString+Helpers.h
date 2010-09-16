@@ -13,6 +13,7 @@
 
 - (BOOL)containsString:(NSString *)matchString;
 - (NSArray *)camelCaseComponents;
+- (NSString *)camelCaseStringFromUnderscored;
 - (NSString *)titleizedStringFromCamelCase;
 - (NSString *)underscoredStringFromCamelCase;
 - (NSString*)stringWithPercentEscape;

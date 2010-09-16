@@ -49,6 +49,16 @@
 	return nameArray;
 }
 
+- (NSString *)camelCaseStringFromUnderscored
+{
+	NSArray *components = [self componentsSeparatedByString:@"_"];
+	NSMutableArray *cappedComponents = [NSMutableArray arrayWithCapacity:[components count]];
+	[components enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+		[cappedComponents addObject:(idx > 0 ? [(NSString *)obj capitalizedString] : obj)];
+	}];
+	return [cappedComponents componentsJoinedByString:@""];
+}
+
 - (NSString *)titleizedStringFromCamelCase
 {
 	return [[self camelCaseComponents] componentsJoinedByString:@" "];
