@@ -25,6 +25,7 @@
 + (NSString *)setterFromGetter:(NSString *)getterName;
 + (NSDictionary *)dictionaryFromQueryParams:(NSString *)paramsString lowercaseKeys:(BOOL)shouldLowercase;
 + (NSString *)udid;
++ (NSString *)currencyStringForNumber:(NSNumber *)amount truncateZeros:(BOOL)truncateZeros;
 
 @end
 

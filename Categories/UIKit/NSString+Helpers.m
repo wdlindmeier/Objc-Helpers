@@ -174,4 +174,15 @@
 	return uuidString;
 }
 
++ (NSString *)currencyStringForNumber:(NSNumber *)amount truncateZeros:(BOOL)truncateZeros
+{
+	NSNumberFormatter *currencyStyle = [[NSNumberFormatter alloc] init];
+	[currencyStyle setFormatterBehavior:NSNumberFormatterBehavior10_4];
+	[currencyStyle setNumberStyle:NSNumberFormatterCurrencyStyle];			
+	NSString *currencyString = [currencyStyle stringFromNumber:amount];
+	if(truncateZeros) currencyString = [currencyString stringByReplacingOccurrencesOfString:@".00" withString:@""];
+	[currencyStyle release];	
+	return currencyString;
+}
+
 @end
