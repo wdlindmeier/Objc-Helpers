@@ -19,5 +19,6 @@
 - (int)second;
 - (NSDate *)dateFromDaysOffset:(NSInteger)daysOffset;
 + (NSDateFormatter *)sharedFormatter;
++ (NSDate *)dateFromJSONFormattedString:(NSString *)JSONstring;
 
 @end
