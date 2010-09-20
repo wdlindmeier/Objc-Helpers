@@ -25,7 +25,9 @@
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
+		[UIResponder setInstancesSendFirstResponderNotifications:YES];
 		NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+		[nc addObserver:self selector:@selector(firstResponderWillChange:) name:WLDWillBecomeFirstResponderNotification object:nil];
 		[nc addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 		[nc addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];				
     }
@@ -123,6 +125,18 @@
 		if([self.delegate respondsToSelector:@selector(keyboardWillHide:)]) [self.delegate keyboardWillHide:frameWithToolbar];
 		[self animateToolbarToFrame:r named:@"hideKeyboard"];		
 	}		
+}
+
+- (void)firstResponderWillChange:(NSNotification *)notification
+{
+	UIResponder *firstResponder = [notification object];	
+	if([firstResponder respondsToSelector:@selector(keyboardType)]){		
+		// NOTE: We're changing the keyboard type of our first responder to that of 
+		// the previous first responder so that when we hide the keyboard, the correct
+		// type animates down, rather that always switching to the qwerty board
+		textFieldAssumeFirstResponder.keyboardType = (UIKeyboardType)[firstResponder performSelector:@selector(keyboardType)];
+	}
+	
 }
 
 - (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context

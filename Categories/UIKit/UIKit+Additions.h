@@ -20,3 +20,5 @@
 #import "NSString+Helpers.h"
 #import "UIView+Helpers.h"
 #import "UIViewController+Helpers.h"
+#import "UIResponder+Helpers.h"
+#import "NSObject+Swizzle.h"
