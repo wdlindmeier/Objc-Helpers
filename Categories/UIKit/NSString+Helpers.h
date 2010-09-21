@@ -21,6 +21,7 @@
 - (NSString *)normalizedString;
 - (NSString *)stringByIncrementingCharacters;
 - (NSString *)stringByStrippingString;
+- (NSString *)stringByPluralizingString;
 
 + (NSString *)setterFromGetter:(NSString *)getterName;
 + (NSDictionary *)dictionaryFromQueryParams:(NSString *)paramsString lowercaseKeys:(BOOL)shouldLowercase;
