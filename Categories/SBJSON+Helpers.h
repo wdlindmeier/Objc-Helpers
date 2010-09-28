@@ -11,5 +11,6 @@
 @interface SBJSON(Helpers)
 
 - (NSString *)errorStringWithRailsErrorString:(NSString *)resultsString error:(NSError **)errorPointer;
+- (NSDictionary *)errorDictionaryWithRailsErrorString:(NSString *)resultsString error:(NSError **)errorPointer;
 
 @end
