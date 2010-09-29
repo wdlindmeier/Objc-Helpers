@@ -12,17 +12,37 @@
 
 - (NSString *)errorStringWithRailsErrorString:(NSString *)resultsString error:(NSError **)errorPointer
 {
-	NSArray *recordErrors = [self objectWithString:resultsString error:errorPointer];	
-	NSString *errorMessage = nil;
-	if(recordErrors){
-		NSMutableString *joinedErrors = [NSMutableString string];
-		for(NSArray *error in recordErrors){
-			[joinedErrors appendString:@"\n"];
-			[joinedErrors appendString:[error componentsJoinedByString:@" "]];
+	NSDictionary *errorsAndKeys = [self errorDictionaryWithRailsErrorString:resultsString error:errorPointer];
+	if(errorsAndKeys){
+		NSMutableArray *joinedErrors = [NSMutableArray array];
+		for(NSString *attrName in errorsAndKeys){
+			NSArray *errors = [errorsAndKeys valueForKey:attrName];
+			for(NSString *error in errors){
+				[joinedErrors addObject:[NSString stringWithFormat:@"%@ %@", attrName, error]]; 
+			}
 		}
-		errorMessage = joinedErrors;		
+		return [joinedErrors componentsJoinedByString:@"\n"];
 	}
-	return errorMessage;
+	return nil;
+}
+
+- (NSDictionary *)errorDictionaryWithRailsErrorString:(NSString *)resultsString error:(NSError **)errorPointer
+{
+	NSArray *recordErrors = [self objectWithString:resultsString error:errorPointer];	
+	if(recordErrors){
+		NSMutableDictionary *collectedErrors = [NSMutableDictionary dictionary];
+		for(NSArray *error in recordErrors){
+			NSString *errorAttr = [error objectAtIndex:0];
+			NSMutableArray *errorCollection = [collectedErrors valueForKey:errorAttr];
+			if(!errorCollection){
+				errorCollection = [NSMutableArray array];
+				[collectedErrors setValue:errorCollection forKey:errorAttr];
+			}
+			[errorCollection addObject:[error objectAtIndex:1]];
+		}		
+		return collectedErrors;
+	}	
+	return nil;	
 }
 
 @end

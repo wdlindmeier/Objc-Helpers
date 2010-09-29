@@ -135,6 +135,15 @@
 	return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 }
 
+- (NSString *)stringByPluralizingString
+{
+	return [[self stringByReplacingOccurrencesOfString:@"y" 
+											withString:@"ie" 
+											   options:0 
+												 range:NSMakeRange(([self length] - 1), 1)] 
+			stringByAppendingString:@"s"];
+}
+
 + (NSString *)setterFromGetter:(NSString *)getterName
 {
 	NSMutableString *capitalizedGetter = [getterName mutableCopy];	

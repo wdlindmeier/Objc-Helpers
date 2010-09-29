@@ -304,25 +304,28 @@
                                                 0,
                                                 CGImageGetColorSpace(imageRef),
                                                 CGImageGetBitmapInfo(imageRef));
-    
-    // Rotate and/or flip the image if required by its orientation
-    CGContextConcatCTM(bitmap, transform);
-    
-    // Set the quality level to use when rescaling
-    CGContextSetInterpolationQuality(bitmap, quality);
-    
-    // Draw into the context; this scales the image
-    CGContextDrawImage(bitmap, transpose ? transposedRect : newRect, imageRef);
-    
-    // Get the resized image from the context and a UIImage
-    CGImageRef newImageRef = CGBitmapContextCreateImage(bitmap);
-    UIImage *newImage = [UIImage imageWithCGImage:newImageRef];
-    
-    // Clean up
-    CGContextRelease(bitmap);
-    CGImageRelease(newImageRef);
-    
-    return newImage;
+    if(!bitmap){
+		return nil;
+	}
+	NSLog(@"Bitmap exists");
+	// Rotate and/or flip the image if required by its orientation
+	CGContextConcatCTM(bitmap, transform);
+	
+	// Set the quality level to use when rescaling
+	CGContextSetInterpolationQuality(bitmap, quality);
+	
+	// Draw into the context; this scales the image
+	CGContextDrawImage(bitmap, transpose ? transposedRect : newRect, imageRef);
+	
+	// Get the resized image from the context and a UIImage
+	CGImageRef newImageRef = CGBitmapContextCreateImage(bitmap);
+	UIImage *newImage = [UIImage imageWithCGImage:newImageRef];
+	
+	// Clean up
+	CGContextRelease(bitmap);
+	CGImageRelease(newImageRef);
+	
+	return newImage;	
 }
 
 // Returns an affine transform that takes into account the image orientation when drawing a scaled image
