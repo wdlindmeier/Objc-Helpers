@@ -18,6 +18,8 @@
 
 #pragma mark UIControl Actions
 
+// Media types include kUTTypeImage, kUTTypeMovie
+
 - (void)chooseFromMediaTypes:(NSArray *)mediaTypes;
 {
 	[mediaTypes retain];

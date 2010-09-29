@@ -19,10 +19,11 @@
 	BOOL showsActivityIndicator;
 	UIImageView *imageView;
 	NSURL *imageURL;
-	
+	UIViewContentMode contentMode;	
 }
 
 @property (nonatomic, assign) BOOL showsActivityIndicator;
+@property (nonatomic, assign) UIViewContentMode contentMode;
 @property (nonatomic, retain) NSURL *imageURL;
 
 - (void)displayPlaceholderImage;

@@ -14,14 +14,42 @@
 
 @property (retain) WDLCachedImageData *cachedData;
 
+- (void)initWDLAsyncImageView;
 - (void)displayImageView:(UIImageView *)anImageView;
 
 @end
 
 @implementation WDLAsyncImageView
 
-@synthesize cachedData, showsActivityIndicator, imageURL;
+@synthesize cachedData, showsActivityIndicator, imageURL, contentMode;
 
+#pragma mark -
+#pragma mark Init 
+
+- (id)initWithFrame:(CGRect)frame
+{
+	if(self = [super initWithFrame:frame]){
+		[self initWDLAsyncImageView];
+	}
+	return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+	if(self = [super initWithCoder:aDecoder]){
+		[self initWDLAsyncImageView];
+	}
+	return self;
+}
+
+- (void)initWDLAsyncImageView
+{
+	self.contentMode = UIViewContentModeScaleAspectFit;
+}
+
+#pragma mark -
+#pragma mark Displaying Images 
+   
 - (void)loadImageFromURLString:(NSString *)aURLString {
 	
 	// Activity indicator, if you want it
@@ -59,7 +87,6 @@
 - (void)displayImage:(UIImage *)anImage
 {
 	UIImageView *localImageView = [[[UIImageView alloc] init] initWithFrame:self.bounds];
-	localImageView.contentMode = UIViewContentModeScaleAspectFit;
 	localImageView.image = anImage;
 	[self displayImageView:localImageView];
 	[localImageView release];
@@ -68,7 +95,6 @@
 - (void)displayPlaceholderImage {
 	
 	UIImageView *placeholder = [[[UIImageView alloc] init] initWithFrame:self.bounds];
-	placeholder.contentMode = UIViewContentModeScaleAspectFit;
 	placeholder.image = [UIImage imageNamed:@"no_image.png"];
 	[self displayImageView:placeholder];
 	[placeholder release];
@@ -92,7 +118,6 @@
 	UIImage *image = [UIImage imageWithData:self.cachedData.imageData];
 	if(image){
 		UIImageView *anImageView = [[[UIImageView alloc] init] initWithFrame:self.bounds];
-		anImageView.contentMode = UIViewContentModeScaleAspectFit;
 		[anImageView setImage:[UIImage imageWithData:self.cachedData.imageData]];
 		[self displayImageView:anImageView];
 		[anImageView release];
@@ -106,6 +131,7 @@
 	[self removeAllSubviews];
 	// No retain, no release
 	imageView = anImageView;
+	imageView.contentMode = self.contentMode;
 	[self addSubview:imageView];		
 	[self setNeedsLayout];
 }
