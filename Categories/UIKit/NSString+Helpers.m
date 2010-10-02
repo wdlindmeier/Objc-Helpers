@@ -144,6 +144,13 @@
 			stringByAppendingString:@"s"];
 }
 
+- (NSString *)stringByCapitalizingFirstLetter
+{
+	NSString *firstLetter = [self substringToIndex:1];
+	return [self stringByReplacingCharactersInRange:NSMakeRange(0,1) 
+										 withString:[firstLetter capitalizedString]];
+}
+
 + (NSString *)setterFromGetter:(NSString *)getterName
 {
 	NSMutableString *capitalizedGetter = [getterName mutableCopy];	
