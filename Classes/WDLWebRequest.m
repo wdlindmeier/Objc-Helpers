@@ -10,7 +10,7 @@
 
 @implementation WDLWebRequest
 
-@synthesize delegate, responseStatus, urlString;
+@synthesize delegate, responseStatus, urlString, headerFields;
 
 #pragma mark Requests 
 
@@ -48,6 +48,9 @@
 {	
 	if([response isKindOfClass:[NSHTTPURLResponse class]]){
 		responseStatus = [(NSHTTPURLResponse *)response statusCode];
+		[headerFields release];
+		headerFields = [(NSHTTPURLResponse *)response allHeaderFields];
+		[headerFields retain];
 	}
 	// NSLog(@"response: %@", [response URL]);
 	// this method is called when the server has determined that it	
@@ -111,6 +114,7 @@
 {
 	self.urlString = nil;
 	[receivedData release];
+	[headerFields release];
 	[super dealloc];
 }
 

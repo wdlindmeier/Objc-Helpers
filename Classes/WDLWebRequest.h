@@ -15,6 +15,7 @@ typedef enum HTTPStatusCodes {
 	HTTPStatusCodeCreated				= 201,
 	HTTPStatusCodeUnauthorized			= 401,
 	HTTPStatusCodeRecordNotFound		= 404,
+	HTTPStatusCodeConflict				= 409,
 	HTTPStatusCodeUnprocessableEntity	= 422,
 	HTTPStatusCodeInternalError			= 500
 } HTTPStatusCode;
@@ -43,12 +44,14 @@ typedef enum HTTPStatusCodes {
 	NSURLConnection *requestConnection;
 	NSString *urlString;
 	BOOL isActive;
+	NSDictionary *headerFields;
 	
 }
 
 @property (nonatomic, assign) id <WDLWebRequestDelegate> delegate;
 @property (nonatomic, readonly) NSInteger responseStatus;
 @property (nonatomic, copy) NSString *urlString;
+@property (nonatomic, readonly) NSDictionary *headerFields;
 
 - (void)makeRequest:(NSURLRequest *)theRequest;
 - (void)cancelRequest;
