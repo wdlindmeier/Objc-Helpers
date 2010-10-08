@@ -92,14 +92,16 @@
 	[[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue:&t];
 	r.origin.y = windowFrame.size.height - (t.size.height + r.size.height);
 	
+	CGRect toolbarFrame = self.view.frame;
+	// NOTE: We're using the keyboard bounds y, not the toolbar
+	CGRect frameWithToolbar = CGRectMake(t.origin.x, t.origin.y, t.size.width, t.size.height + toolbarFrame.size.height);
+
 	if(toolbarIsAnimating){
 		[(CALayer *)self.view.layer removeAnimationForKey:@"hideKeyboard"];
 		toolbarIsAnimating = NO;
 		self.view.frame = r;		
+		if([self.delegate respondsToSelector:@selector(keyboardWillAppear:)]) [self.delegate keyboardWillAppear:frameWithToolbar];
 	}else if(self.delegate){				
-		CGRect toolbarFrame = self.view.frame;
-		// NOTE: We're using the keyboard bounds y, not the toolbar
-		CGRect frameWithToolbar = CGRectMake(t.origin.x, t.origin.y, t.size.width, t.size.height + toolbarFrame.size.height);
 		if([self.delegate respondsToSelector:@selector(keyboardWillAppear:)]) [self.delegate keyboardWillAppear:frameWithToolbar];
 		[self animateToolbarToFrame:r named:@"showKeyboard"];
 	}	
@@ -115,13 +117,15 @@
     [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &t];
 	r.origin.y = windowFrame.size.height;
 	
+	CGRect toolbarFrame = self.view.frame;
+	CGRect frameWithToolbar = CGRectMake(t.origin.x, t.origin.y - toolbarFrame.size.height, t.size.width, t.size.height + toolbarFrame.size.height);
+
 	if(toolbarIsAnimating){
 		[(CALayer *)self.view.layer removeAnimationForKey:@"showKeyboard"];
 		toolbarIsAnimating = NO;
+		if([self.delegate respondsToSelector:@selector(keyboardWillHide:)]) [self.delegate keyboardWillHide:frameWithToolbar];
 		self.view.frame = r;
 	}else if(self.delegate){		
-		CGRect toolbarFrame = self.view.frame;
-		CGRect frameWithToolbar = CGRectMake(t.origin.x, t.origin.y - toolbarFrame.size.height, t.size.width, t.size.height + toolbarFrame.size.height);
 		if([self.delegate respondsToSelector:@selector(keyboardWillHide:)]) [self.delegate keyboardWillHide:frameWithToolbar];
 		[self animateToolbarToFrame:r named:@"hideKeyboard"];		
 	}		
@@ -151,7 +155,7 @@
 	[UIView beginAnimations:animationID context:NULL];
 	[UIView setAnimationDuration:0.3];
 	[UIView setAnimationDelegate:self];
-	[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
+	
 
 	self.view.frame = inputFrame;
 	

@@ -25,7 +25,7 @@
 	[UIView beginAnimations:@"showPickerView" context:pickerView];
 	[UIView setAnimationDuration:0.3];
 	[UIView setAnimationDelegate:self];
-	[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
+	
 	
 	pickerView.frame = CGRectMake(0.0, parentWindow.frame.size.height - pickerFrame.size.height, 
 								  pickerFrame.size.width, pickerFrame.size.height);
@@ -44,7 +44,7 @@
 	[UIView beginAnimations:@"hidePickerView" context:pickerView];
 	[UIView setAnimationDuration:0.3];
 	[UIView setAnimationDelegate:self];
-	[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
+	
 	
 	pickerView.frame = CGRectMake(0.0, parentWindow.frame.size.height, 
 								  pickerFrame.size.width, pickerFrame.size.height);
