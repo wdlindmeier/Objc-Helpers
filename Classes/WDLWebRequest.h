@@ -14,6 +14,8 @@ typedef enum HTTPStatusCodes {
 	HTTPStatusCodeOK					= 200,
 	HTTPStatusCodeCreated				= 201,
 	HTTPStatusCodeUnauthorized			= 401,
+	HTTPStatusCodePaymentRequired		= 402,
+	HTTPStatusCodeForbidden				= 403,
 	HTTPStatusCodeRecordNotFound		= 404,
 	HTTPStatusCodeConflict				= 409,
 	HTTPStatusCodeUnprocessableEntity	= 422,

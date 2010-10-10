@@ -273,7 +273,7 @@
 	BOOL cachePathExists = [fileManager fileExistsAtPath:cachePath isDirectory:&isDirectory];	 
 	if(!cachePathExists){
 		// Create the cache path
-		NSError *fsError;
+		NSError *fsError = nil;
 		BOOL success = [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:&fsError];
 		if(!success){
 			NSLog(@"ERROR creating cachepath: %@", fsError);
@@ -291,7 +291,7 @@
 
 	// Clear the disk cache
 	NSFileManager *fileManager = [NSFileManager defaultManager];
-	NSError *fsError;
+	NSError *fsError = nil;
 	BOOL success = [fileManager removeItemAtPath:[self cacheDirectory] error:&fsError];
 	if(!success){
 		NSLog(@"ERROR clearing image cache: %@", fsError);
