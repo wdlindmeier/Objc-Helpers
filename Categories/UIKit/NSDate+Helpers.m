@@ -74,22 +74,25 @@ static NSDateFormatter *sharedFormatter;
 + (NSDate *)dateFromJSONFormattedString:(NSString *)JSONstring
 {
 	// Strip any +dd:dd or -dd:dd or Z from the end of the string
-	int stringLength = [JSONstring length];
-	NSString *stringSansTZ = [JSONstring stringByReplacingOccurrencesOfString:@"(Z|(\\+|\\-)\\d\\d:\\d\\d)$" 
-																   withString:@"" 
-																	  options:NSRegularExpressionSearch 
-																		range:NSMakeRange(0, stringLength)];
-	NSDate *parsed = nil;
-	NSDateFormatter *dateFormatter = [NSDate sharedFormatter];
-	//2011-09-17T03:36:27
-	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-	@try {
-		parsed = [dateFormatter dateFromString:stringSansTZ];
+	if([JSONstring isNotBlank]){
+		int stringLength = [JSONstring length];
+		NSString *stringSansTZ = [JSONstring stringByReplacingOccurrencesOfString:@"(Z|(\\+|\\-)\\d\\d:\\d\\d)$" 
+																	   withString:@"" 
+																		  options:NSRegularExpressionSearch 
+																			range:NSMakeRange(0, stringLength)];
+		NSDate *parsed = nil;
+		NSDateFormatter *dateFormatter = [NSDate sharedFormatter];
+		//2011-09-17T03:36:27
+		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+		@try {
+			parsed = [dateFormatter dateFromString:stringSansTZ];
+		}
+		@catch (NSException * e) {
+			NSLog(@"NSDate Error: Could not parse date from %@", stringSansTZ);
+		}	
+		return parsed;
 	}
-	@catch (NSException * e) {
-		NSLog(@"NSDate Error: Could not parse date from %@", stringSansTZ);
-	}	
-	return parsed;
+	return nil;
 }
 	
 @end
