@@ -20,6 +20,7 @@
 	UIImageView *imageView;
 	NSURL *imageURL;
 	UIViewContentMode contentMode;	
+	BOOL displayingCachedData;
 }
 
 @property (nonatomic, assign) BOOL showsActivityIndicator;

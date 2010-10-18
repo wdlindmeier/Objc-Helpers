@@ -28,7 +28,10 @@
 
 - (void)setDisplayCount:(int)count
 {
-	// NSLog(@"DISPLAY COUNT == %i FOR url: %@", count, self.URLString);
+	if(count < 0){
+		NSLog(@"MEMORY LEAK: WDLCachedImageData must accurately track it's display count");
+	}
+	// NSLog(@"DISPLAY COUNT == %i FOR url: %@", count, self.URLString);	
 
 	displayCount = count;
 	// If the image is no longer displayed, move it to the disk cache
@@ -43,7 +46,7 @@
 {
 	self.imageData = nil;
 	// Move the image cache to the disk if it's no longer displayed
-	if(displayCount > 0) self.displayCount = 0;
+	// if(displayCount > 0) self.displayCount = 0;
 	self.URLString = nil;
 	[super dealloc];
 }

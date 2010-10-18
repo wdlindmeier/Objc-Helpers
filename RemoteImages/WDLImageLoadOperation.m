@@ -31,6 +31,7 @@
 			[WDLSingletonImageCache imageFailedToLoadForURL:self.imageURL];
 		}
 	}
+	[imageCache release];
 }
 
 - (void)dealloc

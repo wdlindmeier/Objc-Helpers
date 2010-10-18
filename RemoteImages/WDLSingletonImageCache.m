@@ -65,15 +65,17 @@
 				}
 				[imageDelegates addObject:delegate];
 			}
-			
+
 			// Queue up an operation to load the image
 			WDLImageLoadOperation *imageLoader = [[WDLImageLoadOperation alloc] init];
 			imageLoader.imageURL = imageURL;
 			imageLoader.immediatelySaveToDisk = !isDisplayed;
 			[imageLoadQueue addOperation:imageLoader];
 			[imageLoader release];		
+
 		}
 	}
+
 }
 
 #pragma -
@@ -97,7 +99,7 @@
 #pragma mark Class methods
 
 + (WDLSingletonImageCache *) sharedImageCacheInstance {
-	static WDLSingletonImageCache *sharedImageCacheInstance;
+	static WDLSingletonImageCache *sharedImageCacheInstance = nil;
 	
 	@synchronized([WDLSingletonImageCache class]) {
 		if (!sharedImageCacheInstance) {
@@ -254,7 +256,6 @@
 		WDLSingletonImageCache *sharedImageCacheInstance = [WDLSingletonImageCache sharedImageCacheInstance];
 		WDLCachedImageData *cachedData = [sharedImageCacheInstance.sharedImageCache valueForKey:URLString];
 		if(cachedData){		
-			//NSLog(@"Moving image from memory to disk at URL: %@", URLString);
 			[self saveImageData:cachedData.imageData fromURLString:URLString];
 			[sharedImageCacheInstance.sharedImageCache removeObjectForKey:URLString];
 		}						 

@@ -15,7 +15,7 @@
 @property (retain) WDLCachedImageData *cachedData;
 
 - (void)initWDLAsyncImageView;
-- (void)displayImageView:(UIImageView *)anImageView;
+- (void)displayImageView:(UIImageView *)anImageView isCachedData:(BOOL)isCachedData;
 
 @end
 
@@ -48,10 +48,24 @@
 }
 
 #pragma mark -
+#pragma mark Accessors 
+
+- (void)setCachedData:(WDLCachedImageData *)cd
+{
+	if(displayingCachedData && [cachedData isNotBlank]){
+		cachedData.displayCount -= 1;
+		displayingCachedData = NO;
+	}
+	[cd retain];
+	[cachedData release];
+	cachedData = cd;
+}
+
+#pragma mark -
 #pragma mark Displaying Images 
    
 - (void)loadImageFromURLString:(NSString *)aURLString {
-	
+
 	// Activity indicator, if you want it
 	if(showsActivityIndicator){
 		UIActivityIndicatorView *myIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
@@ -65,7 +79,7 @@
 	if(aURLString){
 		
 		[self displayPlaceholderImage];
-		
+
 		self.imageURL = [NSURL URLWithString:aURLString];
 		
 		if(imageURL){
@@ -75,30 +89,29 @@
 		}else{
 			NSLog(@"%@ is not a valid URL", imageURL);
 		}
-		
+
 	}else{
 		
 		[self displayPlaceholderImage];
 		
 	}
-		
+
 }
 
 - (void)displayImage:(UIImage *)anImage
 {
 	UIImageView *localImageView = [[[UIImageView alloc] init] initWithFrame:self.bounds];
 	localImageView.image = anImage;
-	[self displayImageView:localImageView];
+	[self displayImageView:localImageView isCachedData:NO];
 	[localImageView release];
 }
 
-- (void)displayPlaceholderImage {
-	
+- (void)displayPlaceholderImage 
+{	
 	UIImageView *placeholder = [[[UIImageView alloc] init] initWithFrame:self.bounds];
 	placeholder.image = [UIImage imageNamed:@"no_image.png"];
-	[self displayImageView:placeholder];
+	[self displayImageView:placeholder isCachedData:NO];
 	[placeholder release];
-	
 }
 
 - (void)layoutSubviews
@@ -115,19 +128,28 @@
 - (void)imageLoadedAndCached:(WDLCachedImageData *)imageCache
 {
 	self.cachedData = imageCache;
+	
 	UIImage *image = [UIImage imageWithData:self.cachedData.imageData];
 	if(image){
 		UIImageView *anImageView = [[[UIImageView alloc] init] initWithFrame:self.bounds];
-		[anImageView setImage:[UIImage imageWithData:self.cachedData.imageData]];
-		[self displayImageView:anImageView];
+		[anImageView setImage:image];
+		[self displayImageView:anImageView isCachedData:YES];
 		[anImageView release];
 	}else{
 		NSLog(@"Bad image at %@", imageCache.URLString);
 	}
 }
 
-- (void)displayImageView:(UIImageView *)anImageView
+- (void)displayImageView:(UIImageView *)anImageView isCachedData:(BOOL)isCachedData
 {
+	if(displayingCachedData && !isCachedData){
+		self.cachedData.displayCount -= 1;
+	}else if(isCachedData){			
+		self.cachedData.displayCount += 1;
+	}
+	
+	displayingCachedData = isCachedData;
+	
 	[self removeAllSubviews];
 	// No retain, no release
 	imageView = anImageView;
@@ -138,40 +160,16 @@
 
 - (void)imageFailedToLoadForURL:(NSURL *)anImageURL
 {
-	// Do we care?
 	NSLog(@"Async Image failed to load for %@", anImageURL);
 	[self displayPlaceholderImage];
-}
-
-#pragma mark -
-#pragma mark UIView 
-
-// These methods track how many times an image is displayed. 
-// If it gets to 0, we move cached image from memory to disk.
-// This is awesome.
-- (void)removeFromSuperview
-{
-	if(self.imageURL){
-		[WDLSingletonImageCache removeDelegate:self forURL:self.imageURL];
-	}							  	
-	if(cachedData){
-		cachedData.displayCount -= 1;
-	}	
-}
-
-- (void)didMoveToSuperview
-{
-	if(self.superview && cachedData){
-		cachedData.displayCount += 1;
-	}	
 }
 
 #pragma mark -
 #pragma mark Memory
 
 - (void)dealloc {
-	self.imageURL = nil;
 	// NOTE: No retain, no release of imageView
+	self.imageURL = nil;
 	self.cachedData = nil;
     [super dealloc];
 }
