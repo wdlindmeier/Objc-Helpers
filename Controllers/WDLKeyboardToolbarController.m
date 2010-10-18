@@ -11,6 +11,7 @@
 @interface WDLKeyboardToolbarController()
 
 - (void)setPreviousNextVisibility;
+- (void)initWDLKeyboardToolbarController;
 
 @end
 
@@ -25,13 +26,18 @@
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
-		[UIResponder setInstancesSendFirstResponderNotifications:YES];
-		NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-		[nc addObserver:self selector:@selector(firstResponderWillChange:) name:WLDWillBecomeFirstResponderNotification object:nil];
-		[nc addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-		[nc addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];				
+		[self initWDLKeyboardToolbarController];
     }
     return self;
+}
+
+- (void)initWDLKeyboardToolbarController
+{
+	[UIResponder setInstancesSendFirstResponderNotifications:YES];
+	NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+	[nc addObserver:self selector:@selector(firstResponderWillChange:) name:WLDWillBecomeFirstResponderNotification object:nil];
+	[nc addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+	[nc addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];					
 }
 
 #pragma mark Accessors 

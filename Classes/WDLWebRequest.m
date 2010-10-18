@@ -16,7 +16,8 @@
 
 - (void)makeRequest:(NSURLRequest *)request 
 {
-	
+	[requestConnection cancel];
+	[requestConnection release];
 	requestConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	self.urlString = [[request URL] absoluteString];
 	
@@ -73,9 +74,6 @@
 {
 	isActive = NO;
 	
-	// release the connection, and the data object	
-	[connection release];
-	
 	if(self.delegate){
 		[self.delegate webRequest:self didFailWithError:[error localizedDescription]];
 		if([(NSObject *)self.delegate respondsToSelector:@selector(webRequestConnectionComplete:)]){
@@ -94,7 +92,6 @@
 	
 	NSString* stringEncodedData = [[[NSString alloc] initWithData: receivedData encoding: NSUTF8StringEncoding] autorelease];
 	
-	[connection release];	
 	if(self.delegate){
 		[self.delegate webRequest:self didReturnResults:stringEncodedData];
 		if([(NSObject *)self.delegate respondsToSelector:@selector(webRequestConnectionComplete:)]){
@@ -112,9 +109,11 @@
 
 - (void)dealloc
 {
+	[requestConnection cancel];
+	[requestConnection release]; requestConnection = nil;
 	self.urlString = nil;
-	[receivedData release];
-	[headerFields release];
+	[receivedData release]; receivedData = nil;
+	[headerFields release]; headerFields = nil;
 	[super dealloc];
 }
 

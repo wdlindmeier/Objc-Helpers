@@ -94,6 +94,10 @@
 + (void)setAccountEnabled:(BOOL)enabled
 {
 	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+	if(!enabled){
+		((WDLAccountController *)[self sharedInstance]).username = nil;
+		((WDLAccountController *)[self sharedInstance]).password = nil;
+	}
 	[prefs setBool:enabled forKey:[self keyEnabled]];
 	[prefs synchronize];
 }
