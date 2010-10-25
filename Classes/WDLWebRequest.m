@@ -93,7 +93,12 @@
 	NSString* stringEncodedData = [[[NSString alloc] initWithData: receivedData encoding: NSUTF8StringEncoding] autorelease];
 	
 	if(self.delegate){
-		[self.delegate webRequest:self didReturnResults:stringEncodedData];
+		// NOTE: We'll treat any response over 300 as a failure 
+		if(self.responseStatus < 300){
+			[self.delegate webRequest:self didReturnResults:stringEncodedData];
+		}else{
+			[self.delegate webRequest:self didFailWithError:stringEncodedData];
+		}
 		if([(NSObject *)self.delegate respondsToSelector:@selector(webRequestConnectionComplete:)]){
 			[self.delegate webRequestConnectionComplete:self];
 		}
