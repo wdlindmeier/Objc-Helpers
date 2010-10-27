@@ -30,5 +30,6 @@
 - (void)displayPlaceholderImage;
 - (void)displayImage:(UIImage *)anImage;
 - (void)loadImageFromURLString:(NSString *)aURLString;
+- (void)animateActivityIndicator;
 
 @end

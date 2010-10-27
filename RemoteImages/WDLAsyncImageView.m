@@ -68,17 +68,12 @@
 
 	// Activity indicator, if you want it
 	if(showsActivityIndicator){
-		UIActivityIndicatorView *myIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-		myIndicator.center = self.center;
-		myIndicator.hidesWhenStopped = YES;
-		[myIndicator startAnimating];
-		[self addSubview:myIndicator];
-		[myIndicator release];
+		[self animateActivityIndicator];
 	}
 	
 	if(aURLString){
 		
-		[self displayPlaceholderImage];
+		if(!showsActivityIndicator) [self displayPlaceholderImage];
 
 		self.imageURL = [NSURL URLWithString:aURLString];
 		
@@ -96,6 +91,18 @@
 		
 	}
 
+}
+
+- (void)animateActivityIndicator
+{
+	// NOTE: This view will be unloaded whenever a new image is displayed
+	UIActivityIndicatorView *myIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+	CGSize frameSize = self.bounds.size;
+	myIndicator.center = CGPointMake(frameSize.width * 0.5, frameSize.height * 0.5);
+	myIndicator.hidesWhenStopped = YES;
+	[myIndicator startAnimating];
+	[self addSubview:myIndicator];
+	[myIndicator release];	
 }
 
 - (void)displayImage:(UIImage *)anImage
