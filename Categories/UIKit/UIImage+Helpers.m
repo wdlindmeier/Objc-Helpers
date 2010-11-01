@@ -155,8 +155,9 @@
 // Returns true if the image has an alpha layer
 - (BOOL)hasAlpha {
     CGImageAlphaInfo alpha = CGImageGetAlphaInfo(self.CGImage);
-    return (alpha == kCGImageAlphaFirst ||
-            alpha == kCGImageAlphaLast ||
+	// iPhone doesnt seem to support kCGImageAlphaFirst || kCGImageAlphaLast
+    return (//alpha == kCGImageAlphaFirst ||
+            //alpha == kCGImageAlphaLast ||
             alpha == kCGImageAlphaPremultipliedFirst ||
             alpha == kCGImageAlphaPremultipliedLast);
 }
@@ -307,7 +308,7 @@
     if(!bitmap){
 		return nil;
 	}
-	NSLog(@"Bitmap exists");
+
 	// Rotate and/or flip the image if required by its orientation
 	CGContextConcatCTM(bitmap, transform);
 	
