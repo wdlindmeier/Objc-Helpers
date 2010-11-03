@@ -10,12 +10,57 @@
 #import "WDLCachedImageData.h"
 #import "WDLSingletonImageCache.h"
 
+@interface WDLImageLoadOperation()
+
+- (void)downloadImage;
+
+@end
+
 @implementation WDLImageLoadOperation
 
-@synthesize imageURL, immediatelySaveToDisk;
+@synthesize imageURL, immediatelySaveToDisk, isExecuting, isFinished;
 
-// This just loads an image as an operation in a queue and saves the data in the shared image cache
-- (void)main
+#pragma mark -
+#pragma mark Accessors
+
+- (void)setIsFinished:(BOOL)finished
+{
+	[self willChangeValueForKey:@"isFinished"];
+	isFinished = finished;
+	[self didChangeValueForKey:@"isFinished"];	
+}
+
+- (void)setIsExecuting:(BOOL)executing
+{
+	[self willChangeValueForKey:@"isExecuting"];
+	isExecuting = executing;
+	[self didChangeValueForKey:@"isExecuting"];	
+}
+
+- (BOOL)isConcurrent 
+{
+	return YES;
+}
+
+- (void)setIsComplete
+{
+	self.isFinished = YES;
+	self.isExecuting = NO;
+}
+
+#pragma mark -
+#pragma mark Task 
+
+- (void)start
+{
+	self.isExecuting = YES;
+
+	[self downloadImage];
+		
+	[self setIsComplete];	
+}
+
+- (void)downloadImage
 {
 	NSString *urlString = [self.imageURL absoluteString];
 	WDLCachedImageData *imageCache = [[WDLCachedImageData alloc] initWithURLString:urlString];

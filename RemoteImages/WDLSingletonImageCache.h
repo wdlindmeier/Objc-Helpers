@@ -37,5 +37,6 @@
 + (void)imageFailedToLoadForURL:(NSURL *)imageURL;
 + (void)moveDataFromMemoryToDiskForImageAtURLString:(NSString *)URLString;
 + (BOOL)clearCache;
++ (BOOL)clearCacheIfBytesExceed:(int)byteMax;
 
 @end

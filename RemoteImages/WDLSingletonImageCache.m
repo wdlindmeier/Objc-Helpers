@@ -300,4 +300,15 @@
 	return success;
 }
 
++ (BOOL)clearCacheIfBytesExceed:(int)byteMax
+{
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSDictionary *cacheDirInfo = [fileManager attributesOfItemAtPath:[self cacheDirectory] error:nil];
+	NSNumber *fileSize = [cacheDirInfo valueForKey:NSFileSize];
+	if([fileSize intValue] > byteMax){
+		return [self clearCache];
+	}
+	return NO;
+}
+
 @end

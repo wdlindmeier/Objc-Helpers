@@ -18,5 +18,7 @@
 
 @property (nonatomic, retain) NSURL *imageURL;
 @property (nonatomic, assign) BOOL immediatelySaveToDisk;
+@property BOOL isExecuting;
+@property BOOL isFinished;
 
 @end
