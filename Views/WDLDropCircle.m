@@ -8,6 +8,12 @@
 
 #import "WDLDropCircle.h"
 
+@interface WDLDropCircle()
+
+- (void)initWDLDropCircle;
+
+@end
+
 
 @implementation WDLDropCircle
 
@@ -18,9 +24,25 @@
 
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
-        // Initialization code
+        [self initWDLDropCircle];
     }
     return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+	if(self = [super initWithCoder:aDecoder]){
+		[self initWDLDropCircle];
+	}
+	return self;
+}
+
+- (void)initWDLDropCircle
+{
+	self.shadowOffset = CGSizeMake(0.0, 3.0);
+	self.shadowOpacity = 0.3;
+	self.shadowColor = [UIColor blackColor];
+	self.shrinksToBounds = YES;
 }
 
 #pragma mark -

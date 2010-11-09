@@ -61,7 +61,6 @@
 	
 	CGPathRef roundedRectPath = [self newPathForRoundedRect:frame radius:self.radius];
 	
-	//[[UIColor blueColor] set];
 	[self.colorBackground set];
 
 	// Background
