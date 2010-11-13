@@ -40,3 +40,22 @@
 }
 
 @end
+
+@implementation UIScrollView(Helpers)
+
+- (void)growToAccomodateKeyboardBounds:(CGRect)bounds
+{
+	NSLog(@"growToAccomodateKeyboardBounds");
+	UIEdgeInsets viewInset = self.contentInset;
+	self.contentInset = UIEdgeInsetsMake(viewInset.top, viewInset.left, bounds.size.height, viewInset.right);	
+}
+
+- (void)shrinkToReclaimKeyboardBounds:(CGRect)bounds
+{
+	UIEdgeInsets viewInset = self.contentInset;
+	[UIView animateWithDuration:0.35 animations:^(void) {		
+		self.contentInset = UIEdgeInsetsMake(viewInset.top, viewInset.left, 0.0, viewInset.right);
+	}];			
+}
+
+@end

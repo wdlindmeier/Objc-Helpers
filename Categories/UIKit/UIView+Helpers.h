@@ -16,3 +16,11 @@
 - (void)removeAllSubviews;
 
 @end
+
+@interface UIScrollView(Helpers)
+
+- (void)growToAccomodateKeyboardBounds:(CGRect)bounds;
+- (void)shrinkToReclaimKeyboardBounds:(CGRect)bounds;
+
+@end
+
