@@ -13,7 +13,7 @@
 @implementation NSObject(Swizzle)
 
 + (void)swizzleClassMethod:(SEL)originalSelector withReplacement:(SEL)replacementSelector
-{
+{	
 	Method originalMethod = class_getClassMethod([self class], originalSelector);
 	Method replacementMethod = class_getClassMethod([self class], replacementSelector);
 	method_exchangeImplementations(replacementMethod, originalMethod);	

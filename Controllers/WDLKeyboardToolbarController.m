@@ -235,11 +235,9 @@
 	self.toolbar = nil;
 	self.buttonDone = nil;
 	self.buttonPrevNext = nil;
-	[self.view removeFromSuperview];	
 	self.delegate = nil;
 	[textFieldAssumeFirstResponder release];
     [super dealloc];
 }
-
 
 @end
