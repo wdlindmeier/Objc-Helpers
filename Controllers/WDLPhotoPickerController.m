@@ -96,6 +96,11 @@
 	if(self.delegate){			
 		UIViewController *viewController = [self.delegate viewControllerToPresentPhotoPicker:self];
 		self.photoPickerFromAlbum.mediaTypes = mediaTypes;
+		
+		if([self.delegate respondsToSelector:@selector(photoPicker:willPickPhotoWithController:)]){
+			[self.delegate photoPicker:self willPickPhotoWithController:self.photoPickerFromAlbum];
+		}
+
 		[viewController presentModalViewController:self.photoPickerFromAlbum animated:YES];	
 	}
 }
@@ -106,6 +111,9 @@
 	if(self.delegate){			
 		UIViewController *viewController = [self.delegate viewControllerToPresentPhotoPicker:self];
 		self.photoPickerFromCamera.mediaTypes = mediaTypes;
+		if([self.delegate respondsToSelector:@selector(photoPicker:willPickPhotoWithController:)]){
+			[self.delegate photoPicker:self willPickPhotoWithController:self.photoPickerFromCamera];
+		}		
 		[viewController presentModalViewController:self.photoPickerFromCamera animated:YES];
 	}
 }
