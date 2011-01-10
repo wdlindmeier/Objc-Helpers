@@ -151,7 +151,7 @@
 			[viewController dismissModalViewControllerAnimated:YES];
 			[self.delegate photoPicker:self didPickVideoAtURL:videoURL];
 		}
-	}	
+	}
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
@@ -172,7 +172,7 @@
 	self.photoPickerFromAlbum = nil;
 	self.photoPickerFromCamera = nil;
 	self.delegate = nil;
-	[permissableMediaTypes release];
+	[permissableMediaTypes release]; permissableMediaTypes = nil;
 	[super dealloc];
 }
 

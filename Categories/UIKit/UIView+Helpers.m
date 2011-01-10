@@ -12,7 +12,13 @@
 
 - (UIImage *)renderedAsImage
 {
-	UIGraphicsBeginImageContext(self.bounds.size);
+	CGSize imageSize = self.bounds.size;
+	if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)]) {
+		UIGraphicsBeginImageContextWithOptions(imageSize, NO, [[UIScreen mainScreen] scale]);
+	} else {
+		UIGraphicsBeginImageContext(imageSize);
+	}
+	//UIGraphicsBeginImageContext(self.bounds.size);
 	[self.layer renderInContext:UIGraphicsGetCurrentContext()];
 	UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
@@ -45,7 +51,6 @@
 
 - (void)growToAccomodateKeyboardBounds:(CGRect)bounds
 {
-	NSLog(@"growToAccomodateKeyboardBounds");
 	UIEdgeInsets viewInset = self.contentInset;
 	self.contentInset = UIEdgeInsetsMake(viewInset.top, viewInset.left, bounds.size.height, viewInset.right);	
 }

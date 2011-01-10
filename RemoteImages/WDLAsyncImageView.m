@@ -44,23 +44,24 @@
 
 - (void)initWDLAsyncImageView
 {
-	//self.contentMode = UIViewContentModeScaleAspectFit;
+	cachedData = nil;
 }
 
 #pragma mark -
 #pragma mark Accessors 
 
+/*
 - (void)setCachedData:(WDLCachedImageData *)cd
 {
 	if(displayingCachedData && [cachedData isNotBlank]){
-		cachedData.displayCount -= 1;
+		cachedData.displayCount = cachedData.displayCount - 1;
 		displayingCachedData = NO;
 	}
 	[cd retain];
 	[cachedData release];
 	cachedData = cd;
 }
-
+*/
 #pragma mark -
 #pragma mark Displaying Images 
    
@@ -95,14 +96,17 @@
 
 - (void)animateActivityIndicator
 {
-	// NOTE: This view will be unloaded whenever a new image is displayed
-	UIActivityIndicatorView *myIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+	// NOTE: This view will be unloaded whenever a new image is displayed		
+	UIActivityIndicatorView *myIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
 	CGSize frameSize = self.bounds.size;
 	myIndicator.center = CGPointMake(frameSize.width * 0.5, frameSize.height * 0.5);
+	
 	myIndicator.hidesWhenStopped = YES;
 	[myIndicator startAnimating];
+	
 	[self addSubview:myIndicator];
 	[myIndicator release];	
+
 }
 
 - (void)displayImage:(UIImage *)anImage
@@ -136,8 +140,7 @@
 
 - (void)imageLoadedAndCached:(WDLCachedImageData *)imageCache
 {
-	self.cachedData = imageCache;
-	
+	self.cachedData = imageCache;	
 	UIImage *image = [UIImage imageWithData:self.cachedData.imageData];
 	if(image){
 		UIImageView *anImageView = [[[UIImageView alloc] init] initWithFrame:self.bounds];
