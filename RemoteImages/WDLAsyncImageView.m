@@ -21,7 +21,7 @@
 
 @implementation WDLAsyncImageView
 
-@synthesize cachedData, showsActivityIndicator, imageURL, contentMode;
+@synthesize cachedData, showsActivityIndicator, imageURL, contentMode, cornerRadius;
 
 #pragma mark -
 #pragma mark Init 
@@ -44,7 +44,7 @@
 
 - (void)initWDLAsyncImageView
 {
-	self.contentMode = UIViewContentModeScaleAspectFit;
+	//self.contentMode = UIViewContentModeScaleAspectFit;
 }
 
 #pragma mark -
@@ -126,6 +126,8 @@
 	[super layoutSubviews];
 	if(imageView){
 		imageView.frame = self.bounds;
+		imageView.layer.cornerRadius = cornerRadius;
+		imageView.layer.masksToBounds = YES;
 	}
 }
 

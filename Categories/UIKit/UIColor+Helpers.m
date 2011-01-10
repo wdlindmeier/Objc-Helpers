@@ -46,6 +46,14 @@
 						   green:((float) g / 255.0f)
 							blue:((float) b / 255.0f)
 						   alpha:1.0f];
-} 
+}
+
++ (UIColor *)colorWithRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue {
+	CGFloat redComp = red / 255.f;
+	CGFloat greenComp = green / 255.f;
+	CGFloat blueComp = blue / 255.f;
+	
+	return [UIColor colorWithRed:redComp green:greenComp blue:blueComp alpha:1.f];
+}
 
 @end

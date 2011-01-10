@@ -21,15 +21,18 @@
 	NSURL *imageURL;
 	UIViewContentMode contentMode;	
 	BOOL displayingCachedData;
+	CGFloat cornerRadius;
 }
 
 @property (nonatomic, assign) BOOL showsActivityIndicator;
 @property (nonatomic, assign) UIViewContentMode contentMode;
 @property (nonatomic, retain) NSURL *imageURL;
+@property (nonatomic, assign) CGFloat cornerRadius;
 
 - (void)displayPlaceholderImage;
 - (void)displayImage:(UIImage *)anImage;
 - (void)loadImageFromURLString:(NSString *)aURLString;
 - (void)animateActivityIndicator;
+- (void)setCornerRadius:(CGFloat)cornerRadius;
 
 @end
