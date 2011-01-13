@@ -76,17 +76,24 @@ static NSDateFormatter *sharedFormatter;
 	NSDate *parsed = nil;
 	if([JSONstring isNotBlank]){
 		NSDateFormatter *dateFormatter = [NSDate sharedFormatter];
-		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZ"];
+		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZ"];		
 		
-		@try { parsed = [dateFormatter dateFromString:JSONstring];}
-		@catch (NSException * e) {}
+		@try { parsed = [dateFormatter dateFromString:JSONstring]; 
+			//if(parsed){ NSLog(@"Parsed 0: %@ == %@", JSONstring, parsed);}
+		}
+		@catch (NSException * e) { parsed = nil; }
 		
 		if(!parsed){
+			// If there is not explicit time zone, use GMT.
+			[dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
 			[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-			@try { parsed = [dateFormatter dateFromString:JSONstring]; }
-			@catch (NSException * e) {}
+			@try { parsed = [dateFormatter dateFromString:JSONstring]; 
+				//if(parsed){ NSLog(@"Parsed 1: %@ == %@", JSONstring, parsed);}
+			}
+			@catch (NSException * e) { parsed = nil; }
 
 			if(!parsed){
+				// Just ommitting the time zone alltogether
 				int stringLength = [JSONstring length];
 				NSString *stringSansTZ = [JSONstring stringByReplacingOccurrencesOfString:@"(Z|(\\+|\\-)\\d\\d:\\d\\d)$" 
 																			   withString:@"" 
@@ -94,8 +101,10 @@ static NSDateFormatter *sharedFormatter;
 																					range:NSMakeRange(0, stringLength)];
 				
 				[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-				@try { parsed = [dateFormatter dateFromString:stringSansTZ];}
-				@catch (NSException * e) {}
+				@try { parsed = [dateFormatter dateFromString:stringSansTZ]; 
+					//if(parsed){ NSLog(@"Parsed 2: %@ == %@", JSONstring, parsed); }
+				}
+				@catch (NSException * e) { parsed = nil; }
 			}
 		}
 	}
