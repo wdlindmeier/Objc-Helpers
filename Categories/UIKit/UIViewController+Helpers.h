@@ -13,5 +13,6 @@
 
 - (void)showPickerView:(UIView *)pickerView;
 - (void)hidePickerView:(UIView *)pickerView;
+- (BOOL)isVisible;
 
 @end

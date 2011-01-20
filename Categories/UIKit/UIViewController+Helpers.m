@@ -53,4 +53,9 @@
 	
 }
 
+- (BOOL)isVisible
+{
+	return !!self.view.window;
+}
+
 @end
