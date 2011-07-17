@@ -2,6 +2,6 @@
 
 @implementation EAGLView (Helpers)
 
-- (UIImage *)renderedAsImage;
+- (UIImage *)renderedAsImage:(BOOL)allowTransparency;
 
 @end

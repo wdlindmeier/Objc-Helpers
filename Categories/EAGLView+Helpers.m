@@ -6,7 +6,7 @@ void releaseScreenshotData(void *info, const void *data, size_t size) {
 
 @implementation EAGLView (Helpers)
 
-- (UIImage *)renderedAsImage 
+- (UIImage *)renderedAsImage:(BOOL)allowTransparency
 {
     int backingWidth = self.bounds.size.width;
     int pixelsWide = backingWidth * self.contentScaleFactor;
@@ -18,7 +18,7 @@ void releaseScreenshotData(void *info, const void *data, size_t size) {
     // allocate array and read pixels into it.
     GLuint *buffer = (GLuint *) malloc(myDataLength);
     glReadPixels(0, 0, pixelsWide, pixelsHigh, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-    
+
     // gl renders “upside down” so swap top to bottom into new array.
     for(int y = 0; y < pixelsHigh / 2; y++) {
         for(int x = 0; x < pixelsWide; x++) {
@@ -38,7 +38,10 @@ void releaseScreenshotData(void *info, const void *data, size_t size) {
     const int bitsPerPixel = 4 * bitsPerComponent;
     const int bytesPerRow = 4 * backingWidth;
     CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
-    CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault | kCGImageAlphaLast;
+    CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault;
+    if(allowTransparency){
+        bitmapInfo = kCGBitmapByteOrderDefault | kCGImageAlphaLast;
+    }
     CGColorRenderingIntent renderingIntent = kCGRenderingIntentDefault;
     
     CGImageRef imageRef = CGImageCreate(pixelsWide, pixelsHigh, bitsPerComponent, bitsPerPixel, bytesPerRow, colorSpaceRef, bitmapInfo, provider, NULL, NO, renderingIntent);
@@ -51,5 +54,4 @@ void releaseScreenshotData(void *info, const void *data, size_t size) {
     
     return myImage;
 }
-
 @end
