@@ -24,7 +24,7 @@
 
 @implementation UIImage (Helpers)
 
-#pragma mark Instance methods 
+#pragma mark Instance methods
 
 // http://vocaro.com/trevor/blog/2009/10/12/resize-a-uiimage-the-right-way/
 
@@ -48,7 +48,7 @@
     UIImage *resizedImage = [self resizedImageWithContentMode:UIViewContentModeScaleAspectFill
                                                        bounds:CGSizeMake(thumbnailSize, thumbnailSize)
                                          interpolationQuality:quality];
-    
+
     // Crop out any part of the image that's larger than the thumbnail size
     // The cropped rect must be centered on the resized image
     // Round the origin points so that the size isn't altered when CGRectIntegral is later invoked
@@ -57,9 +57,9 @@
                                  thumbnailSize,
                                  thumbnailSize);
     UIImage *croppedImage = [resizedImage croppedImage:cropRect];
-    
+
     UIImage *transparentBorderImage = borderSize ? [croppedImage transparentBorderImage:borderSize] : croppedImage;
-	
+
     return [transparentBorderImage roundedCornerImage:cornerRadius borderSize:borderSize];
 }
 
@@ -67,7 +67,7 @@
 // The image will be scaled disproportionately if necessary to fit the bounds specified by the parameter
 - (UIImage *)resizedImage:(CGSize)newSize interpolationQuality:(CGInterpolationQuality)quality {
     BOOL drawTransposed;
-    
+
     switch (self.imageOrientation) {
         case UIImageOrientationLeft:
         case UIImageOrientationLeftMirrored:
@@ -75,11 +75,11 @@
         case UIImageOrientationRightMirrored:
             drawTransposed = YES;
             break;
-            
+
         default:
             drawTransposed = NO;
     }
-    
+
     return [self resizedImage:newSize
                     transform:[self transformForOrientation:newSize]
                drawTransposed:drawTransposed
@@ -93,22 +93,22 @@
     CGFloat horizontalRatio = bounds.width / self.size.width;
     CGFloat verticalRatio = bounds.height / self.size.height;
     CGFloat ratio;
-    
+
     switch (contentMode) {
         case UIViewContentModeScaleAspectFill:
             ratio = MAX(horizontalRatio, verticalRatio);
             break;
-            
+
         case UIViewContentModeScaleAspectFit:
             ratio = MIN(horizontalRatio, verticalRatio);
             break;
-            
+
         default:
             [NSException raise:NSInvalidArgumentException format:@"Unsupported content mode: %d", contentMode];
     }
-    
+
     CGSize newSize = CGSizeMake(self.size.width * ratio, self.size.height * ratio);
-    
+
     return [self resizedImage:newSize interpolationQuality:quality];
 }
 
@@ -118,7 +118,7 @@
 - (UIImage *)roundedCornerImage:(NSInteger)cornerSize borderSize:(NSInteger)borderSize {
     // If the image does not have an alpha layer, add one
     UIImage *image = [self imageWithAlpha];
-    
+
     // Build a context that's the same dimensions as the new size
     CGContextRef context = CGBitmapContextCreate(NULL,
                                                  image.size.width,
@@ -127,7 +127,7 @@
                                                  0,
                                                  CGImageGetColorSpace(image.CGImage),
                                                  CGImageGetBitmapInfo(image.CGImage));
-	
+
     // Create a clipping path with rounded corners
     CGContextBeginPath(context);
     [self addRoundedRectToPath:CGRectMake(borderSize, borderSize, image.size.width - borderSize * 2, image.size.height - borderSize * 2)
@@ -136,18 +136,18 @@
                     ovalHeight:cornerSize];
     CGContextClosePath(context);
     CGContextClip(context);
-	
+
     // Draw the image to the context; the clipping path will make anything outside the rounded rect transparent
     CGContextDrawImage(context, CGRectMake(0, 0, image.size.width, image.size.height), image.CGImage);
-    
+
     // Create a CGImage from the context
     CGImageRef clippedImage = CGBitmapContextCreateImage(context);
     CGContextRelease(context);
-    
+
     // Create a UIImage from the CGImage
     UIImage *roundedImage = [UIImage imageWithCGImage:clippedImage];
     CGImageRelease(clippedImage);
-    
+
     return roundedImage;
 }
 
@@ -167,11 +167,11 @@
     if ([self hasAlpha]) {
         return self;
     }
-    
+
     CGImageRef imageRef = self.CGImage;
     size_t width = CGImageGetWidth(imageRef);
     size_t height = CGImageGetHeight(imageRef);
-    
+
     // The bitsPerComponent and bitmapInfo values are hard-coded to prevent an "unsupported parameter combination" error
     CGContextRef offscreenContext = CGBitmapContextCreate(NULL,
                                                           width,
@@ -180,16 +180,16 @@
                                                           0,
                                                           CGImageGetColorSpace(imageRef),
                                                           kCGBitmapByteOrderDefault | kCGImageAlphaPremultipliedFirst);
-    
+
     // Draw the image into the context and retrieve the new image, which will now have an alpha layer
     CGContextDrawImage(offscreenContext, CGRectMake(0, 0, width, height), imageRef);
     CGImageRef imageRefWithAlpha = CGBitmapContextCreateImage(offscreenContext);
     UIImage *imageWithAlpha = [UIImage imageWithCGImage:imageRefWithAlpha];
-    
+
     // Clean up
     CGContextRelease(offscreenContext);
     CGImageRelease(imageRefWithAlpha);
-    
+
     return imageWithAlpha;
 }
 
@@ -198,9 +198,9 @@
 - (UIImage *)transparentBorderImage:(NSUInteger)borderSize {
     // If the image does not have an alpha layer, add one
     UIImage *image = [self imageWithAlpha];
-    
+
     CGRect newRect = CGRectMake(0, 0, image.size.width + borderSize * 2, image.size.height + borderSize * 2);
-    
+
     // Build a context that's the same dimensions as the new size
     CGContextRef bitmap = CGBitmapContextCreate(NULL,
                                                 newRect.size.width,
@@ -209,23 +209,23 @@
                                                 0,
                                                 CGImageGetColorSpace(self.CGImage),
                                                 CGImageGetBitmapInfo(self.CGImage));
-    
+
     // Draw the image in the center of the context, leaving a gap around the edges
     CGRect imageLocation = CGRectMake(borderSize, borderSize, image.size.width, image.size.height);
     CGContextDrawImage(bitmap, imageLocation, self.CGImage);
     CGImageRef borderImageRef = CGBitmapContextCreateImage(bitmap);
-    
+
     // Create a mask to make the border transparent, and combine it with the image
     CGImageRef maskImageRef = [self newBorderMask:borderSize size:newRect.size];
     CGImageRef transparentBorderImageRef = CGImageCreateWithMask(borderImageRef, maskImageRef);
     UIImage *transparentBorderImage = [UIImage imageWithCGImage:transparentBorderImageRef];
-    
+
     // Clean up
     CGContextRelease(bitmap);
     CGImageRelease(borderImageRef);
     CGImageRelease(maskImageRef);
     CGImageRelease(transparentBorderImageRef);
-    
+
     return transparentBorderImage;
 }
 
@@ -237,7 +237,7 @@
 // The caller is responsible for releasing the returned reference by calling CGImageRelease
 - (CGImageRef)newBorderMask:(NSUInteger)borderSize size:(CGSize)size {
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
-    
+
     // Build a context that's the same dimensions as the new size
     CGContextRef maskContext = CGBitmapContextCreate(NULL,
                                                      size.width,
@@ -246,22 +246,22 @@
                                                      0,
                                                      colorSpace,
                                                      kCGBitmapByteOrderDefault | kCGImageAlphaNone);
-    
+
     // Start with a mask that's entirely transparent
     CGContextSetFillColorWithColor(maskContext, [UIColor blackColor].CGColor);
     CGContextFillRect(maskContext, CGRectMake(0, 0, size.width, size.height));
-    
+
     // Make the inner part (within the border) opaque
     CGContextSetFillColorWithColor(maskContext, [UIColor whiteColor].CGColor);
     CGContextFillRect(maskContext, CGRectMake(borderSize, borderSize, size.width - borderSize * 2, size.height - borderSize * 2));
-    
+
     // Get an image of the context
     CGImageRef maskImageRef = CGBitmapContextCreateImage(maskContext);
-    
+
     // Clean up
     CGContextRelease(maskContext);
     CGColorSpaceRelease(colorSpace);
-    
+
     return maskImageRef;
 }
 
@@ -296,7 +296,7 @@
     CGRect newRect = CGRectIntegral(CGRectMake(0, 0, newSize.width, newSize.height));
     CGRect transposedRect = CGRectMake(0, 0, newRect.size.height, newRect.size.width);
     CGImageRef imageRef = self.CGImage;
-    
+
     // Build a context that's the same dimensions as the new size
     CGContextRef bitmap = CGBitmapContextCreate(NULL,
                                                 newRect.size.width,
@@ -311,62 +311,62 @@
 
 	// Rotate and/or flip the image if required by its orientation
 	CGContextConcatCTM(bitmap, transform);
-	
+
 	// Set the quality level to use when rescaling
 	CGContextSetInterpolationQuality(bitmap, quality);
-	
+
 	// Draw into the context; this scales the image
 	CGContextDrawImage(bitmap, transpose ? transposedRect : newRect, imageRef);
-	
+
 	// Get the resized image from the context and a UIImage
 	CGImageRef newImageRef = CGBitmapContextCreateImage(bitmap);
 	UIImage *newImage = [UIImage imageWithCGImage:newImageRef];
-	
+
 	// Clean up
 	CGContextRelease(bitmap);
 	CGImageRelease(newImageRef);
-	
-	return newImage;	
+
+	return newImage;
 }
 
 // Returns an affine transform that takes into account the image orientation when drawing a scaled image
 - (CGAffineTransform)transformForOrientation:(CGSize)newSize {
     CGAffineTransform transform = CGAffineTransformIdentity;
-    
+
     switch (self.imageOrientation) {
         case UIImageOrientationDown:           // EXIF = 3
         case UIImageOrientationDownMirrored:   // EXIF = 4
             transform = CGAffineTransformTranslate(transform, newSize.width, newSize.height);
             transform = CGAffineTransformRotate(transform, M_PI);
             break;
-            
+
         case UIImageOrientationLeft:           // EXIF = 6
         case UIImageOrientationLeftMirrored:   // EXIF = 5
             transform = CGAffineTransformTranslate(transform, newSize.width, 0);
             transform = CGAffineTransformRotate(transform, M_PI_2);
             break;
-            
+
         case UIImageOrientationRight:          // EXIF = 8
         case UIImageOrientationRightMirrored:  // EXIF = 7
             transform = CGAffineTransformTranslate(transform, 0, newSize.height);
             transform = CGAffineTransformRotate(transform, -M_PI_2);
             break;
     }
-    
+
     switch (self.imageOrientation) {
         case UIImageOrientationUpMirrored:     // EXIF = 2
         case UIImageOrientationDownMirrored:   // EXIF = 4
             transform = CGAffineTransformTranslate(transform, newSize.width, 0);
             transform = CGAffineTransformScale(transform, -1, 1);
             break;
-            
+
         case UIImageOrientationLeftMirrored:   // EXIF = 5
         case UIImageOrientationRightMirrored:  // EXIF = 7
             transform = CGAffineTransformTranslate(transform, newSize.height, 0);
             transform = CGAffineTransformScale(transform, -1, 1);
             break;
     }
-    
+
     return transform;
 }
 
@@ -386,10 +386,10 @@
 												 bitsPerComponent, bytesPerRow, colorSpace,
 												 kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
     CGColorSpaceRelease(colorSpace);
-	
+
     CGContextDrawImage(context, CGRectMake(0, 0, width, height), imageRef);
     CGContextRelease(context);
-	
+
     // Now your rawData contains the image data in the RGBA8888 pixel format.
     int byteIndex = (bytesPerRow * yy) + xx * bytesPerPixel;
 
@@ -397,10 +397,10 @@
 	CGFloat green = (rawData[byteIndex + 1] * 1.0) / 255.0;
 	CGFloat blue  = (rawData[byteIndex + 2] * 1.0) / 255.0;
 	CGFloat alpha = (rawData[byteIndex + 3] * 1.0) / 255.0;
-	
+
 	UIColor *returnColor = [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
 	free(rawData);
-	
+
 	return returnColor;
 }
 

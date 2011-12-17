@@ -12,7 +12,7 @@
 
 @dynamic username, password;
 
-#pragma mark Accessors 
+#pragma mark Accessors
 
 - (NSString *)username
 {
@@ -23,7 +23,7 @@
 }
 
 - (void)setUsername:(NSString *)aUsername
-{	
+{
 	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
 	if([aUsername isNotBlank]){
 		NSString *newUsername = [aUsername copy];
@@ -47,7 +47,7 @@
 }
 
 - (void)setPassword:(NSString *)aPassword
-{	
+{
 	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
 	if([aPassword isNotBlank]){
 		NSString *newPassword = [aPassword copy];
@@ -58,7 +58,7 @@
 		[password release];
 		password = nil;
 		[prefs removeObjectForKey:[[self class] keyPassword]];
-	}	
+	}
 	[prefs synchronize];
 }
 
@@ -68,7 +68,7 @@
 {
 	[username release];
 	[password release];
-	[super dealloc];	
+	[super dealloc];
 }
 
 #pragma mark Class methods
@@ -76,8 +76,8 @@
 // NOTE: Don't create the shared instance in the super controller.
 // It's stored in a static variable and therefore should be defined in the subclass
 + (id *)sharedInstance
-{	
-	return nil;	
+{
+	return nil;
 }
 
 + (void)setUsername:(NSString *)aUsername password:(NSString *)aPassword

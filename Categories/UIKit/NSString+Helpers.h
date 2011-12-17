@@ -33,7 +33,7 @@
 
 
 static inline NSInteger caseInsensitiveCompareSort(id obj1, id obj2, void *keyPath)
-{	
+{
     NSString *s1 = [obj1 valueForKeyPath:(NSString *)keyPath];
     NSString *s2 = [obj2 valueForKeyPath:(NSString *)keyPath];
 	return [s1 caseInsensitiveCompare:s2];

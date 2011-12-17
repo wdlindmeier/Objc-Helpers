@@ -30,14 +30,14 @@ CGFloat angleBetweenPoints(CGPoint first, CGPoint second) {
 	//degs = degrees(atan((top - bottom)/(right - left)))
 }
 CGFloat angleBetweenLines(CGPoint line1Start, CGPoint line1End, CGPoint line2Start, CGPoint line2End) {
-	
+
 	CGFloat a = line1End.x - line1Start.x;
 	CGFloat b = line1End.y - line1Start.y;
 	CGFloat c = line2End.x - line2Start.x;
 	CGFloat d = line2End.y - line2Start.y;
-	
+
 	CGFloat rads = acos(((a*c) + (b*d)) / ((sqrt(a*a + b*b)) * (sqrt(c*c + d*d))));
-	
+
 	return radiansToDegrees(rads);
-	
+
 }

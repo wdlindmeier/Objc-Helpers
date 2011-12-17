@@ -10,7 +10,7 @@
 
 
 @interface WDLRoundedRectView : UIView {
-	
+
 	UIColor *colorBackground;
 	UIColor *colorStroke;
 	float radius;

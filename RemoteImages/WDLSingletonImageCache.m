@@ -13,7 +13,7 @@
 // private definitions
 @interface WDLSingletonImageCache()
 
-- (void)loadImageForURL:(NSURL *)imageURL 
+- (void)loadImageForURL:(NSURL *)imageURL
 			forDelegate:(NSObject <WDLRemoteImageLoaderDelegate> *)delegate
 		willBeDisplayed:(BOOL)isDisplayed;
 
@@ -41,9 +41,9 @@
 }
 
 #pragma mark -
-#pragma mark Loading Images 
+#pragma mark Loading Images
 
-- (void)loadImageForURL:(NSURL *)imageURL 
+- (void)loadImageForURL:(NSURL *)imageURL
 			forDelegate:(NSObject <WDLRemoteImageLoaderDelegate> *)delegate
 		willBeDisplayed:(BOOL)isDisplayed
 {
@@ -61,7 +61,7 @@
 				NSMutableArray *imageDelegates = [remoteImageDelegates objectForKey:urlKey];
 				if(!imageDelegates){
 					imageDelegates = [NSMutableArray array];
-					[remoteImageDelegates setObject:imageDelegates forKey:urlKey];				
+					[remoteImageDelegates setObject:imageDelegates forKey:urlKey];
 				}
 				[imageDelegates addObject:delegate];
 			}
@@ -71,7 +71,7 @@
 			imageLoader.imageURL = imageURL;
 			imageLoader.immediatelySaveToDisk = !isDisplayed;
 			[imageLoadQueue addOperation:imageLoader];
-			[imageLoader release];		
+			[imageLoader release];
 
 		}
 	}
@@ -88,7 +88,7 @@
 }
 
 - (void) dealloc {
-	[imageLoadQueue cancelAllOperations];	
+	[imageLoadQueue cancelAllOperations];
 	[imageLoadQueue release];
 	[sharedImageCache release];
 	[remoteImageDelegates release];
@@ -100,17 +100,17 @@
 
 + (WDLSingletonImageCache *) sharedImageCacheInstance {
 	static WDLSingletonImageCache *sharedImageCacheInstance = nil;
-	
+
 	@synchronized([WDLSingletonImageCache class]) {
 		if (!sharedImageCacheInstance) {
 			sharedImageCacheInstance = [[WDLSingletonImageCache alloc] init];
 			[[NSNotificationCenter defaultCenter] addObserver:sharedImageCacheInstance
-													 selector:@selector(handleMemoryWarning) 
+													 selector:@selector(handleMemoryWarning)
 														 name:UIApplicationDidReceiveMemoryWarningNotification
 													   object:nil];
 		}
 	}
-	
+
 	return sharedImageCacheInstance;
 }
 
@@ -124,13 +124,13 @@
 			// Check the file system
 			NSMutableData *urlData = [WDLSingletonImageCache imageDataForURLString:URLString];
 			// If it's there, save it to memory
-			if(urlData){ 
+			if(urlData){
 				imageData = [[WDLCachedImageData alloc] initWithURLString:URLString];
 				imageData.imageData = urlData;
 				[WDLSingletonImageCache setImageData:imageData];
 				[imageData release];
 			}
-		}	
+		}
 	}
 	return imageData;
 }
@@ -140,14 +140,14 @@
 	@synchronized([WDLSingletonImageCache class]){
 		WDLSingletonImageCache *sharedImageCacheInstance = [WDLSingletonImageCache sharedImageCacheInstance];
 		[sharedImageCacheInstance.sharedImageCache setValue:cachedData forKey:cachedData.URLString];
-		NSArray *delegates = [sharedImageCacheInstance.remoteImageDelegates valueForKey:cachedData.URLString]; 
+		NSArray *delegates = [sharedImageCacheInstance.remoteImageDelegates valueForKey:cachedData.URLString];
 		if(delegates){
 			// Inform any delegate that was watching this image that it has loaded
 			for(NSObject <WDLRemoteImageLoaderDelegate> * delegate in delegates){
-				// This needs to be done on the main thread, because a WDLImageLoadOperation 
+				// This needs to be done on the main thread, because a WDLImageLoadOperation
 				// might call setImageData: from it's own thread.
-				[delegate performSelectorOnMainThread:@selector(imageLoadedAndCached:) 
-										   withObject:cachedData 
+				[delegate performSelectorOnMainThread:@selector(imageLoadedAndCached:)
+										   withObject:cachedData
 										waitUntilDone:NO];
 			}
 			// Remove the delegates from the dictionary
@@ -161,12 +161,12 @@
 	@synchronized([WDLSingletonImageCache class]){
 		WDLSingletonImageCache *sharedImageCacheInstance = [WDLSingletonImageCache sharedImageCacheInstance];
 		NSString *urlString = [imageURL absoluteString];
-		NSArray *delegates = [sharedImageCacheInstance.remoteImageDelegates valueForKey:urlString]; 
+		NSArray *delegates = [sharedImageCacheInstance.remoteImageDelegates valueForKey:urlString];
 		if(delegates){
 			// Inform any delegate that was watching this image that it has loaded
 			for(NSObject <WDLRemoteImageLoaderDelegate> * delegate in delegates){
-				[delegate performSelectorOnMainThread:@selector(imageFailedToLoadForURL:) 
-										   withObject:imageURL 
+				[delegate performSelectorOnMainThread:@selector(imageFailedToLoadForURL:)
+										   withObject:imageURL
 										waitUntilDone:NO];
 			}
 			// Remove the delegates from the dictionary
@@ -177,9 +177,9 @@
 
 // This will simply load an image and store it in the cache for future use.
 // If the image is already cached, it will not load it again.
-// Set willBeDisplayed to YES if this is loaded into a view. 
+// Set willBeDisplayed to YES if this is loaded into a view.
 // Otherwise the image will be saved to disk.
-+ (void)loadImageForURL:(NSURL *)imageURL 
++ (void)loadImageForURL:(NSURL *)imageURL
 			forDelegate:(NSObject <WDLRemoteImageLoaderDelegate> *)delegate
 		willBeDisplayed:(BOOL)isDisplayed
 {
@@ -209,7 +209,7 @@
 	NSData *imageData;
 	@synchronized([WDLSingletonImageCache class]){
 		NSString *escapedURLString = [URLString stringWithPercentEscape];
-		
+
 		// Find the file
 		NSString *filePath = [[self cacheDirectory] stringByAppendingPathComponent:escapedURLString];
 
@@ -236,11 +236,11 @@
 		NSString *escapedURLString = [URLString stringWithPercentEscape];
 
 		NSString *filePath = [[self cacheDirectory] stringByAppendingPathComponent:escapedURLString];
-		
+
 		// Check if there's a file there. If not, write it.
 		NSFileManager *fileManager = [NSFileManager defaultManager];
 		BOOL imageExists = [fileManager fileExistsAtPath:filePath];
-		
+
 		if(!imageExists){
 			BOOL success = [imageData writeToFile:filePath atomically:YES];
 			if(!success){
@@ -255,23 +255,23 @@
 	@synchronized([WDLSingletonImageCache class]){
 		WDLSingletonImageCache *sharedImageCacheInstance = [WDLSingletonImageCache sharedImageCacheInstance];
 		WDLCachedImageData *cachedData = [sharedImageCacheInstance.sharedImageCache valueForKey:URLString];
-		if(cachedData){		
+		if(cachedData){
 			[self saveImageData:cachedData.imageData fromURLString:URLString];
 			[sharedImageCacheInstance.sharedImageCache removeObjectForKey:URLString];
-		}						 
+		}
 	}
 }
 
 + (NSString *)cacheDirectory {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                                          NSUserDomainMask, YES);
-	
+
 	NSString *documentsPath = [paths objectAtIndex:0];
 	NSString *cachePath = [documentsPath stringByAppendingPathComponent:@"imagecache"];
-	
+
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	BOOL isDirectory;
-	BOOL cachePathExists = [fileManager fileExistsAtPath:cachePath isDirectory:&isDirectory];	 
+	BOOL cachePathExists = [fileManager fileExistsAtPath:cachePath isDirectory:&isDirectory];
 	if(!cachePathExists){
 		// Create the cache path
 		NSError *fsError = nil;

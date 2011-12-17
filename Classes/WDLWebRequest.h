@@ -47,7 +47,7 @@ typedef enum HTTPStatusCodes {
 	NSString *urlString;
 	BOOL isActive;
 	NSDictionary *headerFields;
-	
+
 }
 
 @property (nonatomic, assign) id <WDLWebRequestDelegate> delegate;

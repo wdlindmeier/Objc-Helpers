@@ -25,20 +25,20 @@
 	[mediaTypes retain];
 	[permissableMediaTypes release];
 	permissableMediaTypes = mediaTypes;
-	
+
 	// If they have a camera, we'll give them the option of taking a photo.
 	// Otherwise, just let them pick one.
 	if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]){
 		UIActionSheet *anActionSheet = [[UIActionSheet alloc] initWithTitle:nil
 																   delegate:self
 														  cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel <alert cancel button>")
-													 destructiveButtonTitle:nil 
+													 destructiveButtonTitle:nil
 														  otherButtonTitles:NSLocalizedString(@"Camera", @"Take Photo <photo picker option>"), NSLocalizedString(@"Choose File", @"Choose Existing Pohot <photo picker option>"), nil];
 		anActionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
-		if(self.delegate){			
+		if(self.delegate){
 			UIViewController *viewController = [self.delegate viewControllerToPresentPhotoPicker:self];
 			[anActionSheet showInView:viewController.view];
-		}			
+		}
 		[anActionSheet release];
 	}else{
 		[self chooseMediaTypesFromAlbum:mediaTypes];
@@ -64,27 +64,27 @@
 	}
 }
 
-#pragma mark Accessors 
+#pragma mark Accessors
 
 - (UIImagePickerController *)photoPickerFromCamera{
 	if(photoPickerFromCamera == nil){
-		photoPickerFromCamera = [[UIImagePickerController alloc] init];		
+		photoPickerFromCamera = [[UIImagePickerController alloc] init];
 		photoPickerFromCamera.delegate = self;
 		photoPickerFromCamera.sourceType = UIImagePickerControllerSourceTypeCamera;
 		photoPickerFromCamera.allowsEditing = allowsEditing;
 		photoPickerFromCamera.view.hidden = YES;
-	}	
+	}
 	return photoPickerFromCamera;
 }
 
 - (UIImagePickerController *)photoPickerFromAlbum{
 	if(photoPickerFromAlbum == nil){
-		photoPickerFromAlbum = [[UIImagePickerController alloc] init];		
+		photoPickerFromAlbum = [[UIImagePickerController alloc] init];
 		photoPickerFromAlbum.delegate = self;
 		photoPickerFromAlbum.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
 		photoPickerFromAlbum.allowsEditing = allowsEditing;
 		photoPickerFromAlbum.view.hidden = YES;
-	}	
+	}
 	return photoPickerFromAlbum;
 }
 
@@ -93,27 +93,27 @@
 - (void)chooseMediaTypesFromAlbum:(NSArray *)mediaTypes
 {
 	self.photoPickerFromAlbum.view.hidden = NO;
-	if(self.delegate){			
+	if(self.delegate){
 		UIViewController *viewController = [self.delegate viewControllerToPresentPhotoPicker:self];
 		self.photoPickerFromAlbum.mediaTypes = mediaTypes;
-		
+
 		if([self.delegate respondsToSelector:@selector(photoPicker:willPickPhotoWithController:)]){
 			[self.delegate photoPicker:self willPickPhotoWithController:self.photoPickerFromAlbum];
 		}
 
-		[viewController presentModalViewController:self.photoPickerFromAlbum animated:YES];	
+		[viewController presentModalViewController:self.photoPickerFromAlbum animated:YES];
 	}
 }
 
 - (void)captureMediaTypesFromCamera:(NSArray *)mediaTypes
 {
 	self.photoPickerFromCamera.view.hidden = NO;
-	if(self.delegate){			
+	if(self.delegate){
 		UIViewController *viewController = [self.delegate viewControllerToPresentPhotoPicker:self];
 		self.photoPickerFromCamera.mediaTypes = mediaTypes;
 		if([self.delegate respondsToSelector:@selector(photoPicker:willPickPhotoWithController:)]){
 			[self.delegate photoPicker:self willPickPhotoWithController:self.photoPickerFromCamera];
-		}		
+		}
 		[viewController presentModalViewController:self.photoPickerFromCamera animated:YES];
 	}
 }
@@ -121,8 +121,8 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
 	NSObject *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
-	if([mediaType isEqual:(NSString *)kUTTypeImage]){	
-		
+	if([mediaType isEqual:(NSString *)kUTTypeImage]){
+
 		// Picked an image. Return the image.
 		UIImage *image;
 		if(picker.allowsEditing){
@@ -134,19 +134,19 @@
 		// Nilling out the images in the dict to conserve memory
 		[info setValue:nil forKey:UIImagePickerControllerOriginalImage];
 		[info setValue:nil forKey:UIImagePickerControllerEditedImage];
-		// Re-orients the image data 
+		// Re-orients the image data
 		// image = [image resizedImage:image.size interpolationQuality:kCGInterpolationDefault];
-		if(self.delegate && [(NSObject *)self.delegate respondsToSelector:@selector(photoPicker:didPickImage:)]){	
+		if(self.delegate && [(NSObject *)self.delegate respondsToSelector:@selector(photoPicker:didPickImage:)]){
 			UIViewController *viewController = [self.delegate viewControllerToPresentPhotoPicker:self];
 			[viewController dismissModalViewControllerAnimated:YES];
 			[self.delegate photoPicker:self didPickImage:image];
 		}
 		[image release];
 	}else if([mediaType isEqual:(NSString *)kUTTypeMovie]){
-		
+
 		// Picked a video: Return the URL
 		NSURL *videoURL = [info objectForKey:UIImagePickerControllerMediaURL];
-		if(self.delegate && [(NSObject *)self.delegate respondsToSelector:@selector(photoPicker:didPickVideoAtURL:)]){			
+		if(self.delegate && [(NSObject *)self.delegate respondsToSelector:@selector(photoPicker:didPickVideoAtURL:)]){
 			UIViewController *viewController = [self.delegate viewControllerToPresentPhotoPicker:self];
 			[viewController dismissModalViewControllerAnimated:YES];
 			[self.delegate photoPicker:self didPickVideoAtURL:videoURL];
@@ -162,10 +162,10 @@
 		if([(NSObject *)self.delegate respondsToSelector:@selector(photoPickerDidCancel:)]){
 			[self.delegate photoPickerDidCancel:self];
 		}
-	}	
+	}
 }
 
-#pragma mark Memory 
+#pragma mark Memory
 
 - (void)dealloc
 {

@@ -21,19 +21,19 @@
 - (void)photoPicker:(WDLPhotoPickerController *)aPhotoPicker didPickImage:(UIImage *)anImage;
 - (void)photoPickerDidCancel:(WDLPhotoPickerController *)aPhotoPicker;
 - (void)photoPicker:(WDLPhotoPickerController *)aPhotoPicker didPickVideoAtURL:(NSURL *)videoURL;
-- (void)photoPicker:(WDLPhotoPickerController *)aPhotoPicker 
+- (void)photoPicker:(WDLPhotoPickerController *)aPhotoPicker
   willPickPhotoWithController:(UIImagePickerController *)imagePickerController;
 
 @end
 
 @interface WDLPhotoPickerController : NSObject <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>{
-	
+
 	UIImagePickerController *photoPickerFromCamera;
 	UIImagePickerController *photoPickerFromAlbum;
 	id <WDLPhotoPickerDelegate>delegate;
 	NSArray *permissableMediaTypes;
 	BOOL allowsEditing;
-	
+
 }
 
 @property (assign) id <WDLPhotoPickerDelegate> delegate;

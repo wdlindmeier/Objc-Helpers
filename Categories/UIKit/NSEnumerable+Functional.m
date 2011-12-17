@@ -14,7 +14,7 @@
 {
 	NSMutableArray *collection = [NSMutableArray arrayWithCapacity:[self count]];
 	for(id obj in self){
-		id ret = block(obj);		
+		id ret = block(obj);
 		if(ret || !omitNils) [collection addObject:ret];
 	}
 	return [NSSet setWithArray:collection];
@@ -34,7 +34,7 @@
 {
 	NSMutableArray *collection = [NSMutableArray arrayWithCapacity:[self count]];
 	for(id obj in self){
-		id ret = block(obj);		
+		id ret = block(obj);
 		if(ret || !omitNils) [collection addObject:ret];
 	}
 	return [NSArray arrayWithArray:collection];
@@ -43,7 +43,7 @@
 - (NSArray *)sortedArrayReversing:(BOOL)isReversed withBlock:(id (^)(id obj))block
 {
 	NSArray *ret = [self sortedArrayUsingComparator:^(id obj1, id obj2) {
-		
+
 		id val1 = block(obj1);
 		id val2 = block(obj2);
 		NSComparisonResult result = [val1 compare:val2];
@@ -51,8 +51,8 @@
 		return result;
 
 	}];
-	
-	return ret;	
+
+	return ret;
 }
 
 @end

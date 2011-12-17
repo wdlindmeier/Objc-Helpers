@@ -10,7 +10,7 @@
 
 @implementation UIImage (INResizeImageAllocator)
 
-#pragma mark Instance methods 
+#pragma mark Instance methods
 
 - (UIImage *)scaleImageToSize:(CGSize)size {
 	return [UIImage imageWithImage:self scaledToSize:size];
@@ -20,21 +20,21 @@
 	// Begin the drawing (again)
 	UIGraphicsBeginImageContext(cropRect.size);
 	CGContextRef ctx = UIGraphicsGetCurrentContext();
-	
+
 	// Tanslate and scale upside-down to compensate for Quartz's inverted coordinate system
 	CGContextTranslateCTM(ctx, 0.0, cropRect.size.height);
 	CGContextScaleCTM(ctx, 1.0, -1.0);
-	
+
 	// Draw view into context
 	CGRect drawRect = CGRectMake(-cropRect.origin.x, cropRect.origin.y - (self.size.height - cropRect.size.height) , self.size.width, self.size.height);
 	CGContextDrawImage(ctx, drawRect, self.CGImage);
-	
+
 	// Create the new UIImage from the context
 	UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-	
+
 	// End the drawing
 	UIGraphicsEndImageContext();
-	
+
 	return newImage;
 }
 
@@ -48,7 +48,7 @@
 		newHeight = croppingBox.height;
 		newWidth = (self.size.width / self.size.height) *croppingBox.height;
 	}
-	
+
 	return CGSizeMake(newWidth, newHeight);
 }
 
@@ -79,7 +79,7 @@
 {
 	float widthRatio = newSize.width / image.size.width;
 	float heightRatio = newSize.height / image.size.height;
-	float scaleRatio = heightRatio > widthRatio ? heightRatio : widthRatio;	
+	float scaleRatio = heightRatio > widthRatio ? heightRatio : widthRatio;
 	return [self scaleImage:image withRatio:scaleRatio];
 }
 
@@ -89,7 +89,7 @@
 	UIGraphicsBeginImageContext( newSize );
 	[image drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
 	UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
-	UIGraphicsEndImageContext();	
+	UIGraphicsEndImageContext();
 	return newImage;
 }
 
