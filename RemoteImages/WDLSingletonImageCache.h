@@ -12,7 +12,7 @@
 @class WDLCachedImageData;
 
 @interface WDLSingletonImageCache : NSObject {
-	
+
 	NSMutableDictionary	*sharedImageCache;
 	NSMutableDictionary *remoteImageDelegates;
 	NSOperationQueue *imageLoadQueue;
@@ -27,10 +27,10 @@
 
 + (WDLSingletonImageCache *)sharedImageCacheInstance;
 + (WDLCachedImageData *)imageCacheForURLString:(NSString *)urlString;
-+ (void)loadImageForURL:(NSURL *)imageURL 
++ (void)loadImageForURL:(NSURL *)imageURL
 			forDelegate:(NSObject <WDLRemoteImageLoaderDelegate> *)delegate
 		willBeDisplayed:(BOOL)isDisplayed;
-+ (void)removeDelegate:(NSObject <WDLRemoteImageLoaderDelegate> *)delegate 
++ (void)removeDelegate:(NSObject <WDLRemoteImageLoaderDelegate> *)delegate
 				forURL:(NSURL *)imageURL;
 
 + (void)setImageData:(WDLCachedImageData *)cachedData;

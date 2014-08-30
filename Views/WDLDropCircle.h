@@ -15,7 +15,7 @@
 	float shadowOpacity;
 	UIColor *shadowColor;
 	BOOL shrinksToBounds;
-	
+
 }
 
 @property (nonatomic, assign) CGSize shadowOffset;

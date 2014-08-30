@@ -25,7 +25,7 @@ static NSDateFormatter *sharedFormatter;
 	return [[dateFormatter stringFromDate:self] intValue];
 }
 - (int)day
-{	
+{
 	NSDateFormatter *dateFormatter = [NSDate sharedFormatter];
 	[dateFormatter setDateFormat:@"dd"];
 	return [[dateFormatter stringFromDate:self] intValue];
@@ -58,7 +58,7 @@ static NSDateFormatter *sharedFormatter;
     [offsetComponents setDay:daysOffset];
     NSDate *offsetDate = [gregorian dateByAddingComponents:offsetComponents toDate:self options:0];
     [offsetComponents release];
-    [gregorian release];	
+    [gregorian release];
 
 	return offsetDate;
 }
@@ -76,18 +76,18 @@ static NSDateFormatter *sharedFormatter;
 	NSDate *parsed = nil;
 	if([JSONstring isNotBlank]){
 		NSDateFormatter *dateFormatter = [NSDate sharedFormatter];
-		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZ"];		
-		
-		@try { parsed = [dateFormatter dateFromString:JSONstring]; 
+		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZ"];
+
+		@try { parsed = [dateFormatter dateFromString:JSONstring];
 			//if(parsed){ NSLog(@"Parsed 0: %@ == %@", JSONstring, parsed);}
 		}
 		@catch (NSException * e) { parsed = nil; }
-		
+
 		if(!parsed){
 			// If there is not explicit time zone, use GMT.
 			[dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
 			[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-			@try { parsed = [dateFormatter dateFromString:JSONstring]; 
+			@try { parsed = [dateFormatter dateFromString:JSONstring];
 				//if(parsed){ NSLog(@"Parsed 1: %@ == %@", JSONstring, parsed);}
 			}
 			@catch (NSException * e) { parsed = nil; }
@@ -95,13 +95,13 @@ static NSDateFormatter *sharedFormatter;
 			if(!parsed){
 				// Just ommitting the time zone alltogether
 				int stringLength = [JSONstring length];
-				NSString *stringSansTZ = [JSONstring stringByReplacingOccurrencesOfString:@"(Z|(\\+|\\-)\\d\\d:\\d\\d)$" 
-																			   withString:@"" 
-																				  options:NSRegularExpressionSearch 
+				NSString *stringSansTZ = [JSONstring stringByReplacingOccurrencesOfString:@"(Z|(\\+|\\-)\\d\\d:\\d\\d)$"
+																			   withString:@""
+																				  options:NSRegularExpressionSearch
 																					range:NSMakeRange(0, stringLength)];
-				
+
 				[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-				@try { parsed = [dateFormatter dateFromString:stringSansTZ]; 
+				@try { parsed = [dateFormatter dateFromString:stringSansTZ];
 					//if(parsed){ NSLog(@"Parsed 2: %@ == %@", JSONstring, parsed); }
 				}
 				@catch (NSException * e) { parsed = nil; }
@@ -110,5 +110,5 @@ static NSDateFormatter *sharedFormatter;
 	}
 	return parsed;
 }
-	
+
 @end

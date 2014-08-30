@@ -15,18 +15,18 @@
 {
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
     NSMutableArray *errors = [NSMutableArray arrayWithObject:secondError];
-	
+
     if ([originalError code] == NSValidationMultipleErrorsError) {
-		
+
         [userInfo addEntriesFromDictionary:[originalError userInfo]];
         [errors addObjectsFromArray:[userInfo objectForKey:NSDetailedErrorsKey]];
     }
     else {
         [errors addObject:originalError];
     }
-	
+
     [userInfo setObject:errors forKey:NSDetailedErrorsKey];
-	
+
     return [NSError errorWithDomain:NSCocoaErrorDomain
                                code:NSValidationMultipleErrorsError
                            userInfo:userInfo];

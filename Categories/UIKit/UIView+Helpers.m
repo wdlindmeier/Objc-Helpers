@@ -29,7 +29,7 @@
 {
 	CGPoint position = CGPointMake(0.0, 0.0);
 	if([self isDescendantOfView:parentView]){
-		UIView *parent = self;		
+		UIView *parent = self;
 		while(parent != parentView){
 			position = CGPointMake(position.x + parent.frame.origin.x, position.y + parent.frame.origin.y);
 			parent = parent.superview;
@@ -52,15 +52,15 @@
 - (void)growToAccomodateKeyboardBounds:(CGRect)bounds
 {
 	UIEdgeInsets viewInset = self.contentInset;
-	self.contentInset = UIEdgeInsetsMake(viewInset.top, viewInset.left, bounds.size.height, viewInset.right);	
+	self.contentInset = UIEdgeInsetsMake(viewInset.top, viewInset.left, bounds.size.height, viewInset.right);
 }
 
 - (void)shrinkToReclaimKeyboardBounds:(CGRect)bounds
 {
 	UIEdgeInsets viewInset = self.contentInset;
-	[UIView animateWithDuration:0.35 animations:^(void) {		
+	[UIView animateWithDuration:0.35 animations:^(void) {
 		self.contentInset = UIEdgeInsetsMake(viewInset.top, viewInset.left, 0.0, viewInset.right);
-	}];			
+	}];
 }
 
 @end

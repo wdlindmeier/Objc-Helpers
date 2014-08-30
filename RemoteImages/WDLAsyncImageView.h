@@ -12,14 +12,14 @@
 @class WDLCachedImageData;
 
 @interface WDLAsyncImageView : UIView <WDLRemoteImageLoaderDelegate> {
-	
+
 @private
-	
+
 	WDLCachedImageData *cachedData;
 	BOOL showsActivityIndicator;
 	UIImageView *imageView;
 	NSURL *imageURL;
-	UIViewContentMode contentMode;	
+	UIViewContentMode contentMode;
 	BOOL displayingCachedData;
 	CGFloat cornerRadius;
 }

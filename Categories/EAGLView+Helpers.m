@@ -12,9 +12,9 @@ void releaseScreenshotData(void *info, const void *data, size_t size) {
     int pixelsWide = backingWidth * self.contentScaleFactor;
     int backingHeight = self.bounds.size.height;
     int pixelsHigh = backingHeight * self.contentScaleFactor;
-    
+
     NSInteger myDataLength = pixelsWide * pixelsHigh * 4;
-    
+
     // allocate array and read pixels into it.
     GLuint *buffer = (GLuint *) malloc(myDataLength);
     glReadPixels(0, 0, pixelsWide, pixelsHigh, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
@@ -29,10 +29,10 @@ void releaseScreenshotData(void *info, const void *data, size_t size) {
             buffer[y * backingWidth + x] = bottom;
         }
     }
-    
+
     // make data provider with data.
     CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, buffer, myDataLength, releaseScreenshotData);
-    
+
     // prep the ingredients
     const int bitsPerComponent = 8;
     const int bitsPerPixel = 4 * bitsPerComponent;
@@ -43,15 +43,15 @@ void releaseScreenshotData(void *info, const void *data, size_t size) {
         bitmapInfo = kCGBitmapByteOrderDefault | kCGImageAlphaLast;
     }
     CGColorRenderingIntent renderingIntent = kCGRenderingIntentDefault;
-    
+
     CGImageRef imageRef = CGImageCreate(pixelsWide, pixelsHigh, bitsPerComponent, bitsPerPixel, bytesPerRow, colorSpaceRef, bitmapInfo, provider, NULL, NO, renderingIntent);
     CGColorSpaceRelease(colorSpaceRef);
     CGDataProviderRelease(provider);
-    
+
     // then make the UIImage from that
     UIImage *myImage = [UIImage imageWithCGImage:imageRef scale:self.contentScaleFactor orientation:UIImageOrientationUp];
     CGImageRelease(imageRef);
-    
+
     return myImage;
 }
 @end

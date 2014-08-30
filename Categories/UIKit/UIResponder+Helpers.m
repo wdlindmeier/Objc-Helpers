@@ -19,12 +19,12 @@
 + (void)setInstancesSendFirstResponderNotifications:(BOOL)shouldSendNotification
 {
 	static BOOL sendsNotification = NO;
-	
+
 	if(shouldSendNotification != sendsNotification){
-		[UIResponder swizzleInstanceMethod:@selector(becomeFirstResponder) 
-						   withReplacement:@selector(becomeFirstResponderAndSendNotification)];		
+		[UIResponder swizzleInstanceMethod:@selector(becomeFirstResponder)
+						   withReplacement:@selector(becomeFirstResponderAndSendNotification)];
 		sendsNotification = shouldSendNotification;
-	}	
+	}
 }
 
 @end

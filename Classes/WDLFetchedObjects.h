@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface WDLFetchedObjects : NSObject 
+@interface WDLFetchedObjects : NSObject
 {
 	NSMutableArray *collection;
 }

@@ -10,7 +10,7 @@
 
 
 @interface WDLCachedImageData : NSObject {
-	
+
 	NSMutableData *imageData;
 	int displayCount;
 	NSString *URLString;

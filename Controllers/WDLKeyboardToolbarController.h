@@ -11,16 +11,16 @@
 @protocol WDLKeyboardToolbarDelegate;
 
 @interface WDLKeyboardToolbarController : UIViewController {
-	
+
 	UIToolbar *toolbar;
 	UIBarItem *buttonDone;
 	UISegmentedControl *buttonPrevNext;
-	UIViewController <WDLKeyboardToolbarDelegate> * delegate;	
+	UIViewController <WDLKeyboardToolbarDelegate> * delegate;
 	UITextField *textFieldAssumeFirstResponder;
-	
+
 	BOOL keyboardIsVisible;
 	BOOL toolbarIsAnimating;
-	
+
 }
 
 @property (nonatomic, retain) IBOutlet UIBarItem *buttonDone;

@@ -24,7 +24,7 @@
 @synthesize cachedData, showsActivityIndicator, imageURL, contentMode, cornerRadius;
 
 #pragma mark -
-#pragma mark Init 
+#pragma mark Init
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -48,7 +48,7 @@
 }
 
 #pragma mark -
-#pragma mark Accessors 
+#pragma mark Accessors
 
 /*
 - (void)setCachedData:(WDLCachedImageData *)cd
@@ -63,21 +63,21 @@
 }
 */
 #pragma mark -
-#pragma mark Displaying Images 
-   
+#pragma mark Displaying Images
+
 - (void)loadImageFromURLString:(NSString *)aURLString {
 
 	// Activity indicator, if you want it
 	if(showsActivityIndicator){
 		[self animateActivityIndicator];
 	}
-	
+
 	if(aURLString){
-		
+
 		if(!showsActivityIndicator) [self displayPlaceholderImage];
 
 		self.imageURL = [NSURL URLWithString:aURLString];
-		
+
 		if(imageURL){
 			[WDLSingletonImageCache loadImageForURL:imageURL
 										forDelegate:self
@@ -87,25 +87,25 @@
 		}
 
 	}else{
-		
+
 		[self displayPlaceholderImage];
-		
+
 	}
 
 }
 
 - (void)animateActivityIndicator
 {
-	// NOTE: This view will be unloaded whenever a new image is displayed		
+	// NOTE: This view will be unloaded whenever a new image is displayed
 	UIActivityIndicatorView *myIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
 	CGSize frameSize = self.bounds.size;
 	myIndicator.center = CGPointMake(frameSize.width * 0.5, frameSize.height * 0.5);
-	
+
 	myIndicator.hidesWhenStopped = YES;
 	[myIndicator startAnimating];
-	
+
 	[self addSubview:myIndicator];
-	[myIndicator release];	
+	[myIndicator release];
 
 }
 
@@ -117,8 +117,8 @@
 	[localImageView release];
 }
 
-- (void)displayPlaceholderImage 
-{	
+- (void)displayPlaceholderImage
+{
 	UIImageView *placeholder = [[[UIImageView alloc] init] initWithFrame:self.bounds];
 	placeholder.image = [UIImage imageNamed:@"no_image.png"];
 	[self displayImageView:placeholder isCachedData:NO];
@@ -140,7 +140,7 @@
 
 - (void)imageLoadedAndCached:(WDLCachedImageData *)imageCache
 {
-	self.cachedData = imageCache;	
+	self.cachedData = imageCache;
 	UIImage *image = [UIImage imageWithData:self.cachedData.imageData];
 	if(image){
 		UIImageView *anImageView = [[[UIImageView alloc] init] initWithFrame:self.bounds];
@@ -156,17 +156,17 @@
 {
 	if(displayingCachedData && !isCachedData){
 		self.cachedData.displayCount -= 1;
-	}else if(isCachedData){			
+	}else if(isCachedData){
 		self.cachedData.displayCount += 1;
 	}
-	
+
 	displayingCachedData = isCachedData;
-	
+
 	[self removeAllSubviews];
 	// No retain, no release
 	imageView = anImageView;
 	imageView.contentMode = self.contentMode;
-	[self addSubview:imageView];		
+	[self addSubview:imageView];
 	[self setNeedsLayout];
 }
 
@@ -185,5 +185,5 @@
 	self.cachedData = nil;
     [super dealloc];
 }
-	
+
 @end

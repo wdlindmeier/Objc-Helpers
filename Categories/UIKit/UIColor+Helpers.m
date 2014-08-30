@@ -52,7 +52,7 @@
 	CGFloat redComp = red / 255.f;
 	CGFloat greenComp = green / 255.f;
 	CGFloat blueComp = blue / 255.f;
-	
+
 	return [UIColor colorWithRed:redComp green:greenComp blue:blueComp alpha:1.f];
 }
 

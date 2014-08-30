@@ -18,7 +18,7 @@
 		for(NSString *attrName in errorsAndKeys){
 			NSArray *errors = [errorsAndKeys valueForKey:attrName];
 			for(NSString *error in errors){
-				[joinedErrors addObject:[NSString stringWithFormat:@"%@ %@", attrName, error]]; 
+				[joinedErrors addObject:[NSString stringWithFormat:@"%@ %@", attrName, error]];
 			}
 		}
 		return [joinedErrors componentsJoinedByString:@"\n"];
@@ -28,7 +28,7 @@
 
 - (NSDictionary *)errorDictionaryWithRailsErrorString:(NSString *)resultsString error:(NSError **)errorPointer
 {
-	NSArray *recordErrors = [self objectWithString:resultsString error:errorPointer];	
+	NSArray *recordErrors = [self objectWithString:resultsString error:errorPointer];
 	if(recordErrors){
 		NSMutableDictionary *collectedErrors = [NSMutableDictionary dictionary];
 		for(NSArray *error in recordErrors){
@@ -39,10 +39,10 @@
 				[collectedErrors setValue:errorCollection forKey:errorAttr];
 			}
 			[errorCollection addObject:[error objectAtIndex:1]];
-		}		
+		}
 		return collectedErrors;
-	}	
-	return nil;	
+	}
+	return nil;
 }
 
 @end

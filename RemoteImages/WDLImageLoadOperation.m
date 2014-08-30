@@ -27,17 +27,17 @@
 {
 	[self willChangeValueForKey:@"isFinished"];
 	isFinished = finished;
-	[self didChangeValueForKey:@"isFinished"];	
+	[self didChangeValueForKey:@"isFinished"];
 }
 
 - (void)setIsExecuting:(BOOL)executing
 {
 	[self willChangeValueForKey:@"isExecuting"];
 	isExecuting = executing;
-	[self didChangeValueForKey:@"isExecuting"];	
+	[self didChangeValueForKey:@"isExecuting"];
 }
 
-- (BOOL)isConcurrent 
+- (BOOL)isConcurrent
 {
 	return YES;
 }
@@ -49,22 +49,22 @@
 }
 
 #pragma mark -
-#pragma mark Task 
+#pragma mark Task
 
 - (void)start
 {
 	self.isExecuting = YES;
 
 	[self downloadImage];
-		
-	[self setIsComplete];	
+
+	[self setIsComplete];
 }
 
 - (void)downloadImage
 {
 	NSString *urlString = [self.imageURL absoluteString];
 	WDLCachedImageData *imageCache = [[WDLCachedImageData alloc] initWithURLString:urlString];
-	imageCache.imageData = [NSMutableData dataWithContentsOfURL:self.imageURL];	
+	imageCache.imageData = [NSMutableData dataWithContentsOfURL:self.imageURL];
 	@synchronized([WDLSingletonImageCache class]){
 		if(imageCache.imageData){
 			// Should this be performed in the main thread?
